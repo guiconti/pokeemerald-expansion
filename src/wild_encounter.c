@@ -422,6 +422,9 @@ static void CreateWildMon(u16 species, u8 level)
     bool32 checkCuteCharm = TRUE;
 
     ZeroEnemyPartyMons();
+    if (gSaveBlock1Ptr->randomizeWildEncounters) {
+        species = GetRandomWildMonSpecies(species, level);
+    }
 
     switch (gSpeciesInfo[species].genderRatio)
     {
@@ -1133,4 +1136,17 @@ bool8 StandardWildEncounter_Debug(void)
 
     DoStandardWildBattle_Debug();
     return TRUE;
+}
+
+// Gui stuff
+u16 GetRandomWildMonSpecies(u16 species, u8 level) {
+    u8 tier;
+    if (level >= B_MIN_LEVEL_FOR_TIER_ONE) {
+        tier = TIER_ONE;
+    } else if (level >= B_MIN_LEVEL_FOR_TIER_TWO) {
+        tier = TIER_TWO;
+    } else {
+        tier = TIER_THREE;
+    }
+    return PickRandomPokemon(tier, 0);
 }

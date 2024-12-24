@@ -292,6 +292,9 @@
                                               // Currently Gen4+ shadows don't properly work with Trainerslides
 
 // Gui stuff
-#define B_RANDOMIZE_BATTLE_POKEMONS     FALSE // If set to TRUE, the Pokémon in battle will be randomized.
+#define B_RANDOMIZE_EVENT_BATTLES       TRUE // If set to TRUE, the battle will be randomized.
+#define B_RANDOMIZE_BATTLE_POKEMONS     TRUE // If set to TRUE, the Pokémon in battle will be randomized.
+#define B_MIN_LEVEL_FOR_TIER_ONE        36
+#define B_MIN_LEVEL_FOR_TIER_TWO        17
 
 #endif // GUARD_CONFIG_BATTLE_H
