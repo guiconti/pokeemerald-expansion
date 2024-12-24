@@ -75,4 +75,7 @@
 // Go here if you want to disable specific families of Pokémon.
 #include "config/species_enabled.h"
 
+// Gui stuff
+#define RANDOMIZE_STARTER_POKEMON TRUE // If TRUE, the starter Pokémon will be randomized.
+
 #endif // GUARD_CONFIG_POKEMON_H

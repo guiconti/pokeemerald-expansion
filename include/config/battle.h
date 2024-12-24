@@ -291,4 +291,7 @@
 #define B_ENEMY_MON_SHADOW_STYLE        GEN_3 // In Gen4+, all enemy Pokemon will have a shadow drawn beneath them.
                                               // Currently Gen4+ shadows don't properly work with Trainerslides
 
+// Gui stuff
+#define B_RANDOMIZE_BATTLE_POKEMONS     FALSE // If set to TRUE, the Pokémon in battle will be randomized.
+
 #endif // GUARD_CONFIG_BATTLE_H

@@ -1392,8 +1392,15 @@ static void Task_NewGameBirchSpeechSub_InitPokeBall(u8 taskId)
     gSprites[spriteId].y = 75;
     gSprites[spriteId].invisible = FALSE;
     gSprites[spriteId].data[0] = 0;
-
-    CreatePokeballSpriteToReleaseMon(spriteId, gSprites[spriteId].oam.paletteNum, 112, 58, 0, 0, 32, PALETTES_BG, SPECIES_LOTAD);
+    u16 pokemon;
+    #if P_GEN_3_POKEMON == TRUE
+        pokemon = SPECIES_LOTAD;
+    #elif P_GEN_2_POKEMON == TRUE
+        pokemon = SPECIES_MARILL;
+    #else
+        pokemon = SPECIES_LAPRAS;
+    #endif
+    CreatePokeballSpriteToReleaseMon(spriteId, gSprites[spriteId].oam.paletteNum, 112, 58, 0, 0, 32, PALETTES_BG, pokemon);
     gTasks[taskId].func = Task_NewGameBirchSpeechSub_WaitForLotad;
     gTasks[sBirchSpeechMainTaskId].tTimer = 0;
 }

@@ -113,9 +113,9 @@ static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 // This is not const anymore since we will generate the starters on the fly
 const static u16 sStarterMon[STARTER_MON_COUNT] =
 {
-    SPECIES_ABOMASNOW,
-    SPECIES_ABRA,
-    SPECIES_ABSOL,
+    SPECIES_TREECKO,
+    SPECIES_TORCHIC,
+    SPECIES_MUDKIP,
 };
 
 // TODO: I don't know how to use the sStarterMon above, if I change it in any way the build breaks
@@ -354,6 +354,7 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
 
 // Pick 3 random starters for now
 void GenerateStarters(void) {
+    #if RANDOMIZE_STARTER_POKEMON == TRUE
     // This is very poorly written but I felt that it was the least memory intesive way to do this
     sStarterList[0] = PickNonLegendaryRandomPokemon();
     sStarterList[1] = PickNonLegendaryRandomPokemon();
@@ -364,6 +365,11 @@ void GenerateStarters(void) {
     while (sStarterList[2] == sStarterList[0] || sStarterList[2] == sStarterList[1]) {
         sStarterList[2] = PickNonLegendaryRandomPokemon();
     }
+    #else
+    sStarterList[0] = sStarterMon[0];
+    sStarterList[1] = sStarterMon[1];
+    sStarterList[2] = sStarterMon[2];
+    #endif
 }
 
 // .text
