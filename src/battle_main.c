@@ -2051,7 +2051,12 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
     u8 retVal;
     if (trainerNum == TRAINER_SECRET_BASE)
         return 0;
-    retVal = CreateNPCTrainerPartyFromTrainer(party, GetTrainerStructFromId(trainerNum), firstTrainer, gBattleTypeFlags);
+    const struct Trainer *originalTrainer = GetTrainerStructFromId(trainerNum);
+    if (gSaveBlock1Ptr->randomizeBattles) {
+        retVal = CreateNPCTrainerPartyFromTrainer(party, RandomizeTrainer(originalTrainer), firstTrainer, gBattleTypeFlags);
+    } else {
+        retVal = CreateNPCTrainerPartyFromTrainer(party, originalTrainer, firstTrainer, gBattleTypeFlags);
+    }
     return retVal;
 }
 
@@ -2059,7 +2064,12 @@ void CreateTrainerPartyForPlayer(void)
 {
     ZeroPlayerPartyMons();
     gPartnerTrainerId = gSpecialVar_0x8004;
-    CreateNPCTrainerPartyFromTrainer(gPlayerParty, GetTrainerStructFromId(gSpecialVar_0x8004), TRUE, BATTLE_TYPE_TRAINER);
+    const struct Trainer *originalTrainer = GetTrainerStructFromId(gSpecialVar_0x8004);
+    if (gSaveBlock1Ptr->randomizeBattles) {
+        CreateNPCTrainerPartyFromTrainer(gPlayerParty, RandomizeTrainer(originalTrainer), TRUE, BATTLE_TYPE_TRAINER);
+    } else {
+        CreateNPCTrainerPartyFromTrainer(gPlayerParty, originalTrainer, TRUE, BATTLE_TYPE_TRAINER);
+    }
 }
 
 void VBlankCB_Battle(void)
@@ -6106,4 +6116,62 @@ static s32 Factorial(s32 n)
     for (i = 2; i <= n; i++)
         f *= i;
     return f;
+}
+
+
+// Gui stuff
+const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
+    // s32 i;
+    // u8 monsCount = originalTrainer->partySize;
+    // const struct TrainerMon *originalPartyData = originalTrainer->party;
+    // for (i = 0; i < monsCount; i++) {
+    // }
+    struct Trainer *randomizedTrainer = Alloc(sizeof(struct Trainer));
+    *randomizedTrainer = *originalTrainer;
+    randomizedTrainer->aiFlags = AI_FLAG_SMART_TRAINER;
+    struct TrainerMon *newParty = Alloc(randomizedTrainer->partySize * sizeof(struct TrainerMon));
+    // Randomize the party
+    // TODO: If it is a TRAINER_CLASS_LEADER || TRAINER_CLASS_ELITE_FOUR || TRAINER_CLASS_RIVAL || TRAINER_CLASS_MAGMA_LEADER
+    // We should run a different randomization algorithm  
+    for (int i = 0; i < randomizedTrainer->partySize; i++) {
+        u16 pickedPokemon = PickRandomPokemon(TIER_ONE, TRUE);
+        // TODO: Nickname
+        newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
+        // TODO: Get ev from smogon
+        newParty[i].ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 6);
+        // TODO: Fix
+        newParty[i].iv = TRAINER_PARTY_IVS(
+            MAX_PER_STAT_IVS,
+            MAX_PER_STAT_IVS,
+            MAX_PER_STAT_IVS,
+            MAX_PER_STAT_IVS,
+            MAX_PER_STAT_IVS,
+            MAX_PER_STAT_IVS
+        );
+        // TODO: Get moves from smogon
+        newParty[i].moves[0] = MOVE_TACKLE;
+        newParty[i].moves[1] = MOVE_TACKLE;
+        newParty[i].moves[2] = MOVE_TACKLE;
+        newParty[i].moves[3] = MOVE_TACKLE;
+        newParty[i].species = pickedPokemon;
+        // TODO: Get held item from smogon
+        newParty[i].heldItem = ITEM_LEFTOVERS;
+        // TODO: Get ability from smogon
+        newParty[i].ability = ABILITY_ILLUSION;
+        // TODO: Use difficulty levels to scale level
+        newParty[i].lvl = originalTrainer->party[i].lvl * 2;
+        newParty[i].ball = originalTrainer->party[i].ball;
+        newParty[i].friendship = MAX_FRIENDSHIP;
+        // TODO: Get nature from smogon
+        newParty[i].nature = NATURE_ADAMANT,
+        // TODO: This might break for genderless pokemons, not sure
+        newParty[i].gender = originalTrainer->party[i].gender;
+        // 1% of being shiny
+        newParty[i].isShiny = GenerateRandomNumber(1, 100) == 1;
+        newParty[i].gigantamaxFactor = FALSE;
+        newParty[i].shouldUseDynamax = FALSE;
+        newParty[i].dynamaxLevel = MAX_DYNAMAX_LEVEL;
+    }
+    randomizedTrainer->party = newParty;
+    return randomizedTrainer;
 }

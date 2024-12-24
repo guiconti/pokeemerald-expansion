@@ -1579,6 +1579,7 @@ void CreateFacilityMon(const struct TrainerMon *fmon, u16 level, u8 fixedIV, u32
     }
 
     ModifyPersonalityForNature(&personality, fmon->nature);
+    // TODO: This should be random
     CreateMon(dst, fmon->species, level, fixedIV, TRUE, personality, otID, OT_ID_PRESET);
 
     friendship = MAX_FRIENDSHIP;
@@ -3039,6 +3040,7 @@ static void FillPartnerParty(u16 trainerId)
             else if (partyData[i].gender == TRAINER_MON_FEMALE)
                 personality = (personality & 0xFFFFFF00) | GeneratePersonalityForGender(MON_FEMALE, partyData[i].species);
             ModifyPersonalityForNature(&personality, partyData[i].nature);
+            // TODO: This should be random
             CreateMon(&gPlayerParty[i + 3], partyData[i].species, partyData[i].lvl, 0, TRUE, personality, OT_ID_PRESET, otID);
             j = partyData[i].isShiny;
             SetMonData(&gPlayerParty[i + 3], MON_DATA_IS_SHINY, &j);

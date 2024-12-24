@@ -119,6 +119,7 @@ void CreateScriptedWildMon(u16 species, u8 level, u16 item)
     if (OW_SYNCHRONIZE_NATURE > GEN_3)
         CreateMonWithNature(&gEnemyParty[0], species, level, USE_RANDOM_IVS, PickWildMonNature());
     else
+        // TODO: This should be random
         CreateMon(&gEnemyParty[0], species, level, USE_RANDOM_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
     if (item)
     {
@@ -137,6 +138,7 @@ void CreateScriptedDoubleWildMon(u16 species1, u8 level1, u16 item1, u16 species
     if (OW_SYNCHRONIZE_NATURE > GEN_3)
         CreateMonWithNature(&gEnemyParty[0], species1, level1, 32, PickWildMonNature());
     else
+        // TODO: This should be random
         CreateMon(&gEnemyParty[0], species1, level1, 32, 0, 0, OT_ID_PLAYER_ID, 0);
     if (item1)
     {
@@ -148,6 +150,7 @@ void CreateScriptedDoubleWildMon(u16 species1, u8 level1, u16 item1, u16 species
     if (OW_SYNCHRONIZE_NATURE > GEN_3)
         CreateMonWithNature(&gEnemyParty[1], species2, level2, 32, PickWildMonNature());
     else
+        // TODO: This should be random
         CreateMon(&gEnemyParty[1], species2, level2, 32, 0, 0, OT_ID_PLAYER_ID, 0);
     if (item2)
     {

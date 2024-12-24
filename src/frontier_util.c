@@ -2530,6 +2530,7 @@ void CreateFrontierBrainPokemon(void)
         {
             j = Random32(); //should just be one while loop, but that doesn't match
         } while (sFrontierBrainsMons[facility][symbol][i].nature != GetNatureFromPersonality(j));
+        // TODO: This should be random
         CreateMon(&gEnemyParty[monPartyId],
                   sFrontierBrainsMons[facility][symbol][i].species,
                   monLevel,
