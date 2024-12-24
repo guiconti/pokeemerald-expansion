@@ -16,6 +16,7 @@
 #include "link_rfu.h"
 #include "palette.h"
 #include "party_menu.h"
+#include "pokemon.h"
 #include "recorded_battle.h"
 #include "string_util.h"
 #include "sound.h"
@@ -81,14 +82,18 @@ void SetUpBattleVarsAndBirchZigzagoon(void)
     {
         ZeroEnemyPartyMons();
         u16 pokemon;
-        #if P_GEN_3_POKEMON == TRUE
-            pokemon = SPECIES_ZIGZAGOON;
-        #elif P_GEN_2_POKEMON == TRUE
-            pokemon = SPECIES_SENTRET;
-        #else
-            pokemon = SPECIES_RATTATA;
-        #endif
-        CreateMon(&gEnemyParty[0], pokemon, 2, USE_RANDOM_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
+        if (gSaveBlock1Ptr->randomizeBattles) {
+            pokemon = PickRandomPokemon(TIER_THREE, 0);
+        } else {
+            #if P_GEN_3_POKEMON == TRUE
+                pokemon = SPECIES_ZIGZAGOON;
+            #elif P_GEN_2_POKEMON == TRUE
+                pokemon = SPECIES_SENTRET;
+            #else
+                pokemon = SPECIES_RATTATA;
+            #endif
+        }
+        CreateMon(&gEnemyParty[0], pokemon, 2, MAX_PER_STAT_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
         i = 0;
         SetMonData(&gEnemyParty[0], MON_DATA_HELD_ITEM, &i);
     }

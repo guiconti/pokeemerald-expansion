@@ -911,6 +911,10 @@ void TrySetDayLimitToFormChange(struct Pokemon *mon);
 u32 CheckDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler);
 
 // Gui
-u16 PickNonLegendaryRandomPokemon(void);
+u16 PickTierThreePokemon(void);
+u16 PickTierTwoPokemon(void);
+u16 PickTierOnePokemon(bool8 includeLegendary);
+u16 PickFromAllPokemon(bool8 includeLegendary);
+u16 PickRandomPokemon(u8 tier, bool8 includeLegendary);
 
 #endif // GUARD_POKEMON_H

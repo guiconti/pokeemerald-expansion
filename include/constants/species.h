@@ -1644,4 +1644,10 @@
 
 #define SPECIES_SHINY_TAG 5000
 
+// Gui stuff
+#define ALL_TIERS 0
+#define TIER_ONE 1
+#define TIER_TWO 2
+#define TIER_THREE 3
+
 #endif  // GUARD_CONSTANTS_SPECIES_H

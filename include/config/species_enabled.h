@@ -18,6 +18,7 @@
 #define P_GEN_7_POKEMON                  FALSE // Generation 7 Pokémon (SM, USUM, LGPE)
 #define P_GEN_8_POKEMON                  FALSE // Generation 8 Pokémon (SwSh, BDSP, LA)
 #define P_GEN_9_POKEMON                  FALSE // Generation 9 Pokémon (SV)
+#define P_ALTERNATE_FORMS								 FALSE // Allow mega, gigantamas, alola, and other forms. This should only be true if everything else is also true, if not alternate forms of disable pokemons might be present.
 
 // Setting this to TRUE will add the new evolutions to the Regional Dex.
 #define P_NEW_EVOS_IN_REGIONAL_DEX       TRUE

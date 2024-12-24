@@ -354,22 +354,22 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
 
 // Pick 3 random starters for now
 void GenerateStarters(void) {
-    #if RANDOMIZE_STARTER_POKEMON == TRUE
-    // This is very poorly written but I felt that it was the least memory intesive way to do this
-    sStarterList[0] = PickNonLegendaryRandomPokemon();
-    sStarterList[1] = PickNonLegendaryRandomPokemon();
-    while (sStarterList[0] == sStarterList[1]) {
-        sStarterList[1] = PickNonLegendaryRandomPokemon();
+    if (gSaveBlock1Ptr->randomizeStarters) {
+        // This is very poorly written but I felt that it was the least memory intesive way to do this
+        sStarterList[0] = PickRandomPokemon(TIER_THREE, 0);
+        sStarterList[1] = PickRandomPokemon(TIER_THREE, 0);
+        while (sStarterList[0] == sStarterList[1]) {
+            sStarterList[1] = PickRandomPokemon(TIER_THREE, 0);
+        }
+        sStarterList[2] = PickRandomPokemon(TIER_THREE, 0);
+        while (sStarterList[2] == sStarterList[0] || sStarterList[2] == sStarterList[1]) {
+            sStarterList[2] = PickRandomPokemon(TIER_THREE, 0);
+        }
+    } else {
+        sStarterList[0] = sStarterMon[0];
+        sStarterList[1] = sStarterMon[1];
+        sStarterList[2] = sStarterMon[2];
     }
-    sStarterList[2] = PickNonLegendaryRandomPokemon();
-    while (sStarterList[2] == sStarterList[0] || sStarterList[2] == sStarterList[1]) {
-        sStarterList[2] = PickNonLegendaryRandomPokemon();
-    }
-    #else
-    sStarterList[0] = sStarterMon[0];
-    sStarterList[1] = sStarterMon[1];
-    sStarterList[2] = sStarterMon[2];
-    #endif
 }
 
 // .text
