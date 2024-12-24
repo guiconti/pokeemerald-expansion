@@ -224,4 +224,7 @@ const void *RandomElementArrayDefault(enum RandomTag, const void *array, size_t 
 
 u8 RandomWeightedIndex(u8 *weights, u8 length);
 
+// Gui stuff
+u32 GenerateRandomNumber(u32 min, u32 max);
+
 #endif // GUARD_RANDOM_H

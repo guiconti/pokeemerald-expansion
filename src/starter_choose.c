@@ -110,12 +110,17 @@ static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
     {8, 4},
 };
 
-static const u16 sStarterMon[STARTER_MON_COUNT] =
+// This is not const anymore since we will generate the starters on the fly
+const static u16 sStarterMon[STARTER_MON_COUNT] =
 {
-    SPECIES_TREECKO,
-    SPECIES_TORCHIC,
-    SPECIES_MUDKIP,
+    SPECIES_ABOMASNOW,
+    SPECIES_ABRA,
+    SPECIES_ABSOL,
 };
+
+// TODO: I don't know how to use the sStarterMon above, if I change it in any way the build breaks
+// I don't fully understand things yet, so I am creating this new one for now
+EWRAM_DATA static u16 sStarterList[3] = {};
 
 static const struct BgTemplate sBgTemplates[3] =
 {
@@ -347,12 +352,26 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
     .callback = SpriteCB_StarterPokemon
 };
 
+// Pick 3 random starters for now
+void GenerateStarters(void) {
+    // This is very poorly written but I felt that it was the least memory intesive way to do this
+    sStarterList[0] = PickNonLegendaryRandomPokemon();
+    sStarterList[1] = PickNonLegendaryRandomPokemon();
+    while (sStarterList[0] == sStarterList[1]) {
+        sStarterList[1] = PickNonLegendaryRandomPokemon();
+    }
+    sStarterList[2] = PickNonLegendaryRandomPokemon();
+    while (sStarterList[2] == sStarterList[0] || sStarterList[2] == sStarterList[1]) {
+        sStarterList[2] = PickNonLegendaryRandomPokemon();
+    }
+}
+
 // .text
 u16 GetStarterPokemon(u16 chosenStarterId)
 {
     if (chosenStarterId > STARTER_MON_COUNT)
         chosenStarterId = 0;
-    return sStarterMon[chosenStarterId];
+    return sStarterList[chosenStarterId];
 }
 
 static void VblankCB_StarterChoose(void)
@@ -414,6 +433,8 @@ void CB2_ChooseStarter(void)
     ResetPaletteFade();
     FreeAllSpritePalettes();
     ResetAllPicSprites();
+    // Generate random starters
+    GenerateStarters();
 
     LoadPalette(GetOverworldTextboxPalettePtr(), BG_PLTT_ID(14), PLTT_SIZE_4BPP);
     LoadPalette(gBirchBagGrass_Pal, BG_PLTT_ID(0), sizeof(gBirchBagGrass_Pal));

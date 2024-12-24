@@ -224,3 +224,21 @@ u8 RandomWeightedIndex(u8 *weights, u8 length)
     }
     return 0;
 }
+
+// Gui stuff
+// u16 RandomSeeded(u16 value, u8 seeded){
+//   u16 otId, result;
+
+//   if (gSaveBlock1Ptr->tx_Random_Chaos && !seeded) {
+//     result = Random();
+//   }
+//   else {
+//     otId = GetTrainerId(gSaveBlock2Ptr->playerTrainerId);
+//     result = ISO_RANDOMIZE1(otId + value) >> 16;
+//   }
+//   return result;
+// }
+
+u32 GenerateRandomNumber(u32 min, u32 max) {
+  return Random() % (max - min + 1) + min;
+}

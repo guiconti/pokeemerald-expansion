@@ -910,4 +910,7 @@ void UpdateDaysPassedSinceFormChange(u16 days);
 void TrySetDayLimitToFormChange(struct Pokemon *mon);
 u32 CheckDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler);
 
+// Gui
+u16 PickNonLegendaryRandomPokemon(void);
+
 #endif // GUARD_POKEMON_H
