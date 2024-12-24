@@ -1117,6 +1117,14 @@ struct SaveBlock1
 #endif //FREE_TRAINER_HILL
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
     // sizeof: 0x3???
+
+    // Gui stuff
+    // TODO: We will use an array here to keep track of the nuzlocke encounters
+    u8 randomizeStarters:1;
+    u8 randomizeWildEncounters:1;
+    u8 randomizeBattles:1;
+    u8 chaosModeActive:1;
+    u8 nuzlockeModeActive:1;
 };
 
 extern struct SaveBlock1* gSaveBlock1Ptr;
