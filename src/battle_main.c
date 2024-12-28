@@ -6129,11 +6129,13 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
     // TODO: If it is a TRAINER_CLASS_LEADER || TRAINER_CLASS_ELITE_FOUR || TRAINER_CLASS_RIVAL || TRAINER_CLASS_MAGMA_LEADER
     // We should run a different randomization algorithm  
     for (int i = 0; i < randomizedTrainer->partySize; i++) {
-        u16 pickedPokemon = PickRandomPokemon(TIER_ONE, TRUE);
+        u16 pickedPokemon = PickRandomPokemonSeeded(TIER_ONE, TRUE, trainerNum);
         newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
-        const struct SmogonVariant *selectedSmogonVariant = &gSpeciesInfo[pickedPokemon].smogonVariants[0];
+        u8 smogonVariantLength = sizeof(const struct SmogonVariant) / sizeof(gSpeciesInfo[pickedPokemon].smogonVariants[0]);
+        u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, trainerNum);
+        const struct SmogonVariant *selectedSmogonVariant = &gSpeciesInfo[pickedPokemon].smogonVariants[smogonVariantIndex];
         // 1% of being shiny
-        bool8 isShiny = GenerateRandomNumber(1, 10000) <= B_SHINY_ODDS;
+        bool8 isShiny = GenerateRandomNumberSeeded(1, 10000, trainerNum) <= B_SHINY_ODDS;
         // We are boosting shiny pokemons
         if (isShiny) {
             newParty[i].ev = TRAINER_PARTY_EVS(255, 255, 255, 255, 255, 255);

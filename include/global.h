@@ -1125,6 +1125,9 @@ struct SaveBlock1
     u8 randomizeBattles:1;
     u8 chaosModeActive:1;
     u8 nuzlockeModeActive:1;
+    u8 difficultyIncreased:1;
+    u8 levelCapIsActive:1;
+    u8 expShare:1;
 };
 
 extern struct SaveBlock1* gSaveBlock1Ptr;

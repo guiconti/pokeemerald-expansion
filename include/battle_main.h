@@ -107,6 +107,6 @@ extern const u8 gStatusConditionString_LoveJpn[8];
 extern const u8 *const gStatusConditionStringsTable[7][2];
 
 // Gui stuff
-const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer);
+const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u16 trainerNum);
 
 #endif // GUARD_BATTLE_MAIN_H

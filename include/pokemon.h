@@ -915,11 +915,12 @@ void TrySetDayLimitToFormChange(struct Pokemon *mon);
 u32 CheckDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler);
 
 // Gui
-u16 PickTierThreePokemon(void);
-u16 PickTierTwoPokemon(void);
-u16 PickTierOnePokemon(bool8 includeLegendary);
-u16 PickFromAllPokemon(bool8 includeLegendary);
+u16 PickTierThreePokemon(u8 seeded, u16 seed);
+u16 PickTierTwoPokemon(u8 seeded, u16 seed);
+u16 PickTierOnePokemon(bool8 includeLegendary, u8 seeded, u16 seed);
+u16 PickFromAllPokemon(bool8 includeLegendary, u8 seeded, u16 seed);
 u16 PickRandomPokemon(u8 tier, bool8 includeLegendary);
+u16 PickRandomPokemonSeeded(u8 tier, bool8 includeLegendary, u16 seed);
 
 struct SmogonVariant {
     u16 heldItem;

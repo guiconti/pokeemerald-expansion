@@ -1,5 +1,6 @@
 #include "global.h"
 #include "random.h"
+#include "new_game.h"
 #if MODERN
 #include <alloca.h>
 #endif
@@ -226,18 +227,16 @@ u8 RandomWeightedIndex(u8 *weights, u8 length)
 }
 
 // Gui stuff
-// u16 RandomSeeded(u16 value, u8 seeded){
-//   u16 otId, result;
+u16 RandomSeeded(u16 value) {
+    u16 otId, result;
+    otId = GetTrainerId(gSaveBlock2Ptr->playerTrainerId);
+    result = ISO_RANDOMIZE1(otId + value) >> 16;
+    return result;
+}
 
-//   if (gSaveBlock1Ptr->tx_Random_Chaos && !seeded) {
-//     result = Random();
-//   }
-//   else {
-//     otId = GetTrainerId(gSaveBlock2Ptr->playerTrainerId);
-//     result = ISO_RANDOMIZE1(otId + value) >> 16;
-//   }
-//   return result;
-// }
+u32 GenerateRandomNumberSeeded(u32 min, u32 max, u16 seed) {
+  return RandomSeeded(seed) % (max - min + 1) + min;
+}
 
 u32 GenerateRandomNumber(u32 min, u32 max) {
   return Random() % (max - min + 1) + min;

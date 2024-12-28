@@ -15071,49 +15071,91 @@ static const u16 tierOneWithoutLegendariesSpecies[] =
     // SPECIES_EGG       ,
 };
 
-u16 PickTierThreePokemon(void) {
-    u32 pokemonIndex = GenerateRandomNumber(0, TIER_THREE_SPECIES_COUNT);
+u16 PickTierThreePokemon(u8 seeded, u16 seed) {
+    u32 pokemonIndex;
+    if (seeded == TRUE) {
+        pokemonIndex = GenerateRandomNumberSeeded(0, TIER_THREE_SPECIES_COUNT, seed);
+    } else {
+        pokemonIndex = GenerateRandomNumber(0, TIER_THREE_SPECIES_COUNT);
+    }
     return tierThreeSpecies[pokemonIndex];
 }
 
-u16 PickTierTwoPokemon(void) {
-    u32 pokemonIndex = GenerateRandomNumber(0, TIER_TWO_SPECIES_COUNT);
+u16 PickTierTwoPokemon(u8 seeded, u16 seed) {
+    u32 pokemonIndex;
+    if (seeded == TRUE) {
+        pokemonIndex = GenerateRandomNumberSeeded(0, TIER_TWO_SPECIES_COUNT, seed);
+    } else {
+        pokemonIndex = GenerateRandomNumber(0, TIER_TWO_SPECIES_COUNT);
+    }
     return tierTwoSpecies[pokemonIndex];
 }
 
-u16 PickTierOnePokemon(bool8 includeLegendary) {
+u16 PickTierOnePokemon(bool8 includeLegendary, u8 seeded, u16 seed) {
     u32 pokemonIndex;
     if (includeLegendary) {
-        pokemonIndex = GenerateRandomNumber(0, ALL_SPECIES_COUNT);
+        if (seeded == TRUE) {
+            pokemonIndex = GenerateRandomNumberSeeded(0, TIER_ONE_SPECIES_COUNT, seed);
+        } else {
+            pokemonIndex = GenerateRandomNumber(0, TIER_ONE_SPECIES_COUNT);
+        }
         return tierOneSpecies[pokemonIndex];
     }
-    pokemonIndex = GenerateRandomNumber(0, TIER_ONE_WITHOUT_LEGENDARIES_SPECIES_COUNT);
+    if (seeded == TRUE) {
+        pokemonIndex = GenerateRandomNumberSeeded(0, TIER_ONE_WITHOUT_LEGENDARIES_SPECIES_COUNT, seed);
+    } else {
+        pokemonIndex = GenerateRandomNumber(0, TIER_ONE_WITHOUT_LEGENDARIES_SPECIES_COUNT);
+    }
     return tierOneWithoutLegendariesSpecies[pokemonIndex];
 }
 
-u16 PickFromAllPokemon(bool8 includeLegendary) {
+u16 PickFromAllPokemon(bool8 includeLegendary, u8 seeded, u16 seed) {
     u32 pokemonIndex;
     if (includeLegendary) {
-        pokemonIndex = GenerateRandomNumber(0, TIER_ONE_SPECIES_COUNT);
+        if (seeded == TRUE) {
+            pokemonIndex = GenerateRandomNumberSeeded(0, TIER_ONE_SPECIES_COUNT, seed);
+        } else {
+            pokemonIndex = GenerateRandomNumber(0, TIER_ONE_SPECIES_COUNT);
+        }
         return allSpecies[pokemonIndex];
     }
-    pokemonIndex = GenerateRandomNumber(0, NON_LEGENDARY_SPECIES_COUNT);
+    if (seeded == TRUE) {
+        pokemonIndex = GenerateRandomNumberSeeded(0, NON_LEGENDARY_SPECIES_COUNT, seed);
+    } else {
+        pokemonIndex = GenerateRandomNumber(0, NON_LEGENDARY_SPECIES_COUNT);
+    }
     return nonLegendarySpecies[pokemonIndex];
 }
 
 // Non EWRAM Gui functions
 u16 PickRandomPokemon(u8 tier, bool8 includeLegendary) {
     if (gSaveBlock1Ptr->chaosModeActive) {
-        return PickFromAllPokemon(1);
+        return PickFromAllPokemon(1, FALSE, 0);
     }
     if (tier == ALL_TIERS) {
-        return PickFromAllPokemon(includeLegendary);
+        return PickFromAllPokemon(includeLegendary, FALSE, 0);
     }
     if (tier == TIER_ONE) {
-        return PickTierOnePokemon(includeLegendary);
+        return PickTierOnePokemon(includeLegendary, FALSE, 0);
     }
     if (tier == TIER_TWO) {
-        return PickTierTwoPokemon();
+        return PickTierTwoPokemon(FALSE, 0);
     }
-    return PickTierThreePokemon();
+    return PickTierThreePokemon(FALSE, 0);
+}
+
+u16 PickRandomPokemonSeeded(u8 tier, bool8 includeLegendary, u16 seed) {
+    if (gSaveBlock1Ptr->chaosModeActive) {
+        return PickFromAllPokemon(1, FALSE, 0);
+    }
+    if (tier == ALL_TIERS) {
+        return PickFromAllPokemon(includeLegendary, TRUE, seed);
+    }
+    if (tier == TIER_ONE) {
+        return PickTierOnePokemon(includeLegendary, TRUE, seed);
+    }
+    if (tier == TIER_TWO) {
+        return PickTierTwoPokemon(TRUE, seed);
+    }
+    return PickTierThreePokemon(TRUE, seed);
 }
