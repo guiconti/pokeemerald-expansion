@@ -2053,7 +2053,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
         return 0;
     const struct Trainer *originalTrainer = GetTrainerStructFromId(trainerNum);
     if (gSaveBlock1Ptr->randomizeBattles) {
-        retVal = CreateNPCTrainerPartyFromTrainer(party, RandomizeTrainer(originalTrainer), firstTrainer, gBattleTypeFlags);
+        retVal = CreateNPCTrainerPartyFromTrainer(party, RandomizeTrainer(originalTrainer, trainerNum), firstTrainer, gBattleTypeFlags);
     } else {
         retVal = CreateNPCTrainerPartyFromTrainer(party, originalTrainer, firstTrainer, gBattleTypeFlags);
     }
@@ -2066,7 +2066,7 @@ void CreateTrainerPartyForPlayer(void)
     gPartnerTrainerId = gSpecialVar_0x8004;
     const struct Trainer *originalTrainer = GetTrainerStructFromId(gSpecialVar_0x8004);
     if (gSaveBlock1Ptr->randomizeBattles) {
-        CreateNPCTrainerPartyFromTrainer(gPlayerParty, RandomizeTrainer(originalTrainer), TRUE, BATTLE_TYPE_TRAINER);
+        CreateNPCTrainerPartyFromTrainer(gPlayerParty, RandomizeTrainer(originalTrainer, TRAINER_SECRET_BASE), TRUE, BATTLE_TYPE_TRAINER);
     } else {
         CreateNPCTrainerPartyFromTrainer(gPlayerParty, originalTrainer, TRUE, BATTLE_TYPE_TRAINER);
     }
@@ -6120,7 +6120,7 @@ static s32 Factorial(s32 n)
 
 
 // Gui stuff
-const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
+const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u16 trainerNum) {
     struct Trainer *randomizedTrainer = Alloc(sizeof(struct Trainer));
     *randomizedTrainer = *originalTrainer;
     randomizedTrainer->aiFlags = AI_FLAG_SMART_TRAINER;
@@ -6155,8 +6155,10 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
         newParty[i].species = pickedPokemon;
         newParty[i].heldItem = selectedSmogonVariant->heldItem;
         newParty[i].ability = selectedSmogonVariant->ability;
-        // TODO: Use difficulty levels to scale level
-        newParty[i].lvl = originalTrainer->party[i].lvl * 2;
+        if (gSaveBlock1Ptr->difficultyIncreased) {
+            // newParty[i].lvl = originalTrainer->party[i].lvl * 2;
+            newParty[i].lvl = originalTrainer->party[i].lvl;
+        }
         newParty[i].ball = originalTrainer->party[i].ball;
         newParty[i].friendship = MAX_FRIENDSHIP;
         newParty[i].nature = selectedSmogonVariant->nature;

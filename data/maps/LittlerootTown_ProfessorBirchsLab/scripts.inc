@@ -280,6 +280,8 @@ LittlerootTown_ProfessorBirchsLab_EventScript_Aide::
 	goto_if_set FLAG_BIRCH_AIDE_MET, LittlerootTown_ProfessorBirchsLab_EventScript_AideAlreadyMet
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BirchAwayOnFieldwork, MSGBOX_DEFAULT
 	setflag FLAG_BIRCH_AIDE_MET
+	setflag FLAG_UNUSED_0x264
+	setflag FLAG_UNUSED_0x265
 	release
 	end
 

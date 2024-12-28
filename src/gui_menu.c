@@ -24,6 +24,8 @@
 enum {
   MENU_RANDOMIZER,
   MENU_NUZLOCKE,
+  MENU_DIFFICULTY,
+  MENU_QOL,
   MENU_COUNT,
 };
 
@@ -45,8 +47,30 @@ enum {
   MENUITEM_NUZLOCKE_PLACEHOLDER_3,
   MENUITEM_NUZLOCKE_PLACEHOLDER_4,
   MENUITEM_NUZLOCKE_PLACEHOLDER_5,
-  MENUITEM_NUZLOCKE_SAVE,
+  MENUITEM_NUZLOCKE_NEXT,
   MENUITEM_NUZLOCKE_COUNT,
+};
+
+// Difficulty options
+enum {
+  MENUITEM_DIFFICULTY_INCREASED,
+  MENUITEM_DIFFICULTY_LEVEL_CAP,
+  MENUITEM_DIFFICULTY_PLACEHOLDER_3,
+  MENUITEM_DIFFICULTY_PLACEHOLDER_4,
+  MENUITEM_DIFFICULTY_PLACEHOLDER_5,
+  MENUITEM_DIFFICULTY_NEXT,
+  MENUITEM_DIFFICULTY_COUNT,
+};
+
+// QoL options
+enum {
+  MENUITEM_QOL_EXP_SHARE,
+  MENUITEM_QOL_PLACEHOLDER_2,
+  MENUITEM_QOL_PLACEHOLDER_3,
+  MENUITEM_QOL_PLACEHOLDER_4,
+  MENUITEM_QOL_PLACEHOLDER_5,
+  MENUITEM_QOL_SAVE,
+  MENUITEM_QOL_COUNT,
 };
 
 // Window Ids
@@ -64,8 +88,8 @@ struct OptionMenu {
     u8 submenu;
     u8 randomizer[MENUITEM_RANDOMIZER_COUNT];
     u8 nuzlocke[MENUITEM_NUZLOCKE_COUNT];
-    // u8 sel_nuzlocke[MENUITEM_NUZLOCKE_COUNT];
-    // u8 sel_difficulty[MENUITEM_DIFFICULTY_COUNT];
+    u8 difficulty[MENUITEM_DIFFICULTY_COUNT];
+    u8 qol[MENUITEM_QOL_COUNT];
     // u8 sel_challenges[MENUITEM_CHALLENGES_COUNT];
     int menuCursor[MENU_COUNT];
     int visibleCursor[MENU_COUNT];
@@ -97,8 +121,10 @@ static void DrawChoices_Randomize_WildEncounters(int selection, int y);
 static void DrawChoices_Randomize_Battles(int selection, int y);
 static void DrawChoices_Chaos_Mode(int selection, int y);
 static void DrawChoices_Random_OffOn(int selection, int y, bool8 active);
-static void DrawChoices_Nuzlocke_OnOff(int selection, int y, bool8 active);
 static void DrawChoices_Nuzlocke_Toggle(int selection, int y);
+static void DrawChoices_DifficultyIncrease_Toggle(int selection, int y);
+static void DrawChoices_DifficultyLevelCap_Toggle(int selection, int y);
+static void DrawChoices_ExpShare_Toggle(int selection, int y);
 static void ReDrawAll(void);
 static bool8 CheckConditions(int selection);
 static void DrawBgWindowFrames(void);
@@ -152,7 +178,35 @@ struct // MENU_NUZLOCKE
     [MENUITEM_NUZLOCKE_PLACEHOLDER_3]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
     [MENUITEM_NUZLOCKE_PLACEHOLDER_4]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
     [MENUITEM_NUZLOCKE_PLACEHOLDER_5]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
-    [MENUITEM_NUZLOCKE_SAVE]            = {NULL, NULL},
+    [MENUITEM_NUZLOCKE_NEXT]            = {NULL, NULL},
+};
+
+struct // MENU_DIFFICULTY
+{
+    void (*drawChoices)(int selection, int y);
+    int (*processInput)(int selection);
+} static const sItemFunctionsDifficulty[MENUITEM_DIFFICULTY_COUNT] =
+{
+    [MENUITEM_DIFFICULTY_INCREASED]        = {DrawChoices_DifficultyIncrease_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_DIFFICULTY_LEVEL_CAP]        = {DrawChoices_DifficultyLevelCap_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_3]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_4]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_5]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_DIFFICULTY_NEXT]            = {NULL, NULL},
+};
+
+struct // MENU_QOL
+{
+    void (*drawChoices)(int selection, int y);
+    int (*processInput)(int selection);
+} static const sItemFunctionsQoL[MENUITEM_QOL_COUNT] =
+{
+    [MENUITEM_QOL_EXP_SHARE]        = {DrawChoices_ExpShare_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_QOL_PLACEHOLDER_2]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_QOL_PLACEHOLDER_3]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_QOL_PLACEHOLDER_4]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_QOL_PLACEHOLDER_5]        = {DrawChoices_Nuzlocke_Toggle,     ProcessInput_Options_Two},
+    [MENUITEM_QOL_SAVE]            = {NULL, NULL},
 };
 
 static const struct BgTemplate sOptionMenuBgTemplates[] =
@@ -244,6 +298,7 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledRandomizer[MENUITEM_RA
 
 static const u8 sText_Description_Nuzlocke_Off[]               = _("Nuzlocke mode is disabled.");
 static const u8 sText_Description_Nuzlocke_On[]               = _("Nuzlocke mode is enabled.");
+static const u8 sText_Description_Nuzlocke_Next[]                     = _("Continue to Difficulty options.");
 static const u8 *const sOptionMenuItemDescriptionsNuzlocke[MENUITEM_NUZLOCKE_COUNT][2] =
 {
     [MENUITEM_NUZLOCKE_ENABLED]            = {sText_Description_Nuzlocke_Off,                 sText_Description_Nuzlocke_On,},
@@ -251,7 +306,7 @@ static const u8 *const sOptionMenuItemDescriptionsNuzlocke[MENUITEM_NUZLOCKE_COU
     [MENUITEM_NUZLOCKE_PLACEHOLDER_3]= {sText_Description_Nuzlocke_Off,                 sText_Description_Nuzlocke_On,},
     [MENUITEM_NUZLOCKE_PLACEHOLDER_4]= {sText_Description_Nuzlocke_Off,                 sText_Description_Nuzlocke_On,},
     [MENUITEM_NUZLOCKE_PLACEHOLDER_5]= {sText_Description_Nuzlocke_Off,                 sText_Description_Nuzlocke_On,},
-    [MENUITEM_NUZLOCKE_SAVE]                = {sText_Description_Save,                 sText_Empty,},
+    [MENUITEM_NUZLOCKE_NEXT]                = {sText_Description_Nuzlocke_Next,                 sText_Empty,},
 };
 static const u8 *const sOptionMenuItemDescriptionsDisabledNuzlocke[MENUITEM_NUZLOCKE_COUNT] =
 {
@@ -260,7 +315,53 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledNuzlocke[MENUITEM_NUZL
     [MENUITEM_NUZLOCKE_PLACEHOLDER_3]            = sText_Empty,
     [MENUITEM_NUZLOCKE_PLACEHOLDER_4]            = sText_Empty,
     [MENUITEM_NUZLOCKE_PLACEHOLDER_5]            = sText_Empty,
-    [MENUITEM_NUZLOCKE_SAVE]                = sText_Empty,
+    [MENUITEM_NUZLOCKE_NEXT]                = sText_Empty,
+};
+
+static const u8 sText_Description_Difficulty_Increase_Off[]               = _("Difficulty increase is disabled.");
+static const u8 sText_Description_Difficulty_Increase_On[]               = _("Difficulty increase is enabled.");
+static const u8 sText_Description_Difficulty_Level_Cap_Off[]               = _("Level cap is disabled.");
+static const u8 sText_Description_Difficulty_Level_Cap_On[]               = _("Level cap is enabled.");
+static const u8 sText_Description_Difficulty_Next[]                     = _("Continue to QoL options.");
+static const u8 *const sOptionMenuItemDescriptionsDifficulty[MENUITEM_DIFFICULTY_COUNT][2] =
+{
+    [MENUITEM_DIFFICULTY_INCREASED]            = {sText_Description_Difficulty_Increase_Off,                 sText_Description_Difficulty_Increase_On,},
+    [MENUITEM_DIFFICULTY_LEVEL_CAP]= {sText_Description_Difficulty_Level_Cap_Off,                 sText_Description_Difficulty_Level_Cap_On,},
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_3]= {sText_Description_Difficulty_Increase_Off,                 sText_Description_Difficulty_Increase_On,},
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_4]= {sText_Description_Difficulty_Increase_Off,                 sText_Description_Difficulty_Increase_On,},
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_5]= {sText_Description_Difficulty_Increase_Off,                 sText_Description_Difficulty_Increase_On,},
+    [MENUITEM_DIFFICULTY_NEXT]                = {sText_Description_Save,                 sText_Empty,},
+};
+static const u8 *const sOptionMenuItemDescriptionsDisabledDifficulty[MENUITEM_DIFFICULTY_COUNT] =
+{
+    [MENUITEM_DIFFICULTY_INCREASED]            = sText_Empty,
+    [MENUITEM_DIFFICULTY_LEVEL_CAP]            = sText_Empty,
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_3]            = sText_Empty,
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_4]            = sText_Empty,
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_5]            = sText_Empty,
+    [MENUITEM_DIFFICULTY_NEXT]                = sText_Empty,
+};
+
+static const u8 sText_Description_QoL_Exp_Share_Off[]               = _("Exp share is disabled.");
+static const u8 sText_Description_QoL_Exp_Share_On[]               = _("Exp share is is enabled.");
+static const u8 sText_Description_QoL_Save[]                     = _("Finish settings.");
+static const u8 *const sOptionMenuItemDescriptionsQoL[MENUITEM_QOL_COUNT][2] =
+{
+    [MENUITEM_QOL_EXP_SHARE]            = {sText_Description_QoL_Exp_Share_Off,                 sText_Description_QoL_Exp_Share_On,},
+    [MENUITEM_QOL_PLACEHOLDER_2]= {sText_Description_QoL_Exp_Share_Off,                 sText_Description_QoL_Exp_Share_On,},
+    [MENUITEM_QOL_PLACEHOLDER_3]= {sText_Description_QoL_Exp_Share_Off,                 sText_Description_QoL_Exp_Share_On,},
+    [MENUITEM_QOL_PLACEHOLDER_4]= {sText_Description_QoL_Exp_Share_Off,                 sText_Description_QoL_Exp_Share_On,},
+    [MENUITEM_QOL_PLACEHOLDER_5]= {sText_Description_QoL_Exp_Share_Off,                 sText_Description_QoL_Exp_Share_On,},
+    [MENUITEM_QOL_SAVE]                = {sText_Description_QoL_Save,                 sText_Empty,},
+};
+static const u8 *const sOptionMenuItemDescriptionsDisabledQoL[MENUITEM_QOL_COUNT] =
+{
+    [MENUITEM_QOL_EXP_SHARE]            = sText_Empty,
+    [MENUITEM_QOL_PLACEHOLDER_2]            = sText_Empty,
+    [MENUITEM_QOL_PLACEHOLDER_3]            = sText_Empty,
+    [MENUITEM_QOL_PLACEHOLDER_4]            = sText_Empty,
+    [MENUITEM_QOL_PLACEHOLDER_5]            = sText_Empty,
+    [MENUITEM_QOL_SAVE]                = sText_Empty,
 };
 
 // Menu left side option names text
@@ -270,6 +371,7 @@ static const u8 sText_WildPkmn[] =                  _("WILD ENCOUNTER");
 static const u8 sText_Trainer[] =                   _("BATTLES");
 static const u8 sText_Chaos[] =                     _("CHAOS MODE");
 static const u8 sText_Next[] =                      _("NEXT");
+static const u8 sText_Save[] =           _("SAVE");
 static const u8 *const sOptionMenuItemsNamesRandom[MENUITEM_RANDOMIZER_COUNT] =
 {
     [MENUITEM_RANDOMIZER_ENABLED]                    = sText_Randomizer,
@@ -283,7 +385,6 @@ static const u8 *const sOptionMenuItemsNamesRandom[MENUITEM_RANDOMIZER_COUNT] =
 // MENU_NUZLOCKE
 static const u8 sText_Nuzlocke[]        = _("NUZLOCKE");
 static const u8 sText_Placeholder[]        = _("PLACEHOLDER");
-static const u8 sText_Save[] =           _("SAVE");
 static const u8 *const sOptionMenuItemsNamesNuzlocke[MENUITEM_NUZLOCKE_COUNT] =
 {
     [MENUITEM_NUZLOCKE_ENABLED]        = sText_Nuzlocke,
@@ -291,7 +392,32 @@ static const u8 *const sOptionMenuItemsNamesNuzlocke[MENUITEM_NUZLOCKE_COUNT] =
     [MENUITEM_NUZLOCKE_PLACEHOLDER_3] = sText_Placeholder,
     [MENUITEM_NUZLOCKE_PLACEHOLDER_4] = sText_Placeholder,
     [MENUITEM_NUZLOCKE_PLACEHOLDER_5] = sText_Placeholder,
-    [MENUITEM_NUZLOCKE_SAVE]            = sText_Save,
+    [MENUITEM_NUZLOCKE_NEXT]            = sText_Next,
+};
+
+// MENU_DIFFICULTY
+static const u8 sText_Difficulty[]        = _("DIFFICULTY");
+static const u8 sText_LevelCap[]        = _("LEVEL CAP");
+static const u8 *const sOptionMenuItemsNamesDifficulty[MENUITEM_DIFFICULTY_COUNT] =
+{
+    [MENUITEM_DIFFICULTY_INCREASED]        = sText_Difficulty,
+    [MENUITEM_DIFFICULTY_LEVEL_CAP] = sText_LevelCap,
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_3] = sText_Placeholder,
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_4] = sText_Placeholder,
+    [MENUITEM_DIFFICULTY_PLACEHOLDER_5] = sText_Placeholder,
+    [MENUITEM_DIFFICULTY_NEXT]            = sText_Next,
+};
+
+// MENU_QOL
+static const u8 sText_ExpShare[]        = _("EXP SHARE");
+static const u8 *const sOptionMenuItemsNamesQoL[MENUITEM_QOL_COUNT] =
+{
+    [MENUITEM_QOL_EXP_SHARE]        = sText_ExpShare,
+    [MENUITEM_QOL_PLACEHOLDER_2] = sText_Placeholder,
+    [MENUITEM_QOL_PLACEHOLDER_3] = sText_Placeholder,
+    [MENUITEM_QOL_PLACEHOLDER_4] = sText_Placeholder,
+    [MENUITEM_QOL_PLACEHOLDER_5] = sText_Placeholder,
+    [MENUITEM_QOL_SAVE]            = sText_Save,
 };
 
 // Functions to dynamically retrieve data
@@ -311,6 +437,16 @@ static const u8 *const OptionTextDescription(void) {
               return sOptionMenuItemDescriptionsDisabledNuzlocke[menuItem];
           selection = options->nuzlocke[menuItem];
           return sOptionMenuItemDescriptionsNuzlocke[menuItem][selection];
+      case MENU_DIFFICULTY:
+          if (!CheckConditions(menuItem) && sOptionMenuItemDescriptionsDisabledDifficulty[menuItem] != sText_Empty)
+              return sOptionMenuItemDescriptionsDisabledDifficulty[menuItem];
+          selection = options->difficulty[menuItem];
+          return sOptionMenuItemDescriptionsDifficulty[menuItem][selection];
+      case MENU_QOL:
+          if (!CheckConditions(menuItem) && sOptionMenuItemDescriptionsDisabledQoL[menuItem] != sText_Empty)
+              return sOptionMenuItemDescriptionsDisabledQoL[menuItem];
+          selection = options->qol[menuItem];
+          return sOptionMenuItemDescriptionsQoL[menuItem][selection];
       default: return sOptionMenuItemDescriptionsRandomizer[0][0];
     }
 }
@@ -319,6 +455,8 @@ static const u8 *const OptionTextRight(u8 menuItem) {
   switch (options->submenu) {
   case MENU_RANDOMIZER:       return sOptionMenuItemsNamesRandom[menuItem];
   case MENU_NUZLOCKE:         return sOptionMenuItemsNamesNuzlocke[menuItem];
+  case MENU_DIFFICULTY:         return sOptionMenuItemsNamesDifficulty[menuItem];
+  case MENU_QOL:         return sOptionMenuItemsNamesQoL[menuItem];
   default: return sOptionMenuItemsNamesRandom[0];
   }
 }
@@ -342,7 +480,7 @@ static const u8 sText_TopBar_Right[]            = _("{R_BUTTON}CUSTOM");
 static const u8 sText_TopBar_Randomizer[]       = _("RANDOMIZER");
 static const u8 sText_TopBar_Nuzlocke[]         = _("NUZLOCKE");
 static const u8 sText_TopBar_Difficulty[]       = _("DIFFICULTY");
-static const u8 sText_TopBar_Challenges[]       = _("CHALLENGES");
+static const u8 sText_TopBar_QoL[]       = _("QOL");
 static void DrawTopBarText(void)
 {
     const u8 color[3] = { TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_WHITE, TEXT_COLOR_OPTIONS_GRAY_FG };
@@ -360,6 +498,18 @@ static void DrawTopBarText(void)
             width = GetStringWidth(FONT_SMALL, sText_TopBar_Nuzlocke, 0) / 2;
             AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, 5, 1, color, 0, sText_TopBar_Left);
             AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, 120-width, 1, color, 0, sText_TopBar_Nuzlocke);
+            AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, right, 1, color, 0, sText_TopBar_Right);
+            break;
+        case MENU_DIFFICULTY:
+            width = GetStringWidth(FONT_SMALL, sText_TopBar_Difficulty, 0) / 2;
+            AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, 5, 1, color, 0, sText_TopBar_Left);
+            AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, 120-width, 1, color, 0, sText_TopBar_Difficulty);
+            AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, right, 1, color, 0, sText_TopBar_Right);
+            break;
+        case MENU_QOL:
+            width = GetStringWidth(FONT_SMALL, sText_TopBar_QoL, 0) / 2;
+            AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, 5, 1, color, 0, sText_TopBar_Left);
+            AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, 120-width, 1, color, 0, sText_TopBar_QoL);
             AddTextPrinterParameterized3(WIN_TOPBAR, FONT_SMALL, right, 1, color, 0, sText_TopBar_Right);
             break;
     }
@@ -443,6 +593,12 @@ static void DrawChoices(u32 id, int y) { //right side draw function
     case MENU_NUZLOCKE:
       if (sItemFunctionsNuzlocke[id].drawChoices != NULL)
           sItemFunctionsNuzlocke[id].drawChoices(options->nuzlocke[id], y);
+    case MENU_DIFFICULTY:
+      if (sItemFunctionsDifficulty[id].drawChoices != NULL)
+          sItemFunctionsDifficulty[id].drawChoices(options->difficulty[id], y);
+    case MENU_QOL:
+      if (sItemFunctionsQoL[id].drawChoices != NULL)
+          sItemFunctionsQoL[id].drawChoices(options->qol[id], y);
       break;
   }
 }
@@ -457,6 +613,8 @@ static u8 MenuItemCount(void) {
   switch (options->submenu) {
     case MENU_RANDOMIZER:   return MENUITEM_RANDOMIZER_COUNT;
     case MENU_NUZLOCKE:     return MENUITEM_NUZLOCKE_COUNT;
+    case MENU_DIFFICULTY:     return MENUITEM_DIFFICULTY_COUNT;
+    case MENU_QOL:     return MENUITEM_QOL_COUNT;
     default: return MENUITEM_RANDOMIZER_COUNT;
   }
 }
@@ -464,7 +622,9 @@ static u8 MenuItemCount(void) {
 static u8 MenuItemCancel(void) {
   switch (options->submenu) {
     case MENU_RANDOMIZER:   return MENUITEM_RANDOMIZER_NEXT;
-    case MENU_NUZLOCKE:     return MENUITEM_NUZLOCKE_SAVE;
+    case MENU_NUZLOCKE:     return MENUITEM_NUZLOCKE_NEXT;
+    case MENU_DIFFICULTY:     return MENUITEM_DIFFICULTY_NEXT;
+    case MENU_QOL:     return MENUITEM_QOL_SAVE;
     default: return MENUITEM_RANDOMIZER_NEXT;
   }
 }
@@ -529,7 +689,11 @@ void CB2_InitGuiMenu(void) {
       options->randomizer[MENUITEM_CHAOS_MODE] = 0;
       // Menu nuzlocke
       options->nuzlocke[MENUITEM_NUZLOCKE_ENABLED] = 1;
-
+      // Menu difficulty
+      options->difficulty[MENUITEM_DIFFICULTY_INCREASED] = 1;
+      options->difficulty[MENUITEM_DIFFICULTY_LEVEL_CAP] = 1;
+      // Menu QoL
+      options->qol[MENUITEM_QOL_EXP_SHARE] = 1;
       options->submenu = MENU_RANDOMIZER;
       gMain.state++;
       break;
@@ -683,40 +847,40 @@ static void Task_OptionMenuProcessInput(u8 taskId) {
                   DrawChoices(cursor, options->visibleCursor[options->submenu] * Y_DIFF);
           }
       }
-      // else if (options->submenu == MENU_DIFFICULTY)
-      // {
-      //     int cursor = options->menuCursor[options->submenu];
-      //     u8 previousOption = options->sel_difficulty[cursor];
-      //     if (CheckConditions(cursor))
-      //     {
-      //         if (sItemFunctionsDifficulty[cursor].processInput != NULL)
-      //         {
-      //             options->sel_difficulty[cursor] = sItemFunctionsDifficulty[cursor].processInput(previousOption);
-      //             ReDrawAll();
-      //             DrawDescriptionText();
-      //         }
+      else if (options->submenu == MENU_DIFFICULTY)
+      {
+          int cursor = options->menuCursor[options->submenu];
+          u8 previousOption = options->difficulty[cursor];
+          if (CheckConditions(cursor))
+          {
+              if (sItemFunctionsDifficulty[cursor].processInput != NULL)
+              {
+                  options->difficulty[cursor] = sItemFunctionsDifficulty[cursor].processInput(previousOption);
+                  ReDrawAll();
+                  DrawDescriptionText();
+              }
 
-      //         if (previousOption != options->sel_difficulty[cursor])
-      //             DrawChoices(cursor, options->visibleCursor[options->submenu] * Y_DIFF);
-      //     }
-      // }
-      // else if (options->submenu == MENU_CHALLENGES)
-      // {
-      //     int cursor = options->menuCursor[options->submenu];
-      //     u8 previousOption = options->sel_challenges[cursor];
-      //     if (CheckConditions(cursor))
-      //     {
-      //         if (sItemFunctionsChallenges[cursor].processInput != NULL)
-      //         {
-      //             options->sel_challenges[cursor] = sItemFunctionsChallenges[cursor].processInput(previousOption);
-      //             ReDrawAll();
-      //             DrawDescriptionText();
-      //         }
+              if (previousOption != options->difficulty[cursor])
+                  DrawChoices(cursor, options->visibleCursor[options->submenu] * Y_DIFF);
+          }
+      }
+      else if (options->submenu == MENU_QOL)
+      {
+          int cursor = options->menuCursor[options->submenu];
+          u8 previousOption = options->qol[cursor];
+          if (CheckConditions(cursor))
+          {
+              if (sItemFunctionsQoL[cursor].processInput != NULL)
+              {
+                  options->qol[cursor] = sItemFunctionsQoL[cursor].processInput(previousOption);
+                  ReDrawAll();
+                  DrawDescriptionText();
+              }
 
-      //         if (previousOption != options->sel_challenges[cursor])
-      //             DrawChoices(cursor, options->visibleCursor[options->submenu] * Y_DIFF);
-      //     }
-      // }
+              if (previousOption != options->qol[cursor])
+                  DrawChoices(cursor, options->visibleCursor[options->submenu] * Y_DIFF);
+          }
+      }
   }
   else if (JOY_NEW(R_BUTTON))
   {
@@ -811,40 +975,48 @@ static void DrawChoices_Random_OffOn(int selection, int y, bool8 active) {
 }
 
 static void DrawChoices_Randomizer_Toggle(int selection, int y) {
-  bool8 active = CheckConditions(MENUITEM_RANDOMIZER_ENABLED);
+  bool8 active = options->randomizer[MENUITEM_RANDOMIZER_ENABLED];
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Randomize_Starter(int selection, int y) {
-  bool8 active = CheckConditions(MENUITEM_RANDOM_STARTERS_ENABLED);
+  bool8 active = options->randomizer[MENUITEM_RANDOM_STARTERS_ENABLED];
   DrawChoices_Random_OffOn(selection, y, active);
 }
 static void DrawChoices_Randomize_WildEncounters(int selection, int y) {
-  bool8 active = CheckConditions(MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED);
+  bool8 active = options->randomizer[MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED];
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Randomize_Battles(int selection, int y) {
-  bool8 active = CheckConditions(MENUITEM_RANDOM_BATTLES_ENABLED);
+  bool8 active = options->randomizer[MENUITEM_RANDOM_BATTLES_ENABLED];
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Chaos_Mode(int selection, int y) {
-  bool8 active = CheckConditions(MENUITEM_CHAOS_MODE);
+  bool8 active = options->randomizer[MENUITEM_CHAOS_MODE];
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 // Menu Nuzlocke
-static void DrawChoices_Nuzlocke_OnOff(int selection, int y, bool8 active) {
-    u8 styles[2] = {0};
-    styles[selection] = 1;
-    DrawOptionMenuChoice(sText_On, 104, y, styles[0], active);
-    DrawOptionMenuChoice(sText_Off, GetStringRightAlignXOffset(1, sText_Off, 198), y, styles[1], active);
+static void DrawChoices_Nuzlocke_Toggle(int selection, int y) {
+    bool8 active = options->nuzlocke[MENUITEM_NUZLOCKE_ENABLED];
+    DrawChoices_Random_OffOn(selection, y, active);
 }
 
-static void DrawChoices_Nuzlocke_Toggle(int selection, int y) {
-    bool8 active = CheckConditions(MENUITEM_NUZLOCKE_ENABLED);
-    DrawChoices_Nuzlocke_OnOff(selection, y, active);
+static void DrawChoices_DifficultyIncrease_Toggle(int selection, int y) {
+    bool8 active = options->difficulty[MENUITEM_DIFFICULTY_INCREASED];
+    DrawChoices_Random_OffOn(selection, y, active);
+}
+
+static void DrawChoices_DifficultyLevelCap_Toggle(int selection, int y) {
+    bool8 active = options->difficulty[MENUITEM_DIFFICULTY_LEVEL_CAP];
+    DrawChoices_Random_OffOn(selection, y, active);
+}
+
+static void DrawChoices_ExpShare_Toggle(int selection, int y) {
+    bool8 active = options->qol[MENUITEM_QOL_EXP_SHARE];
+    DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void Task_RandomizerChallengesMenuSave(u8 taskId) {
@@ -963,4 +1135,7 @@ void SaveData(void) {
   gSaveBlock1Ptr->randomizeBattles = options->randomizer[MENUITEM_RANDOM_BATTLES_ENABLED];
   gSaveBlock1Ptr->chaosModeActive = options->randomizer[MENUITEM_CHAOS_MODE];
   gSaveBlock1Ptr->nuzlockeModeActive = options->nuzlocke[MENUITEM_NUZLOCKE_ENABLED];
+  gSaveBlock1Ptr->difficultyIncreased = options->difficulty[MENUITEM_DIFFICULTY_INCREASED];
+  gSaveBlock1Ptr->levelCapIsActive = options->difficulty[MENUITEM_DIFFICULTY_LEVEL_CAP];
+  gSaveBlock1Ptr->expShare = options->qol[MENUITEM_QOL_EXP_SHARE];
 }

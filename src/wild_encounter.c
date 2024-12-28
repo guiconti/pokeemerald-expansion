@@ -423,7 +423,10 @@ static void CreateWildMon(u16 species, u8 level)
 
     ZeroEnemyPartyMons();
     // TODO: Check difficulty to increase level
-    level = level * 2;
+    if (gSaveBlock1Ptr->difficultyIncreased) {
+        // level = level * 2;
+        level = level;
+    }
     if (gSaveBlock1Ptr->randomizeWildEncounters) {
         species = GetRandomWildMonSpecies(species, level);
     }

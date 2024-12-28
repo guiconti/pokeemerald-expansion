@@ -11719,6 +11719,9 @@ bool32 IsAlly(u32 battlerAtk, u32 battlerDef)
 
 bool32 IsGen6ExpShareEnabled(void)
 {
+    if (gSaveBlock1Ptr->expShare == TRUE) {
+        return TRUE;
+    }
     if (I_EXP_SHARE_FLAG <= TEMP_FLAGS_END)
         return FALSE;
 
