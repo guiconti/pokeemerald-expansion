@@ -3524,5 +3524,8 @@ u8 NuzlockeGetCurrentRegionMapSectionId(void) {
             return MAPSEC_SAFARI_ZONE_AREA6;
         }
     }
+    #ifndef NDEBUG
+    MgbaPrintf(MGBA_LOG_DEBUG, "NuzlockeGetCurrentRegionMapSectionId: %d", regionMapSectionId);
+    #endif
     return regionMapSectionId;
 }
