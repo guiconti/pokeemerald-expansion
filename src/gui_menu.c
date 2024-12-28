@@ -35,6 +35,7 @@ enum {
   MENUITEM_RANDOM_STARTERS_ENABLED,
   MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED,
   MENUITEM_RANDOM_BATTLES_ENABLED,
+  MENUITEM_CONSISTENT_TYPE,
   MENUITEM_CHAOS_MODE,
   MENUITEM_RANDOMIZER_NEXT,
   MENUITEM_RANDOMIZER_COUNT,
@@ -119,6 +120,7 @@ static void DrawChoices_Randomizer_Toggle(int selection, int y);
 static void DrawChoices_Randomize_Starter(int selection, int y);
 static void DrawChoices_Randomize_WildEncounters(int selection, int y);
 static void DrawChoices_Randomize_Battles(int selection, int y);
+static void DrawChoices_Randomize_ConsistentType(int selection, int y);
 static void DrawChoices_Chaos_Mode(int selection, int y);
 static void DrawChoices_Random_OffOn(int selection, int y, bool8 active);
 static void DrawChoices_Nuzlocke_Toggle(int selection, int y);
@@ -163,6 +165,7 @@ struct { // MENU_RANDOMIZER
     [MENUITEM_RANDOM_STARTERS_ENABLED]                   = {DrawChoices_Randomize_Starter,          ProcessInput_Options_Two},
     [MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED]                 = {DrawChoices_Randomize_WildEncounters,         ProcessInput_Options_Two},
     [MENUITEM_RANDOM_BATTLES_ENABLED]                   = {DrawChoices_Randomize_Battles,          ProcessInput_Options_Two},
+    [MENUITEM_CONSISTENT_TYPE]                   = {DrawChoices_Randomize_ConsistentType,          ProcessInput_Options_Two},
     [MENUITEM_CHAOS_MODE]                    = {DrawChoices_Chaos_Mode,           ProcessInput_Options_Two},
     [MENUITEM_RANDOMIZER_NEXT]   = {NULL, NULL},
 };
@@ -275,6 +278,8 @@ static const u8 sText_Description_Random_WildEncounter_Off[]          = _("Same 
 static const u8 sText_Description_Random_WildEncounter_On[]           = _("Randomize wild POKéMON.");
 static const u8 sText_Description_Random_Trainer_Off[]              = _("Trainer will have their expected\nparty.");
 static const u8 sText_Description_Random_Trainer_On[]               = _("Randomize enemy trainer parties.");
+static const u8 sText_Description_Random_ConsistentType_Off[]              = _("Types won't be respected\nwhen randomizing.");
+static const u8 sText_Description_Random_ConsistentType_On[]               = _("Types will be respected\nwhen randomizing.");
 static const u8 sText_Description_Chaos_Mode_Off[]              = _("Everything will be randomized.");
 static const u8 sText_Description_Chaos_Mode_On[]               = _("There will be some randomness\nbut not everything will be randomized.");
 static const u8 sText_Description_Random_Next[]                     = _("Continue to Nuzlocke options.");
@@ -284,6 +289,7 @@ static const u8 *const sOptionMenuItemDescriptionsRandomizer[MENUITEM_RANDOMIZER
     [MENUITEM_RANDOM_STARTERS_ENABLED]                   = {sText_Description_Random_Starter_Off,                  sText_Description_Random_Starter_On},
     [MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED]                 = {sText_Description_Random_WildEncounter_Off,              sText_Description_Random_WildEncounter_On},
     [MENUITEM_RANDOM_BATTLES_ENABLED]                   = {sText_Description_Random_Trainer_Off,           sText_Description_Random_Trainer_On},
+    [MENUITEM_CONSISTENT_TYPE]                   = {sText_Description_Random_ConsistentType_Off,           sText_Description_Random_ConsistentType_On},
     [MENUITEM_CHAOS_MODE]                    = {sText_Description_Chaos_Mode_Off,            sText_Description_Chaos_Mode_On},
     [MENUITEM_RANDOMIZER_NEXT]                      = {sText_Description_Random_Next,                  sText_Empty},
 };
@@ -292,6 +298,7 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledRandomizer[MENUITEM_RA
     [MENUITEM_RANDOM_STARTERS_ENABLED]                   = sText_Empty,
     [MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED]                 = sText_Empty,
     [MENUITEM_RANDOM_BATTLES_ENABLED]                   = sText_Empty,
+    [MENUITEM_CONSISTENT_TYPE]                   = sText_Empty,
     [MENUITEM_CHAOS_MODE]                   = sText_Empty,
     [MENUITEM_RANDOMIZER_NEXT]                   = sText_Empty,
 };
@@ -369,6 +376,7 @@ static const u8 sText_Randomizer[] =                _("RANDOMIZER");
 static const u8 sText_Starter[] =                   _("STARTER POKéMON");
 static const u8 sText_WildPkmn[] =                  _("WILD ENCOUNTER");
 static const u8 sText_Trainer[] =                   _("BATTLES");
+static const u8 sText_Types[] =                   _("TYPES");
 static const u8 sText_Chaos[] =                     _("CHAOS MODE");
 static const u8 sText_Next[] =                      _("NEXT");
 static const u8 sText_Save[] =           _("SAVE");
@@ -378,6 +386,7 @@ static const u8 *const sOptionMenuItemsNamesRandom[MENUITEM_RANDOMIZER_COUNT] =
     [MENUITEM_RANDOM_STARTERS_ENABLED]                   = sText_Starter,
     [MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED]                 = sText_WildPkmn,
     [MENUITEM_RANDOM_BATTLES_ENABLED]                   = sText_Trainer,
+    [MENUITEM_CONSISTENT_TYPE]                   = sText_Types,
     [MENUITEM_CHAOS_MODE]                    = sText_Chaos,
     [MENUITEM_RANDOMIZER_NEXT]                      = sText_Next,
 };
@@ -475,8 +484,8 @@ static void VBlankCB(void) {
   TransferPlttBuffer();
 }
 
-static const u8 sText_TopBar_Left[]             = _("{L_BUTTON}GENERAL");
-static const u8 sText_TopBar_Right[]            = _("{R_BUTTON}CUSTOM");
+static const u8 sText_TopBar_Left[]             = _("{L_BUTTON}BACK");
+static const u8 sText_TopBar_Right[]            = _("{R_BUTTON}NEXT");
 static const u8 sText_TopBar_Randomizer[]       = _("RANDOMIZER");
 static const u8 sText_TopBar_Nuzlocke[]         = _("NUZLOCKE");
 static const u8 sText_TopBar_Difficulty[]       = _("DIFFICULTY");
@@ -686,9 +695,10 @@ void CB2_InitGuiMenu(void) {
       options->randomizer[MENUITEM_RANDOM_STARTERS_ENABLED] = 1;
       options->randomizer[MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED] = 1;
       options->randomizer[MENUITEM_RANDOM_BATTLES_ENABLED] = 1;
+      options->randomizer[MENUITEM_CONSISTENT_TYPE] = 1;
       options->randomizer[MENUITEM_CHAOS_MODE] = 0;
       // Menu nuzlocke
-      options->nuzlocke[MENUITEM_NUZLOCKE_ENABLED] = 1;
+      options->nuzlocke[MENUITEM_NUZLOCKE_ENABLED] = 0;
       // Menu difficulty
       options->difficulty[MENUITEM_DIFFICULTY_INCREASED] = 1;
       options->difficulty[MENUITEM_DIFFICULTY_LEVEL_CAP] = 1;
@@ -950,6 +960,7 @@ static bool8 CheckConditions(int selection)
         case MENUITEM_RANDOM_STARTERS_ENABLED:                   return options->randomizer[MENUITEM_RANDOMIZER_ENABLED];
         case MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED:                   return options->randomizer[MENUITEM_RANDOMIZER_ENABLED];
         case MENUITEM_RANDOM_BATTLES_ENABLED:                   return options->randomizer[MENUITEM_RANDOMIZER_ENABLED];
+        case MENUITEM_CONSISTENT_TYPE:                   return options->randomizer[MENUITEM_RANDOMIZER_ENABLED];
         case MENUITEM_CHAOS_MODE:                   return options->randomizer[MENUITEM_RANDOMIZER_ENABLED];
         default:                                        return TRUE;
       }
@@ -990,6 +1001,11 @@ static void DrawChoices_Randomize_WildEncounters(int selection, int y) {
 
 static void DrawChoices_Randomize_Battles(int selection, int y) {
   bool8 active = options->randomizer[MENUITEM_RANDOM_BATTLES_ENABLED];
+  DrawChoices_Random_OffOn(selection, y, active);
+}
+
+static void DrawChoices_Randomize_ConsistentType(int selection, int y) {
+  bool8 active = options->randomizer[MENUITEM_CONSISTENT_TYPE];
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
@@ -1133,6 +1149,7 @@ void SaveData(void) {
   gSaveBlock1Ptr->randomizeStarters = options->randomizer[MENUITEM_RANDOM_STARTERS_ENABLED];
   gSaveBlock1Ptr->randomizeWildEncounters = options->randomizer[MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED];
   gSaveBlock1Ptr->randomizeBattles = options->randomizer[MENUITEM_RANDOM_BATTLES_ENABLED];
+  gSaveBlock1Ptr->randomizeConsistentType = options->randomizer[MENUITEM_CONSISTENT_TYPE];
   gSaveBlock1Ptr->chaosModeActive = options->randomizer[MENUITEM_CHAOS_MODE];
   gSaveBlock1Ptr->nuzlockeModeActive = options->nuzlocke[MENUITEM_NUZLOCKE_ENABLED];
   gSaveBlock1Ptr->difficultyIncreased = options->difficulty[MENUITEM_DIFFICULTY_INCREASED];
