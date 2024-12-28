@@ -6121,11 +6121,6 @@ static s32 Factorial(s32 n)
 
 // Gui stuff
 const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
-    // s32 i;
-    // u8 monsCount = originalTrainer->partySize;
-    // const struct TrainerMon *originalPartyData = originalTrainer->party;
-    // for (i = 0; i < monsCount; i++) {
-    // }
     struct Trainer *randomizedTrainer = Alloc(sizeof(struct Trainer));
     *randomizedTrainer = *originalTrainer;
     randomizedTrainer->aiFlags = AI_FLAG_SMART_TRAINER;
@@ -6135,16 +6130,15 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
     // We should run a different randomization algorithm  
     for (int i = 0; i < randomizedTrainer->partySize; i++) {
         u16 pickedPokemon = PickRandomPokemon(TIER_ONE, TRUE);
-        // TODO: Nickname
         newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
+        const struct SmogonVariant *selectedSmogonVariant = &gSpeciesInfo[pickedPokemon].smogonVariants[0];
         // 1% of being shiny
         bool8 isShiny = GenerateRandomNumber(1, 10000) <= B_SHINY_ODDS;
         // We are boosting shiny pokemons
         if (isShiny) {
             newParty[i].ev = TRAINER_PARTY_EVS(255, 255, 255, 255, 255, 255);
         } else {
-            // TODO: Get ev from smogon
-            newParty[i].ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 6);
+            newParty[i].ev = selectedSmogonVariant->ev;
         }
         newParty[i].iv = TRAINER_PARTY_IVS(
             MAX_PER_STAT_IVS,
@@ -6154,22 +6148,18 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
             MAX_PER_STAT_IVS,
             MAX_PER_STAT_IVS
         );
-        // TODO: Get moves from smogon
-        newParty[i].moves[0] = MOVE_TACKLE;
-        newParty[i].moves[1] = MOVE_TACKLE;
-        newParty[i].moves[2] = MOVE_TACKLE;
-        newParty[i].moves[3] = MOVE_TACKLE;
+        newParty[i].moves[0] = selectedSmogonVariant->moves[0];
+        newParty[i].moves[1] = selectedSmogonVariant->moves[1];
+        newParty[i].moves[2] = selectedSmogonVariant->moves[2];
+        newParty[i].moves[3] = selectedSmogonVariant->moves[3];
         newParty[i].species = pickedPokemon;
-        // TODO: Get held item from smogon
-        newParty[i].heldItem = ITEM_LEFTOVERS;
-        // TODO: Get ability from smogon
-        newParty[i].ability = ABILITY_ILLUSION;
+        newParty[i].heldItem = selectedSmogonVariant->heldItem;
+        newParty[i].ability = selectedSmogonVariant->ability;
         // TODO: Use difficulty levels to scale level
         newParty[i].lvl = originalTrainer->party[i].lvl * 2;
         newParty[i].ball = originalTrainer->party[i].ball;
         newParty[i].friendship = MAX_FRIENDSHIP;
-        // TODO: Get nature from smogon
-        newParty[i].nature = NATURE_ADAMANT;
+        newParty[i].nature = selectedSmogonVariant->nature;
         // If the pokemon is genderless we need to respect that
         if (gSpeciesInfo[pickedPokemon].genderRatio == MON_MALE) {
             newParty[i].gender = MALE;
