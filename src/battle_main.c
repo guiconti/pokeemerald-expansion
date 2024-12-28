@@ -6137,9 +6137,15 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
         u16 pickedPokemon = PickRandomPokemon(TIER_ONE, TRUE);
         // TODO: Nickname
         newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
-        // TODO: Get ev from smogon
-        newParty[i].ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 6);
-        // TODO: Fix
+        // 1% of being shiny
+        bool8 isShiny = GenerateRandomNumber(1, 10000) <= B_SHINY_ODDS;
+        // We are boosting shiny pokemons
+        if (isShiny) {
+            newParty[i].ev = TRAINER_PARTY_EVS(255, 255, 255, 255, 255, 255);
+        } else {
+            // TODO: Get ev from smogon
+            newParty[i].ev = TRAINER_PARTY_EVS(252, 0, 252, 0, 0, 6);
+        }
         newParty[i].iv = TRAINER_PARTY_IVS(
             MAX_PER_STAT_IVS,
             MAX_PER_STAT_IVS,
@@ -6163,11 +6169,17 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer) {
         newParty[i].ball = originalTrainer->party[i].ball;
         newParty[i].friendship = MAX_FRIENDSHIP;
         // TODO: Get nature from smogon
-        newParty[i].nature = NATURE_ADAMANT,
-        // TODO: This might break for genderless pokemons, not sure
-        newParty[i].gender = originalTrainer->party[i].gender;
-        // 1% of being shiny
-        newParty[i].isShiny = GenerateRandomNumber(1, 100) == 1;
+        newParty[i].nature = NATURE_ADAMANT;
+        // If the pokemon is genderless we need to respect that
+        if (gSpeciesInfo[pickedPokemon].genderRatio == MON_MALE) {
+            newParty[i].gender = MALE;
+        } else if (gSpeciesInfo[pickedPokemon].genderRatio == MON_FEMALE) {
+            newParty[i].gender = FEMALE;
+        // I believe that for genderless we just don't set the value for the gender
+        } else if (gSpeciesInfo[pickedPokemon].genderRatio != MON_GENDERLESS) {
+            newParty[i].gender = originalTrainer->party[i].gender;
+        }
+        newParty[i].isShiny = isShiny;
         newParty[i].gigantamaxFactor = FALSE;
         newParty[i].shouldUseDynamax = FALSE;
         newParty[i].dynamaxLevel = MAX_DYNAMAX_LEVEL;

@@ -477,6 +477,10 @@ struct SpeciesInfo /*0xC4*/
 #endif //P_GENDER_DIFFERENCES
 #endif //OW_PKMN_OBJECTS_SHARE_PALETTES
 #endif //OW_POKEMON_OBJECT_EVENTS
+
+
+    // Gui stuff
+    const struct SmogonVariant *smogonVariants;
 };
 
 struct MoveInfo
@@ -916,5 +920,13 @@ u16 PickTierTwoPokemon(void);
 u16 PickTierOnePokemon(bool8 includeLegendary);
 u16 PickFromAllPokemon(bool8 includeLegendary);
 u16 PickRandomPokemon(u8 tier, bool8 includeLegendary);
+
+struct SmogonVariant {
+    u16 heldItem;
+    u16 ability;
+    u8 nature;
+    const u8 *ev;
+    u16 moves[4];
+};
 
 #endif // GUARD_POKEMON_H

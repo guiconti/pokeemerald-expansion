@@ -296,5 +296,6 @@
 #define B_RANDOMIZE_BATTLE_POKEMONS     TRUE // If set to TRUE, the Pokémon in battle will be randomized.
 #define B_MIN_LEVEL_FOR_TIER_ONE        36
 #define B_MIN_LEVEL_FOR_TIER_TWO        17
+#define B_SHINY_ODDS                    100  // This number / 100 will be the % chance of a shiny Pokémon appearing in battle. So 100 means 1% of being shiny
 
 #endif // GUARD_CONFIG_BATTLE_H
