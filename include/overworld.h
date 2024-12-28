@@ -164,4 +164,7 @@ enum ItemObtainFlags
 };
 bool8 GetSetItemObtained(u16 item, enum ItemObtainFlags caseId);
 
+// Gui stuff
+u8 NuzlockeGetCurrentRegionMapSectionId(void);
+
 #endif // GUARD_OVERWORLD_H

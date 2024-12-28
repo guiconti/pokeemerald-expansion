@@ -427,7 +427,7 @@ static void CreateWildMon(u16 species, u8 level)
         // level = level * 2;
         level = level;
     }
-    if (gSaveBlock1Ptr->randomizeWildEncounters) {
+    if (gSaveBlock1Ptr->randomizeWildEncounters && CheckFeebas() == FALSE) {
         species = GetRandomWildMonSpecies(species, level);
     }
 
@@ -1145,7 +1145,11 @@ bool8 StandardWildEncounter_Debug(void)
 
 // Gui stuff
 u16 GetRandomWildMonSpecies(u16 species, u8 level) {
+    if (gSaveBlock1Ptr->chaosModeActive) {
+        return PickRandomPokemon(ALL_TIERS, TRUE);
+    }
     u8 tier;
+    u16 mapOffset = NuzlockeGetCurrentRegionMapSectionId(); //12289, 49157
     if (level >= B_MIN_LEVEL_FOR_TIER_ONE) {
         tier = TIER_ONE;
     } else if (level >= B_MIN_LEVEL_FOR_TIER_TWO) {
@@ -1153,5 +1157,5 @@ u16 GetRandomWildMonSpecies(u16 species, u8 level) {
     } else {
         tier = TIER_THREE;
     }
-    return PickRandomPokemon(tier, 0);
+    return PickRandomPokemonSeeded(tier, 0, MAX_TRAINERS_COUNT + species + mapOffset);
 }

@@ -3506,3 +3506,23 @@ void ScriptHideItemDescription(struct ScriptContext *ctx)
 #endif // OW_SHOW_ITEM_DESCRIPTIONS
 
 
+u8 NuzlockeGetCurrentRegionMapSectionId(void) {
+    u8 regionMapSectionId = GetCurrentRegionMapSectionId();
+    if (regionMapSectionId == MAPSEC_SAFARI_ZONE) {
+        switch(gSaveBlock1Ptr->location.mapNum) {
+        case MAP_NUM(SAFARI_ZONE_SOUTH):
+            return MAPSEC_SAFARI_ZONE_AREA1;
+        case MAP_NUM(SAFARI_ZONE_SOUTHWEST):
+            return MAPSEC_SAFARI_ZONE_AREA2;
+        case MAP_NUM(SAFARI_ZONE_NORTHWEST):
+            return MAPSEC_SAFARI_ZONE_AREA3;
+        case MAP_NUM(SAFARI_ZONE_NORTH):
+            return MAPSEC_SAFARI_ZONE_AREA4;
+        case MAP_NUM(SAFARI_ZONE_SOUTHEAST):
+            return MAPSEC_SAFARI_ZONE_AREA5;
+        case MAP_NUM(SAFARI_ZONE_NORTHEAST):
+            return MAPSEC_SAFARI_ZONE_AREA6;
+        }
+    }
+    return regionMapSectionId;
+}
