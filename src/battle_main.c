@@ -70,6 +70,7 @@
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/weather.h"
+#include "data/opponents.h"
 #include "cable_club.h"
 
 extern const struct BgTemplate gBattleBgTemplates[];
@@ -6129,7 +6130,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
     // TODO: If it is a TRAINER_CLASS_LEADER || TRAINER_CLASS_ELITE_FOUR || TRAINER_CLASS_RIVAL || TRAINER_CLASS_MAGMA_LEADER
     // We should run a different randomization algorithm  
     for (int i = 0; i < randomizedTrainer->partySize; i++) {
-        u16 pickedPokemon = PickRandomPokemonSeeded(TIER_ONE, gSpeciesInfo[originalTrainer->party[i].species].types, 2, TRUE, trainerNum);
+        u16 pickedPokemon = PickRandomPokemonSeeded(trainerIdToMetadata[trainerNum].tier, trainerIdToMetadata[trainerNum].types, NUMBER_OF_MON_TYPES, TRUE, trainerNum);
         newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
         u8 smogonVariantLength = sizeof(const struct SmogonVariant) / sizeof(gSpeciesInfo[pickedPokemon].smogonVariants[0]);
         u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, trainerNum);
