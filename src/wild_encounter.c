@@ -23,6 +23,7 @@
 #include "constants/items.h"
 #include "constants/layouts.h"
 #include "constants/weather.h"
+#include "data/wild_encounter.h"
 
 extern const u8 EventScript_SprayWoreOff[];
 
@@ -417,18 +418,19 @@ u8 PickWildMonNature(void)
     return Random() % NUM_NATURES;
 }
 
-static void CreateWildMon(u16 species, u8 level)
+static void CreateWildMon(u16 species, u8 level, u8 area)
 {
     bool32 checkCuteCharm = TRUE;
 
     ZeroEnemyPartyMons();
     // TODO: Check difficulty to increase level
+    // TODO: Fix this
     if (gSaveBlock1Ptr->difficultyIncreased) {
         // level = level * 2;
         level = level;
     }
     if (gSaveBlock1Ptr->randomizeWildEncounters && CheckFeebas() == FALSE) {
-        species = GetRandomWildMonSpecies(species, level);
+        species = GetRandomWildMonSpecies(species, level, area);
     }
 
     switch (gSpeciesInfo[species].genderRatio)
@@ -517,7 +519,7 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
     if (gMapHeader.mapLayoutId != LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS && flags & WILD_CHECK_KEEN_EYE && !IsAbilityAllowingEncounter(level))
         return FALSE;
 
-    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level);
+    CreateWildMon(wildMonInfo->wildPokemon[wildMonIndex].species, level, area);
     return TRUE;
 }
 
@@ -528,7 +530,7 @@ static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 
     u8 level = ChooseWildMonLevel(wildMonInfo->wildPokemon, wildMonIndex, WILD_AREA_FISHING);
 
     UpdateChainFishingStreak();
-    CreateWildMon(wildMonSpecies, level);
+    CreateWildMon(wildMonSpecies, level, WILD_AREA_FISHING);
     return wildMonSpecies;
 }
 
@@ -539,7 +541,7 @@ static bool8 SetUpMassOutbreakEncounter(u8 flags)
     if (flags & WILD_CHECK_REPEL && !IsWildLevelAllowedByRepel(gSaveBlock1Ptr->outbreakPokemonLevel))
         return FALSE;
 
-    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel);
+    CreateWildMon(gSaveBlock1Ptr->outbreakPokemonSpecies, gSaveBlock1Ptr->outbreakPokemonLevel, WILD_AREA_LAND);
     for (i = 0; i < MAX_MON_MOVES; i++)
         SetMonMoveSlot(&gEnemyParty[0], gSaveBlock1Ptr->outbreakPokemonMoves[i], i);
 
@@ -902,7 +904,7 @@ void FishingWildEncounter(u8 rod)
         u8 level = ChooseWildMonLevel(&sWildFeebas, 0, WILD_AREA_FISHING);
 
         species = sWildFeebas.species;
-        CreateWildMon(species, level);
+        CreateWildMon(species, level, WILD_AREA_FISHING);
     }
     else
     {
@@ -1144,12 +1146,30 @@ bool8 StandardWildEncounter_Debug(void)
 }
 
 // Gui stuff
-u16 GetRandomWildMonSpecies(u16 species, u8 level) {
+const u8* GetTypesForMap(u8 area) {
+    if (area == WILD_AREA_LAND) {
+        return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].land;
+        // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].land;
+    }
+    if (area == WILD_AREA_WATER) {
+        return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].water;
+        // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].water;
+    }
+    if (area == WILD_AREA_ROCKS) {
+        return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].rock;
+        // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].rock;
+    }
+    return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].fishing;
+    // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].fishing;
+}
+
+u16 GetRandomWildMonSpecies(u16 species, u8 level, u8 area) {
     if (gSaveBlock1Ptr->chaosModeActive) {
-        return PickRandomPokemon(ALL_TIERS, gSpeciesInfo[0].types, TRUE);
+        return PickRandomPokemon(ALL_TIERS, gSpeciesInfo[0].types, 1, TRUE);
     }
     u8 tier;
     u16 mapOffset = NuzlockeGetCurrentRegionMapSectionId(); //12289, 49157
+    const u8 *types = GetTypesForMap(area);
     if (level >= B_MIN_LEVEL_FOR_TIER_ONE) {
         tier = TIER_ONE;
     } else if (level >= B_MIN_LEVEL_FOR_TIER_TWO) {
@@ -1157,6 +1177,6 @@ u16 GetRandomWildMonSpecies(u16 species, u8 level) {
     } else {
         tier = TIER_THREE;
     }
-    // TODO: Fix this
-    return PickRandomPokemonSeeded(tier, gSpeciesInfo[0].types, 0, MAX_TRAINERS_COUNT + species + mapOffset);
+    // (mapOffset * 5) so we reduce the changes of overlapping seeds for different maps
+    return PickRandomPokemonSeeded(tier, types, NUMBER_OF_MON_TYPES, 0, MAX_TRAINERS_COUNT + species + (mapOffset * 5));
 }
