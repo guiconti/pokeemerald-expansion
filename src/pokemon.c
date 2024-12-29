@@ -19652,17 +19652,33 @@ static const u16 nonLegendaryFairySpecies[] = {
 #endif
 };
 
-u8 PickType(const u8 *types, u8 seeded, u16 seed) {
-    if (types[0] == TYPE_NONE) {
+u8 PickType(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed) {
+    if (lengthOfTypes == 0) {
+        #ifndef NDEBUG
+        MgbaPrintf(
+            MGBA_LOG_DEBUG,
+            "Picking type but list is empty"
+        );
+        #endif
         return TYPE_NONE;
     }
-    if (types[1] == TYPE_NONE) {
-        return types[0];
+    u8 validTypes = 0;
+    while (validTypes < lengthOfTypes && types[validTypes] != TYPE_NONE) {
+        validTypes++;
     }
+    // We run the loop above until it fails, so we need to reduce 1 validType
+    validTypes--;
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "%d valid types when picking type",
+        validTypes
+    );
+    #endif
     if (seeded == TRUE) {
-        return types[GenerateRandomNumberSeeded(0, 1, seed)];
+        return types[GenerateRandomNumberSeeded(0, validTypes, seed)];
     }
-    return types[GenerateRandomNumber(0, 1)];
+    return types[GenerateRandomNumber(0, validTypes)];
 }
 
 u16 GeneratePokemonFromList(const u16 *list, u32 count, u8 seeded, u16 seed) {
@@ -19674,10 +19690,18 @@ u16 GeneratePokemonFromList(const u16 *list, u32 count, u8 seeded, u16 seed) {
 }
 
 // Non EWRAM Gui functions
-u16 PickTierThreePokemon(const u8 *types, u8 seeded, u16 seed) {
+u16 PickTierThreePokemon(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed) {
     // I don't know a better way to implement this in C since I don't know how to implement dictionaries
     // Without writing it from scratch
-    u8 type = PickType(types, seeded, seed);
+    u8 type = PickType(types, lengthOfTypes, seeded, seed);
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Picking tier three pokemon for type: %d and seed: %d",
+        type,
+        seed
+    );
+    #endif
     if (type == TYPE_NONE) {
         return GeneratePokemonFromList(tierThreeSpecies, TIER_THREE_SPECIES_COUNT, seeded, seed);
     }
@@ -19738,10 +19762,18 @@ u16 PickTierThreePokemon(const u8 *types, u8 seeded, u16 seed) {
     return GeneratePokemonFromList(tierThreeSpecies, TIER_THREE_SPECIES_COUNT, seeded, seed);
 }
 
-u16 PickTierTwoPokemon(const u8 *types, u8 seeded, u16 seed) {
+u16 PickTierTwoPokemon(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed) {
     // I don't know a better way to implement this in C since I don't know how to implement dictionaries
     // Without writing it from scratch
-    u8 type = PickType(types, seeded, seed);
+    u8 type = PickType(types, lengthOfTypes, seeded, seed);
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Picking tier two pokemon for type: %d and seed: %d",
+        type,
+        seed
+    );
+    #endif
     if (type == TYPE_NONE) {
         return GeneratePokemonFromList(tierTwoSpecies, TIER_TWO_SPECIES_COUNT, seeded, seed);
     }
@@ -19802,10 +19834,18 @@ u16 PickTierTwoPokemon(const u8 *types, u8 seeded, u16 seed) {
     return GeneratePokemonFromList(tierTwoSpecies, TIER_TWO_SPECIES_COUNT, seeded, seed);
 }
 
-u16 PickTierOnePokemon(const u8 *types, bool8 includeLegendary, u8 seeded, u16 seed) {
+u16 PickTierOnePokemon(const u8 *types, u8 lengthOfTypes, bool8 includeLegendary, u8 seeded, u16 seed) {
     // I don't know a better way to implement this in C since I don't know how to implement dictionaries
     // Without writing it from scratch
-    u8 type = PickType(types, seeded, seed);
+    u8 type = PickType(types, lengthOfTypes, seeded, seed);
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Picking tier one pokemon for type: %d and seed: %d",
+        type,
+        seed
+    );
+    #endif
     if (type == TYPE_NONE) {
         if (includeLegendary == TRUE) {
             return GeneratePokemonFromList(tierOneSpecies, TIER_ONE_SPECIES_COUNT, seeded, seed);
@@ -19926,10 +19966,18 @@ u16 PickTierOnePokemon(const u8 *types, bool8 includeLegendary, u8 seeded, u16 s
     return GeneratePokemonFromList(tierOneWithoutLegendariesSpecies, TIER_ONE_WITHOUT_LEGENDARIES_SPECIES_COUNT, seeded, seed);
 }
 
-u16 PickFromAllPokemon(const u8 *types, bool8 includeLegendary, u8 seeded, u16 seed) {
+u16 PickFromAllPokemon(const u8 *types, u8 lengthOfTypes, bool8 includeLegendary, u8 seeded, u16 seed) {
     // I don't know a better way to implement this in C since I don't know how to implement dictionaries
     // Without writing it from scratch
-    u8 type = PickType(types, seeded, seed);
+    u8 type = PickType(types, lengthOfTypes, seeded, seed);
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Picking all pokemon for type: %d and seed: %d",
+        type,
+        seed
+    );
+    #endif
     if (type == TYPE_NONE) {
         if (includeLegendary == TRUE) {
             return GeneratePokemonFromList(allSpecies, ALL_SPECIES_COUNT, seeded, seed);
@@ -20050,34 +20098,53 @@ u16 PickFromAllPokemon(const u8 *types, bool8 includeLegendary, u8 seeded, u16 s
     return GeneratePokemonFromList(nonLegendarySpecies, NON_LEGENDARY_SPECIES_COUNT, seeded, seed);
 }
 
-u16 PickRandomPokemon(u8 tier, const u8 *types, bool8 includeLegendary) {
+u16 PickRandomPokemon(u8 tier, const u8 *types, u8 lengthOfTypes, bool8 includeLegendary) {
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Picking full random pokemon. tier: %d, types: %d, include legendary: %d",
+        tier,
+        lengthOfTypes,
+        includeLegendary
+    );
+    #endif
     if (gSaveBlock1Ptr->chaosModeActive) {
-        return PickFromAllPokemon(gSpeciesInfo[0].types, TRUE, FALSE, 0);
+        return PickFromAllPokemon(gSpeciesInfo[0].types, 1, TRUE, FALSE, 0);
     }
     if (tier == ALL_TIERS) {
-        return PickFromAllPokemon(types, includeLegendary, FALSE, 0);
+        return PickFromAllPokemon(types, lengthOfTypes, includeLegendary, FALSE, 0);
     }
     if (tier == TIER_ONE) {
-        return PickTierOnePokemon(types, includeLegendary, FALSE, 0);
+        return PickTierOnePokemon(types, lengthOfTypes, includeLegendary, FALSE, 0);
     }
     if (tier == TIER_TWO) {
-        return PickTierTwoPokemon(types, FALSE, 0);
+        return PickTierTwoPokemon(types, lengthOfTypes, FALSE, 0);
     }
-    return PickTierThreePokemon(types, FALSE, 0);
+    return PickTierThreePokemon(types, lengthOfTypes, FALSE, 0);
 }
 
-u16 PickRandomPokemonSeeded(u8 tier, const u8 *types, bool8 includeLegendary, u16 seed) {
+u16 PickRandomPokemonSeeded(u8 tier, const u8 *types, u8 lengthOfTypes, bool8 includeLegendary, u16 seed) {
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Picking seeded random pokemon. tier: %d, types: %d, include legendary: %d, seed: %d",
+        tier,
+        lengthOfTypes,
+        includeLegendary,
+        seed
+    );
+    #endif
     if (gSaveBlock1Ptr->chaosModeActive) {
-        return PickFromAllPokemon(gSpeciesInfo[0].types, TRUE, FALSE, 0);
+        return PickFromAllPokemon(gSpeciesInfo[0].types, 1, TRUE, FALSE, 0);
     }
     if (tier == ALL_TIERS) {
-        return PickFromAllPokemon(types, includeLegendary, TRUE, seed);
+        return PickFromAllPokemon(types, lengthOfTypes, includeLegendary, TRUE, seed);
     }
     if (tier == TIER_ONE) {
-        return PickTierOnePokemon(types, includeLegendary, TRUE, seed);
+        return PickTierOnePokemon(types, lengthOfTypes, includeLegendary, TRUE, seed);
     }
     if (tier == TIER_TWO) {
-        return PickTierTwoPokemon(types, TRUE, seed);
+        return PickTierTwoPokemon(types, lengthOfTypes, TRUE, seed);
     }
-    return PickTierThreePokemon(types, TRUE, seed);
+    return PickTierThreePokemon(types, lengthOfTypes, TRUE, seed);
 }

@@ -915,14 +915,14 @@ void TrySetDayLimitToFormChange(struct Pokemon *mon);
 u32 CheckDynamicMoveType(struct Pokemon *mon, u32 move, u32 battler);
 
 // Gui
-u16 PickTierThreePokemon(const u8 *types, u8 seeded, u16 seed);
-u16 PickTierTwoPokemon(const u8 *types, u8 seeded, u16 seed);
-u16 PickTierOnePokemon(const u8 *types, bool8 includeLegendary, u8 seeded, u16 seed);
-u16 PickFromAllPokemon(const u8 *types, bool8 includeLegendary, u8 seeded, u16 seed);
-u16 PickRandomPokemon(u8 tier, const u8 *types, bool8 includeLegendary);
-u16 PickRandomPokemonSeeded(u8 tier, const u8 *types, bool8 includeLegendary, u16 seed);
-u16 PickFromAllPokemon(const u8 *types, bool8 includeLegendary, u8 seeded, u16 seed);
-u8 PickType(const u8 *types, u8 seeded, u16 seed);
+u16 PickTierThreePokemon(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed);
+u16 PickTierTwoPokemon(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed);
+u16 PickTierOnePokemon(const u8 *types, u8 lengthOfTypes, bool8 includeLegendary, u8 seeded, u16 seed);
+u16 PickFromAllPokemon(const u8 *types, u8 lengthOfTypes, bool8 includeLegendary, u8 seeded, u16 seed);
+u16 PickRandomPokemon(u8 tier, const u8 *types, u8 lengthOfTypes, bool8 includeLegendary);
+u16 PickRandomPokemonSeeded(u8 tier, const u8 *types, u8 lengthOfTypes, bool8 includeLegendary, u16 seed);
+u16 PickFromAllPokemon(const u8 *types, u8 lengthOfTypes, bool8 includeLegendary, u8 seeded, u16 seed);
+u8 PickType(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed);
 
 struct SmogonVariant {
     u16 heldItem;

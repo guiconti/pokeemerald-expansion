@@ -83,8 +83,7 @@ void SetUpBattleVarsAndBirchZigzagoon(void)
         ZeroEnemyPartyMons();
         u16 pokemon;
         if (gSaveBlock1Ptr->randomizeBattles) {
-            // TODO: Fix this
-            pokemon = PickRandomPokemon(TIER_THREE, gSpeciesInfo[141].types, 0);
+            pokemon = PickRandomPokemon(TIER_THREE, gSpeciesInfo[SPECIES_ZIGZAGOON].types, 2, 0);
         } else {
             #if P_GEN_3_POKEMON == TRUE
                 pokemon = SPECIES_ZIGZAGOON;

@@ -6129,8 +6129,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
     // TODO: If it is a TRAINER_CLASS_LEADER || TRAINER_CLASS_ELITE_FOUR || TRAINER_CLASS_RIVAL || TRAINER_CLASS_MAGMA_LEADER
     // We should run a different randomization algorithm  
     for (int i = 0; i < randomizedTrainer->partySize; i++) {
-        // TODO: Fix this
-        u16 pickedPokemon = PickRandomPokemonSeeded(TIER_ONE, gSpeciesInfo[141].types, TRUE, trainerNum);
+        u16 pickedPokemon = PickRandomPokemonSeeded(TIER_ONE, gSpeciesInfo[originalTrainer->party[i].species].types, 2, TRUE, trainerNum);
         newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
         u8 smogonVariantLength = sizeof(const struct SmogonVariant) / sizeof(gSpeciesInfo[pickedPokemon].smogonVariants[0]);
         u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, trainerNum);
@@ -6159,6 +6158,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].heldItem = selectedSmogonVariant->heldItem;
         newParty[i].ability = selectedSmogonVariant->ability;
         if (gSaveBlock1Ptr->difficultyIncreased) {
+            // TODO: Fix this
             // newParty[i].lvl = originalTrainer->party[i].lvl * 2;
             newParty[i].lvl = originalTrainer->party[i].lvl;
         }

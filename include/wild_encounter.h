@@ -45,6 +45,17 @@ bool8 StandardWildEncounter_Debug(void);
 u32 CalculateChainFishingShinyRolls(void);
 
 // Gui stuff
-u16 GetRandomWildMonSpecies(u16 species, u8 level);
+u16 GetRandomWildMonSpecies(u16 species, u8 level, u8 area);
+const u8* GetTypesForMap(u8 area);
+
+#include "constants/pokemon.h"
+
+struct MapTypes
+{
+	const u8 land[NUMBER_OF_MON_TYPES];
+	const u8 water[NUMBER_OF_MON_TYPES];
+	const u8 rock[NUMBER_OF_MON_TYPES];
+	const u8 fishing[NUMBER_OF_MON_TYPES];
+};
 
 #endif // GUARD_WILD_ENCOUNTER_H
