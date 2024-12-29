@@ -1146,7 +1146,7 @@ bool8 StandardWildEncounter_Debug(void)
 // Gui stuff
 u16 GetRandomWildMonSpecies(u16 species, u8 level) {
     if (gSaveBlock1Ptr->chaosModeActive) {
-        return PickRandomPokemon(ALL_TIERS, TRUE);
+        return PickRandomPokemon(ALL_TIERS, gSpeciesInfo[0].types, TRUE);
     }
     u8 tier;
     u16 mapOffset = NuzlockeGetCurrentRegionMapSectionId(); //12289, 49157
@@ -1157,5 +1157,6 @@ u16 GetRandomWildMonSpecies(u16 species, u8 level) {
     } else {
         tier = TIER_THREE;
     }
-    return PickRandomPokemonSeeded(tier, 0, MAX_TRAINERS_COUNT + species + mapOffset);
+    // TODO: Fix this
+    return PickRandomPokemonSeeded(tier, gSpeciesInfo[0].types, 0, MAX_TRAINERS_COUNT + species + mapOffset);
 }

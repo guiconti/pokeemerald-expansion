@@ -356,14 +356,14 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
 void GenerateStarters(void) {
     if (gSaveBlock1Ptr->randomizeStarters) {
         // This is very poorly written but I felt that it was the least memory intesive way to do this
-        sStarterList[0] = PickRandomPokemon(TIER_THREE, 0);
-        sStarterList[1] = PickRandomPokemon(TIER_THREE, 0);
+        sStarterList[0] = PickRandomPokemon(TIER_THREE, gSpeciesInfo[0].types, 0);
+        sStarterList[1] = PickRandomPokemon(TIER_THREE, gSpeciesInfo[0].types, 0);
         while (sStarterList[0] == sStarterList[1]) {
-            sStarterList[1] = PickRandomPokemon(TIER_THREE, 0);
+            sStarterList[1] = PickRandomPokemon(TIER_THREE, gSpeciesInfo[0].types, 0);
         }
-        sStarterList[2] = PickRandomPokemon(TIER_THREE, 0);
+        sStarterList[2] = PickRandomPokemon(TIER_THREE, gSpeciesInfo[0].types, 0);
         while (sStarterList[2] == sStarterList[0] || sStarterList[2] == sStarterList[1]) {
-            sStarterList[2] = PickRandomPokemon(TIER_THREE, 0);
+            sStarterList[2] = PickRandomPokemon(TIER_THREE, gSpeciesInfo[0].types, 0);
         }
     } else {
         sStarterList[0] = sStarterMon[0];

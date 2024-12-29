@@ -6129,7 +6129,8 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
     // TODO: If it is a TRAINER_CLASS_LEADER || TRAINER_CLASS_ELITE_FOUR || TRAINER_CLASS_RIVAL || TRAINER_CLASS_MAGMA_LEADER
     // We should run a different randomization algorithm  
     for (int i = 0; i < randomizedTrainer->partySize; i++) {
-        u16 pickedPokemon = PickRandomPokemonSeeded(TIER_ONE, TRUE, trainerNum);
+        // TODO: Fix this
+        u16 pickedPokemon = PickRandomPokemonSeeded(TIER_ONE, gSpeciesInfo[141].types, TRUE, trainerNum);
         newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
         u8 smogonVariantLength = sizeof(const struct SmogonVariant) / sizeof(gSpeciesInfo[pickedPokemon].smogonVariants[0]);
         u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, trainerNum);
