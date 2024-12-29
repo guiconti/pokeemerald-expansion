@@ -1,4 +1,6 @@
 const fs = require("fs");
+const cMapGroups = fs.readFileSync("./src/data/wild_encounter.h", "utf8");
+const cMapTypesSplitted = cMapGroups.split("\n");
 
 let fileContent = `#include "constants/species.h"
 #include "constants/pokemon.h"
@@ -871,21 +873,117 @@ const TRAINER_IDS = [
 	"TRAINER_MAY_PLACEHOLDER",
 ];
 
+
+const TRAINER_CLASS_TO_NAMES = {
+	"BUG": ["bug"],
+	"SWIMMER": ["swimmer"],
+	"TEAM_AQUA": ["aqua"],
+	"TEAM_MAGMA": ["magma"],
+	"EXPERT": ["expert"],
+	"FIGHTER": ["black belt"],
+	"HEX": ["hex maniac"],
+	"AROMA": ["aroma"],
+	"RUIN": ["ruin"],
+	"GUITAR": ["guitar"],
+	"KINDLER": ["kindler"],
+	"PSYCHIC": ["psychic"],
+}
+
+const TRAINER_CLASS_TO_TYPES = {
+	"BUG": "TYPE_BUG, TYPE_BUG, TYPE_GRASS,",
+	"SWIMMER": "TYPE_WATER, TYPE_WATER, TYPE_ICE,",
+	"TEAM_AQUA": "TYPE_WATER, TYPE_WATER, TYPE_DARK, TYPE_GHOST",
+	"TEAM_MAGMA": "TYPE_FIRE, TYPE_FIRE, TYPE_GROUND, TYPE_ROCK, TYPE_DARK",
+	"BIRD_KEEPER": "TYPE_NORMAL, TYPE_FLYING, TYPE_FLYING, TYPE_FLYING,",
+	"EXPERT": "TYPE_NONE",
+	"FIGHTER": "TYPE_FIGHTING, TYPE_FIGHTING, TYPE_FIGHTING, TYPE_FIGHTING, TYPE_NORMAL, TYPE_ROCK, TYPE_GROUND",
+	"HEX": "TYPE_DARK, TYPE_GHOST, TYPE_PSYCHIC",
+	"AROMA": "TYPE_GRASS, TYPE_GRASS, TYPE_GRASS, TYPE_GRASS, TYPE_BUG, TYPE_BUG, TYPE_FAIRY",
+	"RUIN": "TYPE_GHOST, TYPE_DARK, TYPE_ROCK",
+	"GUITAR": "TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_PSYCHIC",
+	"KINDLER": "TYPE_FIRE, TYPE_FIRE, TYPE_FIRE, TYPE_GROUND, TYPE_FIGHTING",
+	"PSYCHIC": "TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_GHOST, TYPE_DARK,",
+}
+
+const FIXED_TRAINER_TYPES = {
+	TRAINER_NONE: "TYPE_NONE,",
+	TRAINER_GABBY_AND_TY_1: "TYPE_NONE,",
+};
+
+const MANUAL_TRANSLATIONS = {
+	MAP_S_TIDAL_CORRIDOR: "MAP_SS_TIDAL_CORRIDOR",
+	MAP_S_TIDAL_LOWER_DECK: "MAP_SS_TIDAL_LOWER_DECK",
+	MAP_S_TIDAL_ROOMS: "MAP_SS_TIDAL_ROOMS",
+};
+
+const IGNORED_DIRS = new Set([".gitignore", "map_groups.json"]);
+
+const MAP_TO_TYPES = {};
+const MAP_TO_SCRIPTS = {};
+
 const mapDirs = fs.readdirSync("./data/maps");
-console.log(mapDirs);
-process.exit();
+for (const mapDir of mapDirs) {
+	if (IGNORED_DIRS.has(mapDir)) continue;
+	let splittedName = mapDir.split(/(?=[A-Z])/g);
+	for (let i = 0; i < splittedName.length; i++) {
+		if (splittedName[i].includes("_") && i < splittedName.length - 1) {
+			const underscoreSplitted = splittedName[i].split("_");
+			splittedName[i + 1] = underscoreSplitted[1] + splittedName[i + 1];
+			splittedName[i] = underscoreSplitted[0];
+		}
+		splittedName[i] = splittedName[i].replace("_", "");
+		if (splittedName[i].length === 1) {
+			splittedName[i - 1] += splittedName[i];
+			splittedName.splice(i, 1);
+		}
+		// // Check if last character is a number
+		// console.log(splittedName[i][splittedName[i].length - 1]);
+		// if (parseInt(splittedName[i][splittedName[i].length - 1]) && i < splittedName.length - 1) {
+		// 	splittedName[i] += splittedName[i + 1];
+		// 	splittedName.splice(i + 1, 1);
+		// }
+	}
+	let formattedName = `MAP_${splittedName.join("_").toUpperCase()}`;
+	let startMapIndex = 0;
+	// Fail loudly
+	if (!cMapGroups.includes(formattedName)) {
+		formattedName = MANUAL_TRANSLATIONS[formattedName] || formattedName;
+		if (!cMapGroups.includes(formattedName)) {
+			console.log(`Missing ${formattedName}`);
+			throw new Error(`Missing ${formattedName}`);
+		}
+	}
+	while (!cMapTypesSplitted[startMapIndex].includes(formattedName)) {
+		startMapIndex++;
+	}
+	// Skip two lines since that's when the .land types start
+	startMapIndex += 2;
+	let types = [];
+	while (!cMapTypesSplitted[startMapIndex].includes("}")) {
+		types.push(cMapTypesSplitted[startMapIndex].replace(/\t|\n/g, ""));
+		startMapIndex++;
+	}
+	MAP_TO_TYPES[formattedName] = types.join(" ");
+	if (fs.existsSync(`./data/maps/${mapDir}/scripts.inc`)) {
+		const scriptsContent = fs.readFileSync(`./data/maps/${mapDir}/scripts.inc`, "utf-8");
+		MAP_TO_SCRIPTS[formattedName] = scriptsContent;
+	}
+}
 
 const trainersPartyContentLines = fs.readFileSync("./src/data/trainers.party", "utf-8").split("\n");
 
 for (const trainerId of TRAINER_IDS) {
-	let trainerLineIndex = trainersPartyContentLines.findIndex(line => line.includes(trainerId));
+	let trainerLineIndex = trainersPartyContentLines.findIndex((line) => line.includes(trainerId));
 	if (trainerLineIndex === -1) {
 		throw new Error("Could not find trainer " + trainerId);
 	}
 	console.log("Trainer line index", trainerLineIndex);
 	trainerLineIndex++;
 	let maxLevel = -1;
-	while (trainerLineIndex < trainersPartyContentLines.length && !trainersPartyContentLines[trainerLineIndex].includes("===")) {
+	while (
+		trainerLineIndex < trainersPartyContentLines.length &&
+		!trainersPartyContentLines[trainerLineIndex].includes("===")
+	) {
 		if (trainersPartyContentLines[trainerLineIndex].includes("Level: ")) {
 			maxLevel = Math.max(maxLevel, parseInt(trainersPartyContentLines[trainerLineIndex].replace("Level: ", "")));
 		}
@@ -894,14 +992,38 @@ for (const trainerId of TRAINER_IDS) {
 	maxLevel *= 1.25;
 	let tier = "TIER_ONE";
 	if (maxLevel < 16) {
-		tier = "TIER_THREE"
+		tier = "TIER_THREE";
 	} else if (maxLevel < 30) {
 		tier = "TIER_TWO";
 	}
-	fileContent += `\t[${trainerId}] = {\n`
-	fileContent += `\t\t.tier = ${tier},\n`
-	fileContent += `\t\t.types = ${defaultTypes},\n`
-	fileContent += `\t},\n`
+
+	// Get types for map that trainer is in
+	let types = "";
+	for (const map in MAP_TO_SCRIPTS) {
+		if (MAP_TO_SCRIPTS[map].includes(trainerId)) {
+			console.log("Found map", map);
+			types = MAP_TO_TYPES[map];
+		}
+	}
+
+	if (!types) {
+		types = FIXED_TRAINER_TYPES[trainerId];
+	}
+	if (!types) {
+		if (trainerId.endsWith("_2") || trainerId.endsWith("_3") || trainerId.endsWith("_4") || trainerId.endsWith("_5") || trainerId.endsWith("_6")) {
+			// Rematch, anything goes
+			types = "TYPE_NONE,";
+		}
+	}
+	if (!types) {
+		console.log("No types found for", trainerId);
+		process.exit();
+	}
+
+	fileContent += `\t[${trainerId}] = {\n`;
+	fileContent += `\t\t.tier = ${tier},\n`;
+	fileContent += `\t\t.types = ${defaultTypes},\n`;
+	fileContent += `\t},\n`;
 }
 
 fileContent += "};\n";
