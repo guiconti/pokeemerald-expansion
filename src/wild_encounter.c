@@ -423,11 +423,8 @@ static void CreateWildMon(u16 species, u8 level, u8 area)
     bool32 checkCuteCharm = TRUE;
 
     ZeroEnemyPartyMons();
-    // TODO: Check difficulty to increase level
-    // TODO: Fix this
     if (gSaveBlock1Ptr->difficultyIncreased) {
-        // level = level * 2;
-        level = level;
+        level = min(uq4_12_multiply(level, UQ_4_12(1.25)), 100);
     }
     if (gSaveBlock1Ptr->randomizeWildEncounters && CheckFeebas() == FALSE) {
         species = GetRandomWildMonSpecies(species, level, area);

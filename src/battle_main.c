@@ -6158,9 +6158,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].heldItem = selectedSmogonVariant->heldItem;
         newParty[i].ability = selectedSmogonVariant->ability;
         if (gSaveBlock1Ptr->difficultyIncreased) {
-            // TODO: Fix this
-            // newParty[i].lvl = originalTrainer->party[i].lvl * 2;
-            newParty[i].lvl = originalTrainer->party[i].lvl;
+            newParty[i].lvl = min(uq4_12_multiply(originalTrainer->party[i].lvl, UQ_4_12(1.25)), 100);
         }
         newParty[i].ball = originalTrainer->party[i].ball;
         newParty[i].friendship = MAX_FRIENDSHIP;
