@@ -19674,6 +19674,14 @@ u8 PickType(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed) {
         "%d valid types when picking type",
         validTypes
     );
+    for (int i = 0; i < validTypes; i++) {
+        MgbaPrintf(
+            MGBA_LOG_DEBUG,
+            "Type #%d: %d",
+            i,
+            types[i]
+        );
+    }
     #endif
     if (seeded == TRUE) {
         return types[GenerateRandomNumberSeeded(0, validTypes, seed)];

@@ -1144,20 +1144,25 @@ bool8 StandardWildEncounter_Debug(void)
 
 // Gui stuff
 const u8* GetTypesForMap(u8 area) {
+    u8 mapId = NuzlockeGetCurrentRegionMapSectionId();
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Picking types for map %d, area %d",
+        mapId,
+        area
+    );
+    #endif
     if (area == WILD_AREA_LAND) {
-        return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].land;
-        // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].land;
+        return mapIdToTypes[mapId].land;
     }
     if (area == WILD_AREA_WATER) {
-        return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].water;
-        // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].water;
+        return mapIdToTypes[mapId].water;
     }
     if (area == WILD_AREA_ROCKS) {
-        return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].rock;
-        // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].rock;
+        return mapIdToTypes[mapId].rock;
     }
-    return mapIdToTypes[MAP_DEWFORD_TOWN_HOUSE1].fishing;
-    // return mapIdToTypes[gSaveBlock1Ptr->location.mapGroup].fishing;
+    return mapIdToTypes[mapId].fishing;
 }
 
 u16 GetRandomWildMonSpecies(u16 species, u8 level, u8 area) {
