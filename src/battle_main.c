@@ -6130,15 +6130,13 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         randomizedTrainer->items[i] = ITEM_NONE;
     }
 
-
-    // Special trainers
-    if (
-        randomizedTrainer->trainerClass == TRAINER_CLASS_LEADER || 
+    u8 isSpecialTrainer = randomizedTrainer->trainerClass == TRAINER_CLASS_LEADER || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_ELITE_FOUR || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_RIVAL || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_MAGMA_LEADER ||
-        randomizedTrainer->trainerClass == TRAINER_CLASS_CHAMPION
-    ) {
+        randomizedTrainer->trainerClass == TRAINER_CLASS_CHAMPION;
+
+    if (isSpecialTrainer) {
         // Pick variant
         #ifndef NDEBUG
         MgbaPrintf(
@@ -6147,72 +6145,101 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
             trainerNum
         );
         #endif
-        const struct SpecialTrainer *specialTrainerData = &specialTrainerIdToTeamOptions[trainerNum];
-        u8 optionIndex = GenerateRandomNumberSeeded(0, specialTrainerData->optionsSize - 1, trainerNum);
-        const struct SpecialTrainerOption *chosenVariant = &specialTrainerData->options[optionIndex];
-        randomizedTrainer->partySize = chosenVariant->partySize;
-        struct TrainerMon *newParty = Alloc(chosenVariant->partySize * sizeof(struct TrainerMon));
-        for (int i = 0; i < randomizedTrainer->partySize; i++) {
-            #ifndef NDEBUG
-            MgbaPrintf(
-                MGBA_LOG_DEBUG,
-                "Pokemon %d for special trainer is %d",
-                i,
-                chosenVariant->pokemons[i].species
-            );
-            #endif
-            newParty[i].species = chosenVariant->pokemons[i].species;
-            newParty[i].heldItem = chosenVariant->pokemons[i].heldItem;
-            newParty[i].ability = chosenVariant->pokemons[i].ability;
-            newParty[i].nickname = gSpeciesInfo[chosenVariant->pokemons[i].species].speciesName;
-            if (chosenVariant->pokemons[i].isShiny) {
-                newParty[i].ev = TRAINER_PARTY_EVS(255, 255, 255, 255, 255, 255);
-            } else {
-                newParty[i].ev = chosenVariant->pokemons[i].ev;
-            }
-            newParty[i].iv = TRAINER_PARTY_IVS(
-                MAX_PER_STAT_IVS,
-                MAX_PER_STAT_IVS,
-                MAX_PER_STAT_IVS,
-                MAX_PER_STAT_IVS,
-                MAX_PER_STAT_IVS,
-                MAX_PER_STAT_IVS
-            );
-            newParty[i].moves[0] = chosenVariant->pokemons[i].moves[0];
-            newParty[i].moves[1] = chosenVariant->pokemons[i].moves[1];
-            newParty[i].moves[2] = chosenVariant->pokemons[i].moves[2];
-            newParty[i].moves[3] = chosenVariant->pokemons[i].moves[3];
-            newParty[i].lvl = chosenVariant->pokemons[i].lvl;
-            if (gSaveBlock1Ptr->difficultyIncreased) {
-                newParty[i].lvl = min(uq4_12_multiply(newParty[i].lvl, UQ_4_12(1.25)), 100);
-            }
-            newParty[i].ball = ITEM_POKE_BALL;
-            newParty[i].friendship = MAX_FRIENDSHIP;
-            newParty[i].nature = chosenVariant->pokemons[i].nature;
-            newParty[i].gender = chosenVariant->pokemons[i].gender;
-            newParty[i].isShiny = chosenVariant->pokemons[i].isShiny;
-            newParty[i].gender = chosenVariant->pokemons[i].gender;
-            newParty[i].gigantamaxFactor = FALSE;
-            newParty[i].shouldUseDynamax = FALSE;
-            newParty[i].dynamaxLevel = MAX_DYNAMAX_LEVEL;
+
+        // Get list of pokemons and legendaries
+        // If legendary list > 0 select partySize - 1 pokemons and 1 legendary at random
+        // For each species get the smogon variant and build the team
+        const struct SpecialTrainer *specialTrainerData = &specialTrainerIdToPokemonOptions[trainerNum];
+        randomizedTrainer->partySize = specialTrainerData->partySize;
+    }
+
+    u16 newTrainerSpecies[randomizedTrainer->partySize];
+    u8 mandatoryShinyIndexForSpecialTrainer = 254;
+    if (isSpecialTrainer) {
+        const struct SpecialTrainer *specialTrainerData = &specialTrainerIdToPokemonOptions[trainerNum];
+        u8 legendariesInTeam = 0;
+        if (specialTrainerData->legendariesSize > 0) {
+            // Set legendary at the end of the party
+            newTrainerSpecies[specialTrainerData->partySize - 1] = specialTrainerData->legendaries[GenerateRandomNumberSeeded(0, specialTrainerData->legendariesSize - 1, trainerNum)];
+            legendariesInTeam = 1;
         }
-        randomizedTrainer->party = newParty;
-        return randomizedTrainer;
+        for (int i = 0; i < specialTrainerData->partySize - 1 - legendariesInTeam; i++) {
+            // Pick pokemon
+            // TODO: Fix, we currently can have duplicated pokemons
+            newTrainerSpecies[i] = specialTrainerData->pokemons[GenerateRandomNumberSeeded(0, specialTrainerData->pokemonsSize - 1, (trainerNum * 2) + i)];
+        }
+        mandatoryShinyIndexForSpecialTrainer = GenerateRandomNumberSeeded(0, specialTrainerData->partySize - 1, trainerNum);
+
+
+        // randomizedTrainer->partySize = specialTrainerData->partySize;
+        // struct TrainerMon *newParty = Alloc(specialTrainerData->partySize * sizeof(struct TrainerMon));
+        // for (int i = 0; i < randomizedTrainer->partySize; i++) {
+        //     #ifndef NDEBUG
+        //     MgbaPrintf(
+        //         MGBA_LOG_DEBUG,
+        //         "Pokemon %d for special trainer is %d",
+        //         i,
+        //         chosenVariant->pokemons[i].species
+        //     );
+        //     #endif
+        //     newParty[i].species = chosenVariant->pokemons[i].species;
+        //     newParty[i].heldItem = chosenVariant->pokemons[i].heldItem;
+        //     newParty[i].ability = chosenVariant->pokemons[i].ability;
+        //     newParty[i].nickname = gSpeciesInfo[chosenVariant->pokemons[i].species].speciesName;
+        //     if (chosenVariant->pokemons[i].isShiny) {
+        //         newParty[i].ev = TRAINER_PARTY_EVS(255, 255, 255, 255, 255, 255);
+        //     } else {
+        //         newParty[i].ev = chosenVariant->pokemons[i].ev;
+        //     }
+        //     newParty[i].iv = TRAINER_PARTY_IVS(
+        //         MAX_PER_STAT_IVS,
+        //         MAX_PER_STAT_IVS,
+        //         MAX_PER_STAT_IVS,
+        //         MAX_PER_STAT_IVS,
+        //         MAX_PER_STAT_IVS,
+        //         MAX_PER_STAT_IVS
+        //     );
+        //     newParty[i].moves[0] = chosenVariant->pokemons[i].moves[0];
+        //     newParty[i].moves[1] = chosenVariant->pokemons[i].moves[1];
+        //     newParty[i].moves[2] = chosenVariant->pokemons[i].moves[2];
+        //     newParty[i].moves[3] = chosenVariant->pokemons[i].moves[3];
+        //     newParty[i].lvl = chosenVariant->pokemons[i].lvl;
+        //     if (gSaveBlock1Ptr->difficultyIncreased) {
+        //         newParty[i].lvl = min(uq4_12_multiply(newParty[i].lvl, UQ_4_12(1.25)), 100);
+        //     }
+        //     newParty[i].ball = ITEM_POKE_BALL;
+        //     newParty[i].friendship = MAX_FRIENDSHIP;
+        //     newParty[i].nature = chosenVariant->pokemons[i].nature;
+        //     newParty[i].gender = chosenVariant->pokemons[i].gender;
+        //     newParty[i].isShiny = chosenVariant->pokemons[i].isShiny;
+        //     newParty[i].gender = chosenVariant->pokemons[i].gender;
+        //     newParty[i].gigantamaxFactor = FALSE;
+        //     newParty[i].shouldUseDynamax = FALSE;
+        //     newParty[i].dynamaxLevel = MAX_DYNAMAX_LEVEL;
+        // }
+        // randomizedTrainer->party = newParty;
+        // return randomizedTrainer;
+    } else {
+        for (int i = 0; i < randomizedTrainer->partySize; i++) {
+            u16 pickedPokemon = PickRandomPokemonSeeded(trainerIdToMetadata[trainerNum].tier, trainerIdToMetadata[trainerNum].types, NUMBER_OF_MON_TYPES, TRUE, trainerNum);
+            newTrainerSpecies[i] = pickedPokemon;
+        }
     }
 
 
 
     struct TrainerMon *newParty = Alloc(randomizedTrainer->partySize * sizeof(struct TrainerMon));
-    // Randomize the party
-    // We should run a different randomization algorithm  
     for (int i = 0; i < randomizedTrainer->partySize; i++) {
-        u16 pickedPokemon = PickRandomPokemonSeeded(trainerIdToMetadata[trainerNum].tier, trainerIdToMetadata[trainerNum].types, NUMBER_OF_MON_TYPES, TRUE, trainerNum);
-        newParty[i].nickname = gSpeciesInfo[pickedPokemon].speciesName;
-        u8 smogonVariantLength = sizeof(const struct SmogonVariant) / sizeof(gSpeciesInfo[pickedPokemon].smogonVariants[0]);
+        newParty[i].nickname = gSpeciesInfo[newTrainerSpecies[i]].speciesName;
+        u8 smogonVariantLength = sizeof(const struct SmogonVariant) / sizeof(gSpeciesInfo[newTrainerSpecies[i]].smogonVariants[0]);
         u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, trainerNum);
-        const struct SmogonVariant *selectedSmogonVariant = &gSpeciesInfo[pickedPokemon].smogonVariants[smogonVariantIndex];
+        const struct SmogonVariant *selectedSmogonVariant = &gSpeciesInfo[newTrainerSpecies[i]].smogonVariants[smogonVariantIndex];
         // 1% of being shiny
         bool8 isShiny = GenerateRandomNumberSeeded(1, 10000, trainerNum) <= B_SHINY_ODDS;
+        // If this is the shiny for the special trainer transform it to shiny
+        if (isShiny == FALSE && i == mandatoryShinyIndexForSpecialTrainer) {
+            isShiny = TRUE;
+        }
         // We are boosting shiny pokemons
         if (isShiny) {
             newParty[i].ev = TRAINER_PARTY_EVS(255, 255, 255, 255, 255, 255);
@@ -6231,7 +6258,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].moves[1] = selectedSmogonVariant->moves[1];
         newParty[i].moves[2] = selectedSmogonVariant->moves[2];
         newParty[i].moves[3] = selectedSmogonVariant->moves[3];
-        newParty[i].species = pickedPokemon;
+        newParty[i].species = newTrainerSpecies[i];
         newParty[i].heldItem = selectedSmogonVariant->heldItem;
         newParty[i].ability = selectedSmogonVariant->ability;
         newParty[i].lvl = originalTrainer->party[i].lvl;
@@ -6242,12 +6269,12 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].friendship = MAX_FRIENDSHIP;
         newParty[i].nature = selectedSmogonVariant->nature;
         // If the pokemon is genderless we need to respect that
-        if (gSpeciesInfo[pickedPokemon].genderRatio == MON_MALE) {
+        if (gSpeciesInfo[newTrainerSpecies[i]].genderRatio == MON_MALE) {
             newParty[i].gender = MALE;
-        } else if (gSpeciesInfo[pickedPokemon].genderRatio == MON_FEMALE) {
+        } else if (gSpeciesInfo[newTrainerSpecies[i]].genderRatio == MON_FEMALE) {
             newParty[i].gender = FEMALE;
         // I believe that for genderless we just don't set the value for the gender
-        } else if (gSpeciesInfo[pickedPokemon].genderRatio != MON_GENDERLESS) {
+        } else if (gSpeciesInfo[newTrainerSpecies[i]].genderRatio != MON_GENDERLESS) {
             newParty[i].gender = originalTrainer->party[i].gender;
         }
         newParty[i].isShiny = isShiny;
