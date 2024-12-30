@@ -429,7 +429,7 @@ static void CreateWildMon(u16 species, u8 level, u8 area)
     }
     if (gSaveBlock1Ptr->difficultyIncreased) {
         u8 levelOscillation = GenerateRandomNumberSeeded(0, 18, species + level + area);
-        level = max(min(maxPlayerPokemonLevel - levelOscillation, 90), 8);
+        level = max(min(maxPlayerPokemonLevel - levelOscillation, 90), 4);
     }
     if (gSaveBlock1Ptr->randomizeWildEncounters && CheckFeebas() == FALSE) {
         species = GetRandomWildMonSpecies(species, level, area);

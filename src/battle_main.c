@@ -6156,6 +6156,18 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         // For each species get the smogon variant and build the team
         const struct SpecialTrainer *specialTrainerData = &specialTrainerIdToPokemonOptions[trainerNum];
         randomizedTrainer->partySize = specialTrainerData->partySize;
+    } else {
+        u16 minNumberOfPokemons = originalTrainer->partySize;
+        if (originalTrainer->party[0].lvl < 15) {
+            minNumberOfPokemons = 1;
+        } else if (originalTrainer->party[0].lvl < 25) {
+            minNumberOfPokemons = 2;
+        } else if (originalTrainer->party[0].lvl < 30) {
+            minNumberOfPokemons = 3;
+        } else {
+            minNumberOfPokemons = 4;
+        }
+        randomizedTrainer->partySize = GenerateRandomNumberSeeded(minNumberOfPokemons, 6, trainerNum);
     }
 
     u16 newTrainerSpecies[randomizedTrainer->partySize];
