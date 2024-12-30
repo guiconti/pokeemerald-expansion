@@ -1,6 +1,8 @@
 const fs = require("fs");
 const cMapGroups = fs.readFileSync("./src/data/wild_encounter.h", "utf8");
 const cMapTypesSplitted = cMapGroups.split("\n");
+const cTrainers = fs.readFileSync("./src/data/trainers.party", "utf8");
+const cTrainerSplitted = cTrainers.split("\n");
 
 let fileContent = `#include "constants/species.h"
 #include "constants/pokemon.h"
@@ -12,8 +14,6 @@ struct TrainerMetadata {
 };
 
 const struct TrainerMetadata trainerIdToMetadata[] = {\n`;
-
-const defaultTypes = `{TYPE_NORMAL, TYPE_FIGHTING, TYPE_FIGHTING, TYPE_FLYING, TYPE_POISON, TYPE_GROUND, TYPE_ROCK, TYPE_GHOST, TYPE_STEEL, TYPE_FIRE, TYPE_WATER, TYPE_GRASS, TYPE_ELECTRIC, TYPE_PSYCHIC, TYPE_ICE, TYPE_DRAGON, TYPE_DARK, TYPE_FAIRY}`;
 
 const TRAINER_IDS = [
 	"TRAINER_NONE",
@@ -873,41 +873,48 @@ const TRAINER_IDS = [
 	"TRAINER_MAY_PLACEHOLDER",
 ];
 
-
 const TRAINER_CLASS_TO_NAMES = {
-	"BUG": ["bug"],
-	"SWIMMER": ["swimmer"],
-	"TEAM_AQUA": ["aqua"],
-	"TEAM_MAGMA": ["magma"],
-	"EXPERT": ["expert"],
-	"FIGHTER": ["black belt"],
-	"HEX": ["hex maniac"],
-	"AROMA": ["aroma"],
-	"RUIN": ["ruin"],
-	"GUITAR": ["guitar"],
-	"KINDLER": ["kindler"],
-	"PSYCHIC": ["psychic"],
-}
+	BUG: ["bug"],
+	SWIMMER: ["swimmer"],
+	FISHERMAN: ["fisherman"],
+	TEAM_AQUA: ["aqua"],
+	TEAM_MAGMA: ["magma"],
+	EXPERT: ["expert"],
+	EXPERT: ["ranger"],
+	FIGHTER: ["black belt"],
+	HEX: ["hex maniac"],
+	AROMA: ["aroma"],
+	RUIN: ["ruin"],
+	GUITAR: ["guitar"],
+	KINDLER: ["kindler"],
+	PSYCHIC: ["psychic"],
+	DRAGON: ["dragon"],
+	HIKER: ["hiker"],
+};
 
 const TRAINER_CLASS_TO_TYPES = {
-	"BUG": "TYPE_BUG, TYPE_BUG, TYPE_GRASS,",
-	"SWIMMER": "TYPE_WATER, TYPE_WATER, TYPE_ICE,",
-	"TEAM_AQUA": "TYPE_WATER, TYPE_WATER, TYPE_DARK, TYPE_GHOST",
-	"TEAM_MAGMA": "TYPE_FIRE, TYPE_FIRE, TYPE_GROUND, TYPE_ROCK, TYPE_DARK",
-	"BIRD_KEEPER": "TYPE_NORMAL, TYPE_FLYING, TYPE_FLYING, TYPE_FLYING,",
-	"EXPERT": "TYPE_NONE",
-	"FIGHTER": "TYPE_FIGHTING, TYPE_FIGHTING, TYPE_FIGHTING, TYPE_FIGHTING, TYPE_NORMAL, TYPE_ROCK, TYPE_GROUND",
-	"HEX": "TYPE_DARK, TYPE_GHOST, TYPE_PSYCHIC",
-	"AROMA": "TYPE_GRASS, TYPE_GRASS, TYPE_GRASS, TYPE_GRASS, TYPE_BUG, TYPE_BUG, TYPE_FAIRY",
-	"RUIN": "TYPE_GHOST, TYPE_DARK, TYPE_ROCK",
-	"GUITAR": "TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_PSYCHIC",
-	"KINDLER": "TYPE_FIRE, TYPE_FIRE, TYPE_FIRE, TYPE_GROUND, TYPE_FIGHTING",
-	"PSYCHIC": "TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_GHOST, TYPE_DARK,",
-}
+	BUG: "{TYPE_BUG, TYPE_BUG, TYPE_GRASS,}",
+	SWIMMER: "{TYPE_WATER, TYPE_WATER, TYPE_ICE,}",
+	TEAM_AQUA: "{TYPE_WATER, TYPE_WATER, TYPE_DARK, TYPE_GHOST}",
+	TEAM_MAGMA: "{TYPE_FIRE, TYPE_FIRE, TYPE_GROUND, TYPE_ROCK, TYPE_DARK}",
+	BIRD_KEEPER: "{TYPE_NORMAL, TYPE_FLYING, TYPE_FLYING, TYPE_FLYING,}",
+	EXPERT: "{TYPE_NONE}",
+	RANGER: "{TYPE_NONE}",
+	FIGHTER: "{TYPE_FIGHTING, TYPE_FIGHTING, TYPE_FIGHTING, TYPE_FIGHTING, TYPE_NORMAL, TYPE_ROCK, TYPE_GROUND}",
+	HEX: "{TYPE_DARK, TYPE_GHOST, TYPE_PSYCHIC}",
+	AROMA: "{TYPE_GRASS, TYPE_GRASS, TYPE_GRASS, TYPE_GRASS, TYPE_BUG, TYPE_BUG, TYPE_FAIRY}",
+	RUIN: "{TYPE_GHOST, TYPE_DARK, TYPE_ROCK}",
+	GUITAR: "{TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_ELECTRIC, TYPE_PSYCHIC}",
+	KINDLER: "{TYPE_FIRE, TYPE_FIRE, TYPE_FIRE, TYPE_GROUND, TYPE_FIGHTING, TYPE_DARK,}",
+	PSYCHIC: "{TYPE_PSYCHIC, TYPE_PSYCHIC, TYPE_GHOST, TYPE_DARK,}",
+	FISHERMAN: "{TYPE_WATER, TYPE_ICE}",
+	DRAGON: "{TYPE_DRAGON}",
+	HIKER: "{TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_GROUND,TYPE_STEEL,TYPE_STEEL,TYPE_GRASS,TYPE_FIGHTING,}",
+};
 
 const FIXED_TRAINER_TYPES = {
-	TRAINER_NONE: "TYPE_NONE,",
-	TRAINER_GABBY_AND_TY_1: "TYPE_NONE,",
+	TRAINER_NONE: "{TYPE_NONE,}",
+	TRAINER_GABBY_AND_TY_1: "{TYPE_NONE,}",
 };
 
 const MANUAL_TRANSLATIONS = {
@@ -916,10 +923,34 @@ const MANUAL_TRANSLATIONS = {
 	MAP_S_TIDAL_ROOMS: "MAP_SS_TIDAL_ROOMS",
 };
 
-const IGNORED_DIRS = new Set([".gitignore", "map_groups.json"]);
+const IGNORED_DIRS = new Set([
+	".gitignore",
+	"map_groups.json",
+	"connections.inc",
+	"events.inc",
+	"groups.inc",
+	"headers.inc",
+]);
 
 const MAP_TO_TYPES = {};
 const MAP_TO_SCRIPTS = {};
+const GYM_MAPS = {
+	"MAP_DEWFORD_TOWN_GYM": "{TYPE_FIGHTING,TYPE_FIGHTING,TYPE_FIGHTING,TYPE_NORMAL,TYPE_NORMAL,TYPE_ELECTRIC,}",
+	"MAP_LAVARIDGE_TOWN_GYM_1F": "{TYPE_FIRE,TYPE_FIRE,TYPE_FIRE,TYPE_GROUND,TYPE_ROCK,TYPE_NORMAL,TYPE_DRAGON}",
+	"MAP_LAVARIDGE_TOWN_GYM_B1F": "{TYPE_FIRE,TYPE_FIRE,TYPE_FIRE,TYPE_GROUND,TYPE_ROCK,TYPE_NORMAL,TYPE_DRAGON}",
+	"MAP_PETALBURG_CITY_GYM": "{TYPE_NORMAL,TYPE_NORMAL,TYPE_NORMAL,TYPE_FIGHTING,TYPE_PSYCHIC,TYPE_DARK,TYPE_STEEL}",
+	"MAP_MAUVILLE_CITY_GYM": "{TYPE_ELECTRIC,TYPE_ELECTRIC,TYPE_ELECTRIC,TYPE_GROUND,TYPE_NORMAL}",
+	"MAP_RUSTBORO_CITY_GYM": "{TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_STEEL,TYPE_STEEL,TYPE_FIGHTING}",
+	"MAP_FORTREE_CITY_GYM": "{TYPE_FLYING,TYPE_FLYING,TYPE_FLYING,TYPE_DRAGON,TYPE_GRASS,TYPE_STEEL,TYPE_WATER,}",
+	"MAP_MOSSDEEP_CITY_GYM": "{TYPE_PSYCHIC,TYPE_PSYCHIC,TYPE_DARK,TYPE_DARK,TYPE_GHOST,TYPE_GHOST,TYPE_NORMAL}",
+	"MAP_SOOTOPOLIS_CITY_GYM_1F": "{TYPE_ICE,TYPE_ICE,TYPE_ICE,TYPE_ICE,TYPE_WATER,TYPE_WATER,TYPE_DRAGON}",
+	"MAP_SOOTOPOLIS_CITY_GYM_B1F": "{TYPE_ICE,TYPE_ICE,TYPE_ICE,TYPE_ICE,TYPE_WATER,TYPE_WATER,TYPE_DRAGON}",
+}
+
+let gymMatchCount = 0;
+let classMatchCount = 0;
+let mapMatchCount = 0;
+let remainingCount = 0;
 
 const mapDirs = fs.readdirSync("./data/maps");
 for (const mapDir of mapDirs) {
@@ -963,7 +994,7 @@ for (const mapDir of mapDirs) {
 		types.push(cMapTypesSplitted[startMapIndex].replace(/\t|\n/g, ""));
 		startMapIndex++;
 	}
-	MAP_TO_TYPES[formattedName] = types.join(" ");
+	MAP_TO_TYPES[formattedName] = `{${types.join(" ")}}`;
 	if (fs.existsSync(`./data/maps/${mapDir}/scripts.inc`)) {
 		const scriptsContent = fs.readFileSync(`./data/maps/${mapDir}/scripts.inc`, "utf-8");
 		MAP_TO_SCRIPTS[formattedName] = scriptsContent;
@@ -977,7 +1008,6 @@ for (const trainerId of TRAINER_IDS) {
 	if (trainerLineIndex === -1) {
 		throw new Error("Could not find trainer " + trainerId);
 	}
-	console.log("Trainer line index", trainerLineIndex);
 	trainerLineIndex++;
 	let maxLevel = -1;
 	while (
@@ -997,35 +1027,80 @@ for (const trainerId of TRAINER_IDS) {
 		tier = "TIER_TWO";
 	}
 
-	// Get types for map that trainer is in
+	// For types we first try to match this trainer against a GYM
+	// If that fails we try to match this trainer against one of our predefined classes
+	// If that doesn't happen then we try to match it against its map
+	// If that also fails that means that they can use everything
 	let types = "";
+	let trainerMap = null;
 	for (const map in MAP_TO_SCRIPTS) {
 		if (MAP_TO_SCRIPTS[map].includes(trainerId)) {
-			console.log("Found map", map);
-			types = MAP_TO_TYPES[map];
+			trainerMap = map;
 		}
 	}
 
+	// Gym match
+	if (trainerMap && GYM_MAPS[trainerMap]) {
+		types = GYM_MAPS[trainerMap];
+		gymMatchCount++;
+	}
+
+	// Class match
 	if (!types) {
+		let trainerIndex = cTrainerSplitted.findIndex((line) => line.includes(trainerId));
+		// Class is the second line after the trainer id
+		trainerIndex += 2;
+		for (const trainerClass in TRAINER_CLASS_TO_NAMES) {
+			for (const trainerNameOption of TRAINER_CLASS_TO_NAMES[trainerClass]) {
+				if (cTrainerSplitted[trainerIndex].toLowerCase().includes(trainerNameOption)) {
+					types = TRAINER_CLASS_TO_TYPES[trainerClass];
+					classMatchCount++;
+					break;
+				}
+			}
+		}
+	}
+
+	// Map match
+	if (!types && trainerMap) {
+		types = MAP_TO_TYPES[trainerMap];
+		mapMatchCount++;
+	}
+
+	// Fixed matches
+	if (!types && FIXED_TRAINER_TYPES[trainerId]) {
 		types = FIXED_TRAINER_TYPES[trainerId];
+		remainingCount++;
 	}
 	if (!types) {
-		if (trainerId.endsWith("_2") || trainerId.endsWith("_3") || trainerId.endsWith("_4") || trainerId.endsWith("_5") || trainerId.endsWith("_6")) {
+		if (
+			trainerId.endsWith("_2") ||
+			trainerId.endsWith("_3") ||
+			trainerId.endsWith("_4") ||
+			trainerId.endsWith("_5") ||
+			trainerId.endsWith("_6")
+		) {
 			// Rematch, anything goes
-			types = "TYPE_NONE,";
+			types = "{TYPE_NONE,}";
 		}
 	}
 	if (!types) {
 		console.log("No types found for", trainerId);
-		process.exit();
+		remainingCount++;
+		types = "{TYPE_NONE,}";
 	}
 
 	fileContent += `\t[${trainerId}] = {\n`;
 	fileContent += `\t\t.tier = ${tier},\n`;
-	fileContent += `\t\t.types = ${defaultTypes},\n`;
+	fileContent += `\t\t.types = ${types},\n`;
 	fileContent += `\t},\n`;
 }
 
 fileContent += "};\n";
+
+console.log("Gym matches", gymMatchCount);
+console.log("Class matches", classMatchCount);
+console.log("Map matches", mapMatchCount);
+console.log("Remaining", remainingCount);
 
 fs.writeFileSync("./opponents.h", fileContent);
