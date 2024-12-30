@@ -282,6 +282,7 @@ LittlerootTown_ProfessorBirchsLab_EventScript_Aide::
 	setflag FLAG_BIRCH_AIDE_MET
 	setflag FLAG_UNUSED_0x264
 	setflag FLAG_UNUSED_0x265
+	setflag FLAG_UNUSED_0x266
 	release
 	end
 

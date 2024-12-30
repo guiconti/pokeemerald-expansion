@@ -658,7 +658,7 @@
 
 #define FLAG_UNUSED_0x264  0x264 // Exp Share Flag
 #define FLAG_UNUSED_0x265  0x265 // Smart Wild Pokemon
-#define FLAG_UNUSED_0x266  0x266 // Unused Flag
+#define FLAG_UNUSED_0x266  0x266 // No bag in battle
 #define FLAG_UNUSED_0x267  0x267 // Unused Flag
 #define FLAG_UNUSED_0x268  0x268 // Unused Flag
 #define FLAG_UNUSED_0x269  0x269 // Unused Flag
