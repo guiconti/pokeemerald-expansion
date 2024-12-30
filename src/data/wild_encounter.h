@@ -2,7 +2,7 @@
 #include "constants/map_groups.h"
 
 // Gui stuff
-const struct MapTypes mapIdToTypes[] = {
+static const struct MapTypes mapIdToTypes[] = {
 	[MAP_PETALBURG_CITY] = {
 		.land = {
 			TYPE_NORMAL,

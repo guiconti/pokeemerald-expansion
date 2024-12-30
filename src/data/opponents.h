@@ -7,7 +7,7 @@ struct TrainerMetadata {
 	const u8 types[NUMBER_OF_MON_TYPES];
 };
 
-const struct TrainerMetadata trainerIdToMetadata[] = {
+static const struct TrainerMetadata trainerIdToMetadata[] = {
 	[TRAINER_NONE] = {
 		.tier = TIER_THREE,
 		.types = {TYPE_NONE,},
@@ -6694,5 +6694,142 @@ const struct TrainerMetadata trainerIdToMetadata[] = {
 	[TRAINER_MAY_PLACEHOLDER] = {
 		.tier = TIER_THREE,
 		.types = {TYPE_NONE,},
+	},
+};
+
+struct TrainerPokemon {
+	u16 species;
+	u16 heldItem;
+	u16 ability;
+	u8 nature;
+	const u8 *ev;
+	u16 moves[4];
+	u8 lvl;
+	u8 isShiny;
+	bool8 gender;
+};
+
+
+struct SpecialTrainerOption {
+	const struct TrainerPokemon *pokemons;
+	u8 partySize;
+};
+
+struct SpecialTrainer {
+	const struct SpecialTrainerOption *options;
+	u8 optionsSize;
+};
+
+static const struct SpecialTrainer specialTrainerIdToTeamOptions[] = {
+	[TRAINER_MAY_ROUTE_103_MUDKIP] = {
+		.options = (const struct SpecialTrainerOption[2]) {
+			{
+				.pokemons = (const struct TrainerPokemon[1]) {
+					{
+						.species = SPECIES_MUDKIP,
+						.heldItem = ITEM_LEFTOVERS,
+						.ability = ABILITY_TORRENT,
+						.nature = NATURE_SERIOUS,
+						.ev = TRAINER_PARTY_EVS(252, 0, 6, 252, 0, 0),
+						.moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_NONE, MOVE_NONE},
+						.lvl = 11,
+						.isShiny = TRUE,
+						.gender = MON_MALE,
+					},
+				},
+				.partySize = 1,
+			},
+			{
+				.pokemons = (const struct TrainerPokemon[1]) {
+					{
+						.species = SPECIES_MUDKIP,
+						.heldItem = ITEM_LEFTOVERS,
+						.ability = ABILITY_TORRENT,
+						.nature = NATURE_SERIOUS,
+						.ev = TRAINER_PARTY_EVS(252, 0, 6, 252, 0, 0),
+						.moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_NONE, MOVE_NONE},
+						.lvl = 11,
+						.isShiny = TRUE,
+						.gender = MON_MALE,
+					},
+				},
+				.partySize = 1,
+			},
+		},
+		.optionsSize = 2,
+	},
+	[TRAINER_MAY_ROUTE_103_TREECKO] = {
+		.options = (const struct SpecialTrainerOption[2]) {
+			{
+				.pokemons = (const struct TrainerPokemon[1]) {
+					{
+						.species = SPECIES_MUDKIP,
+						.heldItem = ITEM_LEFTOVERS,
+						.ability = ABILITY_TORRENT,
+						.nature = NATURE_SERIOUS,
+						.ev = TRAINER_PARTY_EVS(252, 0, 6, 252, 0, 0),
+						.moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_NONE, MOVE_NONE},
+						.lvl = 11,
+						.isShiny = TRUE,
+						.gender = MON_MALE,
+					},
+				},
+				.partySize = 1,
+			},
+			{
+				.pokemons = (const struct TrainerPokemon[1]) {
+					{
+						.species = SPECIES_MUDKIP,
+						.heldItem = ITEM_LEFTOVERS,
+						.ability = ABILITY_TORRENT,
+						.nature = NATURE_SERIOUS,
+						.ev = TRAINER_PARTY_EVS(252, 0, 6, 252, 0, 0),
+						.moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_NONE, MOVE_NONE},
+						.lvl = 11,
+						.isShiny = TRUE,
+						.gender = MON_MALE,
+					},
+				},
+				.partySize = 1,
+			},
+		},
+		.optionsSize = 2,
+	},
+	[TRAINER_MAY_ROUTE_103_TORCHIC] = {
+		.options = (const struct SpecialTrainerOption[2]) {
+			{
+				.pokemons = (const struct TrainerPokemon[1]) {
+					{
+						.species = SPECIES_MUDKIP,
+						.heldItem = ITEM_LEFTOVERS,
+						.ability = ABILITY_TORRENT,
+						.nature = NATURE_SERIOUS,
+						.ev = TRAINER_PARTY_EVS(252, 0, 6, 252, 0, 0),
+						.moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_NONE, MOVE_NONE},
+						.lvl = 11,
+						.isShiny = TRUE,
+						.gender = MON_MALE,
+					},
+				},
+				.partySize = 1,
+			},
+			{
+				.pokemons = (const struct TrainerPokemon[1]) {
+					{
+						.species = SPECIES_MUDKIP,
+						.heldItem = ITEM_LEFTOVERS,
+						.ability = ABILITY_TORRENT,
+						.nature = NATURE_SERIOUS,
+						.ev = TRAINER_PARTY_EVS(252, 0, 6, 252, 0, 0),
+						.moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_NONE, MOVE_NONE},
+						.lvl = 11,
+						.isShiny = TRUE,
+						.gender = MON_MALE,
+					},
+				},
+				.partySize = 1,
+			},
+		},
+		.optionsSize = 2,
 	},
 };
