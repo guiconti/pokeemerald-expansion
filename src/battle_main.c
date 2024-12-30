@@ -6129,6 +6129,11 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
     for (int i = 0; i < MAX_TRAINER_ITEMS; i++) {
         randomizedTrainer->items[i] = ITEM_NONE;
     }
+    // Pokemon levels will be based on the trainer's level
+    u8 maxPlayerPokemonLevel = 0;
+    for (int i = 0; i < gPlayerPartyCount; i++) {
+        maxPlayerPokemonLevel = max(maxPlayerPokemonLevel, gPlayerParty[i].level);
+    }
 
     u8 isSpecialTrainer = randomizedTrainer->trainerClass == TRAINER_CLASS_LEADER || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_ELITE_FOUR || 
@@ -6163,62 +6168,19 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
             newTrainerSpecies[specialTrainerData->partySize - 1] = specialTrainerData->legendaries[GenerateRandomNumberSeeded(0, specialTrainerData->legendariesSize - 1, trainerNum)];
             legendariesInTeam = 1;
         }
+        u16 pokemonsCopy[specialTrainerData->pokemonsSize];
+        for (int i = 0; i < specialTrainerData->pokemonsSize; i++) {
+            pokemonsCopy[i] = specialTrainerData->pokemons[i];
+        }
+        // We can't reassign items in a const list so we need to copy it before shuffling it
+        ShuffleListU16(pokemonsCopy, specialTrainerData->pokemonsSize, trainerNum);
         for (int i = 0; i < specialTrainerData->partySize - 1 - legendariesInTeam; i++) {
             // Pick pokemon
-            // TODO: Fix, we currently can have duplicated pokemons
-            newTrainerSpecies[i] = specialTrainerData->pokemons[GenerateRandomNumberSeeded(0, specialTrainerData->pokemonsSize - 1, (trainerNum * 2) + i)];
+            newTrainerSpecies[i] = pokemonsCopy[i];
         }
-        mandatoryShinyIndexForSpecialTrainer = GenerateRandomNumberSeeded(0, specialTrainerData->partySize - 1, trainerNum);
-
-
-        // randomizedTrainer->partySize = specialTrainerData->partySize;
-        // struct TrainerMon *newParty = Alloc(specialTrainerData->partySize * sizeof(struct TrainerMon));
-        // for (int i = 0; i < randomizedTrainer->partySize; i++) {
-        //     #ifndef NDEBUG
-        //     MgbaPrintf(
-        //         MGBA_LOG_DEBUG,
-        //         "Pokemon %d for special trainer is %d",
-        //         i,
-        //         chosenVariant->pokemons[i].species
-        //     );
-        //     #endif
-        //     newParty[i].species = chosenVariant->pokemons[i].species;
-        //     newParty[i].heldItem = chosenVariant->pokemons[i].heldItem;
-        //     newParty[i].ability = chosenVariant->pokemons[i].ability;
-        //     newParty[i].nickname = gSpeciesInfo[chosenVariant->pokemons[i].species].speciesName;
-        //     if (chosenVariant->pokemons[i].isShiny) {
-        //         newParty[i].ev = TRAINER_PARTY_EVS(255, 255, 255, 255, 255, 255);
-        //     } else {
-        //         newParty[i].ev = chosenVariant->pokemons[i].ev;
-        //     }
-        //     newParty[i].iv = TRAINER_PARTY_IVS(
-        //         MAX_PER_STAT_IVS,
-        //         MAX_PER_STAT_IVS,
-        //         MAX_PER_STAT_IVS,
-        //         MAX_PER_STAT_IVS,
-        //         MAX_PER_STAT_IVS,
-        //         MAX_PER_STAT_IVS
-        //     );
-        //     newParty[i].moves[0] = chosenVariant->pokemons[i].moves[0];
-        //     newParty[i].moves[1] = chosenVariant->pokemons[i].moves[1];
-        //     newParty[i].moves[2] = chosenVariant->pokemons[i].moves[2];
-        //     newParty[i].moves[3] = chosenVariant->pokemons[i].moves[3];
-        //     newParty[i].lvl = chosenVariant->pokemons[i].lvl;
-        //     if (gSaveBlock1Ptr->difficultyIncreased) {
-        //         newParty[i].lvl = min(uq4_12_multiply(newParty[i].lvl, UQ_4_12(1.25)), 100);
-        //     }
-        //     newParty[i].ball = ITEM_POKE_BALL;
-        //     newParty[i].friendship = MAX_FRIENDSHIP;
-        //     newParty[i].nature = chosenVariant->pokemons[i].nature;
-        //     newParty[i].gender = chosenVariant->pokemons[i].gender;
-        //     newParty[i].isShiny = chosenVariant->pokemons[i].isShiny;
-        //     newParty[i].gender = chosenVariant->pokemons[i].gender;
-        //     newParty[i].gigantamaxFactor = FALSE;
-        //     newParty[i].shouldUseDynamax = FALSE;
-        //     newParty[i].dynamaxLevel = MAX_DYNAMAX_LEVEL;
-        // }
-        // randomizedTrainer->party = newParty;
-        // return randomizedTrainer;
+        if (randomizedTrainer->partySize > 1) {
+            mandatoryShinyIndexForSpecialTrainer = GenerateRandomNumberSeeded(0, specialTrainerData->partySize - 1, trainerNum);
+        }
     } else {
         for (int i = 0; i < randomizedTrainer->partySize; i++) {
             u16 pickedPokemon = PickRandomPokemonSeeded(trainerIdToMetadata[trainerNum].tier, trainerIdToMetadata[trainerNum].types, NUMBER_OF_MON_TYPES, TRUE, trainerNum);
@@ -6226,13 +6188,12 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         }
     }
 
-
-
     struct TrainerMon *newParty = Alloc(randomizedTrainer->partySize * sizeof(struct TrainerMon));
+    u8 trainerMinLevel = trainerIdToMinLevel[trainerNum];
     for (int i = 0; i < randomizedTrainer->partySize; i++) {
         newParty[i].nickname = gSpeciesInfo[newTrainerSpecies[i]].speciesName;
         u8 smogonVariantLength = sizeof(const struct SmogonVariant) / sizeof(gSpeciesInfo[newTrainerSpecies[i]].smogonVariants[0]);
-        u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, trainerNum);
+        u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, (trainerNum * 5) + i);
         const struct SmogonVariant *selectedSmogonVariant = &gSpeciesInfo[newTrainerSpecies[i]].smogonVariants[smogonVariantIndex];
         // 1% of being shiny
         bool8 isShiny = GenerateRandomNumberSeeded(1, 10000, trainerNum) <= B_SHINY_ODDS;
@@ -6263,7 +6224,8 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].ability = selectedSmogonVariant->ability;
         newParty[i].lvl = originalTrainer->party[i].lvl;
         if (gSaveBlock1Ptr->difficultyIncreased) {
-            newParty[i].lvl = min(uq4_12_multiply(newParty[i].lvl, UQ_4_12(1.25)), 100);
+            u8 levelOscillation = GenerateRandomNumberSeeded(0, 2, trainerNum + newParty[i].species);
+            newParty[i].lvl = min(max(maxPlayerPokemonLevel, trainerMinLevel) + levelOscillation, 100);
         }
         newParty[i].ball = originalTrainer->party[i].ball;
         newParty[i].friendship = MAX_FRIENDSHIP;

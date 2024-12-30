@@ -241,3 +241,14 @@ u32 GenerateRandomNumberSeeded(u32 min, u32 max, u16 seed) {
 u32 GenerateRandomNumber(u32 min, u32 max) {
   return Random() % (max - min + 1) + min;
 }
+
+void ShuffleListU16(u16 *list, u16 count, u32 seed) {
+    u16 i;
+    for (i = (count - 1); i > 0; i--){
+        u16 j = GenerateRandomNumberSeeded(0, i +  1, (seed * 5) + i);
+        u16 tmp = list[j];
+        list[j] = list[i];
+        list[i] = tmp;
+    }
+    return;
+}

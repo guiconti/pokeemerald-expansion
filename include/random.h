@@ -228,5 +228,6 @@ u8 RandomWeightedIndex(u8 *weights, u8 length);
 u16 RandomSeeded(u16 value);
 u32 GenerateRandomNumberSeeded(u32 min, u32 max, u16 seed);
 u32 GenerateRandomNumber(u32 min, u32 max);
+void ShuffleListU16(u16 *list, u16 count, u32 seed);
 
 #endif // GUARD_RANDOM_H

@@ -423,8 +423,13 @@ static void CreateWildMon(u16 species, u8 level, u8 area)
     bool32 checkCuteCharm = TRUE;
 
     ZeroEnemyPartyMons();
+    u8 maxPlayerPokemonLevel = 0;
+    for (int i = 0; i < gPlayerPartyCount; i++) {
+        maxPlayerPokemonLevel = max(maxPlayerPokemonLevel, gPlayerParty[i].level);
+    }
     if (gSaveBlock1Ptr->difficultyIncreased) {
-        level = min(uq4_12_multiply(level, UQ_4_12(1.25)), 100);
+        u8 levelOscillation = GenerateRandomNumberSeeded(0, 18, species + level + area);
+        level = max(min(maxPlayerPokemonLevel - levelOscillation, 90), 8);
     }
     if (gSaveBlock1Ptr->randomizeWildEncounters && CheckFeebas() == FALSE) {
         species = GetRandomWildMonSpecies(species, level, area);
