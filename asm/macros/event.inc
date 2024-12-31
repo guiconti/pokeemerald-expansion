@@ -2437,3 +2437,11 @@
 	.2byte \dest
 	.endm
 
+	@ Save the game and remove legendary before battle
+	.macro legendary_save
+	removeobject VAR_LAST_TALKED
+	special CallLegendarySaveFunction
+	playse SE_SAVE
+	waitse
+	.endm
+

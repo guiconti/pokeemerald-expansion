@@ -343,4 +343,7 @@ void SetControllerToLinkOpponent(u32 battler);
 // link partner
 void SetControllerToLinkPartner(u32 battler);
 
+// Gui stuff
+void CallLegendarySaveFunction(void);
+
 #endif // GUARD_BATTLE_CONTROLLERS_H

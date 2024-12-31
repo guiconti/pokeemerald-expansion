@@ -26,6 +26,8 @@
 #include "text.h"
 #include "constants/abilities.h"
 #include "constants/songs.h"
+#include "fieldmap.h"
+#include "save.h"
 
 static EWRAM_DATA u8 sLinkSendTaskId = 0;
 static EWRAM_DATA u8 sLinkReceiveTaskId = 0;
@@ -3079,4 +3081,9 @@ void BtlController_HandleBattleAnimation(u32 battler, bool32 ignoreSE, bool32 up
         if (updateTvData)
             BattleTv_SetDataBasedOnAnimation(animationId);
     }
+}
+
+void CallLegendarySaveFunction(void) {
+    SaveMapView();
+    TrySavingData(SAVE_NORMAL);
 }
