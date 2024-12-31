@@ -52,3 +52,9 @@ PacifidlogTown_Text_TownSign:
 	.string "“Where the morning sun smiles upon\n"
 	.string "the waters.”$"
 
+PacifidlogTown_EventScript_DisguisedOak::
+	msgbox PacifidlogTown_DefaultText_DisguisedOak, MSGBOX_NPC
+
+PacifidlogTown_DefaultText_DisguisedOak:
+	.string "FISHARMAN: Sorry, could you let me keep fishing?"
+	.string "You feel like you know this fisherman..."
