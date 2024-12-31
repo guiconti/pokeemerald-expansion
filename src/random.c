@@ -244,8 +244,19 @@ u32 GenerateRandomNumber(u32 min, u32 max) {
 
 void ShuffleListU16(u16 *list, u16 count, u32 seed) {
     u16 i;
+    u16 otId = GetTrainerId(gSaveBlock2Ptr->playerTrainerId);
     for (i = (count - 1); i > 0; i--){
-        u16 j = GenerateRandomNumberSeeded(0, i +  1, (seed * 5) + i);
+        u16 j = GenerateRandomNumberSeeded(0, i +  1, (otId + (seed * 5)) + i);
+        #ifndef NDEBUG
+        MgbaPrintf(
+            MGBA_LOG_DEBUG,
+            "Shuffling list from index %d with value %d to index %d with value %d",
+            j,
+            list[j],
+            i,
+            list[i]
+        );
+        #endif
         u16 tmp = list[j];
         list[j] = list[i];
         list[i] = tmp;

@@ -1124,6 +1124,8 @@ struct SaveBlock1
     u8 randomizeWildEncounters:1;
     u8 randomizeBattles:1;
     u8 randomizeConsistentType:1;
+    u8 randomizeItems:1;
+    u8 randomizeTrades:1;
     u8 chaosModeActive:1;
     u8 nuzlockeModeActive:1;
     u8 difficultyIncreased:1;

@@ -115,12 +115,15 @@ void CreateScriptedWildMon(u16 species, u8 level, u16 item)
 {
     u8 heldItem[2];
 
+    if (gSaveBlock1Ptr->chaosModeActive) {
+        species = PickRandomPokemon(TIER_ONE, gSpeciesInfo[species].types, 2, TRUE);
+    }
+
     ZeroEnemyPartyMons();
     if (OW_SYNCHRONIZE_NATURE > GEN_3)
-        CreateMonWithNature(&gEnemyParty[0], species, level, USE_RANDOM_IVS, PickWildMonNature());
+        CreateMonWithNature(&gEnemyParty[0], species, level, MAX_PER_STAT_IVS, PickWildMonNature());
     else
-        // TODO: This should be random
-        CreateMon(&gEnemyParty[0], species, level, USE_RANDOM_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
+        CreateMon(&gEnemyParty[0], species, level, MAX_PER_STAT_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
     if (item)
     {
         heldItem[0] = item;
@@ -460,8 +463,8 @@ static u32 ScriptGiveMonParameterized(u8 side, u8 slot, u16 species, u8 level, u
 u32 ScriptGiveMon(u16 species, u8 level, u16 item)
 {
     u8 evs[NUM_STATS]        = {0, 0, 0, 0, 0, 0};
-    u8 ivs[NUM_STATS]        = {MAX_PER_STAT_IVS + 1, MAX_PER_STAT_IVS + 1, MAX_PER_STAT_IVS + 1,   // We pass "MAX_PER_STAT_IVS + 1" here to ensure that
-                                MAX_PER_STAT_IVS + 1, MAX_PER_STAT_IVS + 1, MAX_PER_STAT_IVS + 1};  // ScriptGiveMonParameterized won't touch the stats' IV.
+    u8 ivs[NUM_STATS]        = {MAX_PER_STAT_IVS, MAX_PER_STAT_IVS, MAX_PER_STAT_IVS,   // We pass "MAX_PER_STAT_IVS + 1" here to ensure that
+                                MAX_PER_STAT_IVS, MAX_PER_STAT_IVS, MAX_PER_STAT_IVS};  // ScriptGiveMonParameterized won't touch the stats' IV.
     u16 moves[MAX_MON_MOVES] = {MOVE_NONE, MOVE_NONE, MOVE_NONE, MOVE_NONE};
 
     return ScriptGiveMonParameterized(0, PARTY_SIZE, species, level, item, ITEM_POKE_BALL, NUM_NATURES, NUM_ABILITY_PERSONALITY, MON_GENDERLESS, evs, ivs, moves, FALSE, FALSE, NUMBER_OF_MON_TYPES);

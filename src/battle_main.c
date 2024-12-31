@@ -6140,6 +6140,15 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         randomizedTrainer->trainerClass == TRAINER_CLASS_RIVAL || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_MAGMA_LEADER ||
         randomizedTrainer->trainerClass == TRAINER_CLASS_CHAMPION;
+    // Remove the very first rival battle as a special trainer since that battles becomes
+    // virtually impossible for the majority of times
+    isSpecialTrainer = isSpecialTrainer &&
+        trainerNum != TRAINER_BRENDAN_ROUTE_103_MUDKIP &&
+        trainerNum != TRAINER_BRENDAN_ROUTE_103_TREECKO &&
+        trainerNum != TRAINER_BRENDAN_ROUTE_103_TORCHIC &&
+        trainerNum != TRAINER_MAY_ROUTE_103_MUDKIP &&
+        trainerNum != TRAINER_MAY_ROUTE_103_TREECKO &&
+        trainerNum != TRAINER_MAY_ROUTE_103_TORCHIC;
 
     if (isSpecialTrainer) {
         // Pick variant
@@ -6157,17 +6166,20 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         const struct SpecialTrainer *specialTrainerData = &specialTrainerIdToPokemonOptions[trainerNum];
         randomizedTrainer->partySize = specialTrainerData->partySize;
     } else {
-        u16 minNumberOfPokemons = originalTrainer->partySize;
+        u16 minNumberOfPokemons = 1;
+        u16 maxNumberOfPokemons = originalTrainer->partySize;
         if (originalTrainer->party[0].lvl < 15) {
-            minNumberOfPokemons = 1;
+            maxNumberOfPokemons = 3;
         } else if (originalTrainer->party[0].lvl < 25) {
-            minNumberOfPokemons = 2;
+            maxNumberOfPokemons = 4;
         } else if (originalTrainer->party[0].lvl < 30) {
-            minNumberOfPokemons = 3;
+            minNumberOfPokemons = 2;
+            maxNumberOfPokemons = 5;
         } else {
-            minNumberOfPokemons = 4;
+            minNumberOfPokemons = 3;
+            maxNumberOfPokemons = 6;
         }
-        randomizedTrainer->partySize = GenerateRandomNumberSeeded(minNumberOfPokemons, 6, trainerNum);
+        randomizedTrainer->partySize = GenerateRandomNumberSeeded(minNumberOfPokemons, maxNumberOfPokemons, trainerNum);
     }
 
     u16 newTrainerSpecies[randomizedTrainer->partySize];
@@ -6186,7 +6198,14 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         }
         // We can't reassign items in a const list so we need to copy it before shuffling it
         ShuffleListU16(pokemonsCopy, specialTrainerData->pokemonsSize, trainerNum);
-        for (int i = 0; i < specialTrainerData->partySize - 1 - legendariesInTeam; i++) {
+        for (int i = 0; i < specialTrainerData->partySize - legendariesInTeam; i++) {
+            #ifndef NDEBUG
+            MgbaPrintf(
+                MGBA_LOG_DEBUG,
+                "Pokemon %d picked for special trainer",
+                pokemonsCopy[i]
+            );
+            #endif
             // Pick pokemon
             newTrainerSpecies[i] = pokemonsCopy[i];
         }
@@ -6195,7 +6214,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         }
     } else {
         for (int i = 0; i < randomizedTrainer->partySize; i++) {
-            u16 pickedPokemon = PickRandomPokemonSeeded(trainerIdToMetadata[trainerNum].tier, trainerIdToMetadata[trainerNum].types, NUMBER_OF_MON_TYPES, TRUE, trainerNum);
+            u16 pickedPokemon = PickRandomPokemonSeeded(trainerIdToMetadata[trainerNum].tier, trainerIdToMetadata[trainerNum].types, NUMBER_OF_MON_TYPES, TRUE, trainerNum + i);
             newTrainerSpecies[i] = pickedPokemon;
         }
     }
@@ -6208,7 +6227,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         u8 smogonVariantIndex = GenerateRandomNumberSeeded(0, smogonVariantLength, (trainerNum * 5) + i);
         const struct SmogonVariant *selectedSmogonVariant = &gSpeciesInfo[newTrainerSpecies[i]].smogonVariants[smogonVariantIndex];
         // 1% of being shiny
-        bool8 isShiny = GenerateRandomNumberSeeded(1, 10000, trainerNum) <= B_SHINY_ODDS;
+        bool8 isShiny = GenerateRandomNumberSeeded(1, 10000, trainerNum + i) <= B_SHINY_ODDS;
         // If this is the shiny for the special trainer transform it to shiny
         if (isShiny == FALSE && i == mandatoryShinyIndexForSpecialTrainer) {
             isShiny = TRUE;
@@ -6236,8 +6255,27 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].ability = selectedSmogonVariant->ability;
         newParty[i].lvl = originalTrainer->party[i].lvl;
         if (gSaveBlock1Ptr->difficultyIncreased) {
-            u8 levelOscillation = GenerateRandomNumberSeeded(0, 2, trainerNum + newParty[i].species);
-            newParty[i].lvl = min(max(maxPlayerPokemonLevel, trainerMinLevel) + levelOscillation, 100);
+            // Trying to scale difficulty without making normal trainers impossible to beat, especially during
+            // The first parts of the game
+            u8 maxLevel = trainerMinLevel + 5;
+            u8 maxOscillation = 8;
+            if (isSpecialTrainer == TRUE) {
+                maxOscillation = 2;
+                maxLevel = 100;
+                trainerMinLevel -= maxOscillation;
+            }
+            #ifndef NDEBUG
+            MgbaPrintf(
+                MGBA_LOG_DEBUG,
+                "Choosing level for pokemon. Min level %d Max level %d Max oscillation %d",
+                trainerMinLevel,
+                maxLevel,
+                maxOscillation
+            );
+            #endif
+            // TODO: For sure there is a better way to write this
+            u8 levelOscillation = GenerateRandomNumberSeeded(0, maxOscillation, trainerNum + newParty[i].species);
+            newParty[i].lvl = min(max(maxPlayerPokemonLevel - levelOscillation, trainerMinLevel), maxLevel);
         }
         newParty[i].ball = originalTrainer->party[i].ball;
         newParty[i].friendship = MAX_FRIENDSHIP;

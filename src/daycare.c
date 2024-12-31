@@ -1092,7 +1092,7 @@ void CreateEgg(struct Pokemon *mon, u16 species, bool8 setHotSpringsLocation)
     u8 metLocation;
     u8 isEgg;
 
-    CreateMon(mon, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
+    CreateMon(mon, species, EGG_HATCH_LEVEL, MAX_PER_STAT_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
     metLevel = 0;
     ball = BALL_POKE;
     language = LANGUAGE_JAPANESE;
@@ -1119,7 +1119,7 @@ static void SetInitialEggData(struct Pokemon *mon, u16 species, struct DayCare *
     u8 language;
 
     personality = daycare->offspringPersonality;
-    CreateMon(mon, species, EGG_HATCH_LEVEL, USE_RANDOM_IVS, TRUE, personality, OT_ID_PLAYER_ID, 0);
+    CreateMon(mon, species, EGG_HATCH_LEVEL, MAX_PER_STAT_IVS, TRUE, personality, OT_ID_PLAYER_ID, 0);
     metLevel = 0;
     ball = BALL_POKE;
     language = LANGUAGE_JAPANESE;

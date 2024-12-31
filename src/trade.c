@@ -465,7 +465,7 @@ static void CB2_CreateTradeMenu(void)
         gPaletteFade.bufferTransferDisabled = FALSE;
 
         for (i = 0; i < PARTY_SIZE; i++)
-            CreateMon(&gEnemyParty[i], SPECIES_NONE, 0, USE_RANDOM_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
+            CreateMon(&gEnemyParty[i], SPECIES_NONE, 0, MAX_PER_STAT_IVS, FALSE, 0, OT_ID_PLAYER_ID, 0);
 
         PrintTradeMessage(MSG_STANDBY);
         ShowBg(0);
@@ -4511,9 +4511,15 @@ static void SpriteCB_BouncingPokeballArrive(struct Sprite *sprite)
 u16 GetInGameTradeSpeciesInfo(void)
 {
     const struct InGameTrade *inGameTrade = &sIngameTrades[gSpecialVar_0x8004];
-    StringCopy(gStringVar1, GetSpeciesName(inGameTrade->requestedSpecies));
-    StringCopy(gStringVar2, GetSpeciesName(inGameTrade->species));
-    return inGameTrade->requestedSpecies;
+    u16 requestedSpecies = inGameTrade->requestedSpecies;
+    u16 sendSpecies = inGameTrade->species;
+    if (gSaveBlock1Ptr->randomizeTrades) {
+        requestedSpecies = PickRandomPokemonSeeded(ALL_TIERS, gSpeciesInfo[0].types, 1, FALSE, inGameTrade->species);
+        sendSpecies = PickRandomPokemonSeeded(ALL_TIERS, gSpeciesInfo[0].types, 1, FALSE, inGameTrade->requestedSpecies);
+    }
+    StringCopy(gStringVar1, GetSpeciesName(requestedSpecies));
+    StringCopy(gStringVar2, GetSpeciesName(sendSpecies));
+    return requestedSpecies;
 }
 
 static void BufferInGameTradeMonName(void)
@@ -4535,7 +4541,7 @@ static void CreateInGameTradePokemonInternal(u8 whichPlayerMon, u8 whichInGameTr
     u8 mailNum;
     struct Pokemon *pokemon = &gEnemyParty[0];
 
-    CreateMon(pokemon, inGameTrade->species, level, USE_RANDOM_IVS, TRUE, inGameTrade->personality, OT_ID_PRESET, inGameTrade->otId);
+    CreateMon(pokemon, inGameTrade->species, level, MAX_PER_STAT_IVS, TRUE, inGameTrade->personality, OT_ID_PRESET, inGameTrade->otId);
 
     SetMonData(pokemon, MON_DATA_HP_IV, &inGameTrade->ivs[0]);
     SetMonData(pokemon, MON_DATA_ATK_IV, &inGameTrade->ivs[1]);
