@@ -95,7 +95,7 @@ IslandCave_EventScript_Regice::
 	delay 40
 	waitmoncry
 	legendary_save
-	setwildbattle SPECIES_REGICE, 40
+	setwildbattle SPECIES_REGICE, 100
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special StartRegiBattle
 	waitstate

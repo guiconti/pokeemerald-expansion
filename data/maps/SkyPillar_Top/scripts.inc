@@ -49,7 +49,7 @@ SkyPillar_Top_EventScript_Rayquaza::
 	delay 40
 	waitmoncry
 	legendary_save
-	setwildbattle SPECIES_RAYQUAZA, 70
+	setwildbattle SPECIES_RAYQUAZA, 100
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	waitstate

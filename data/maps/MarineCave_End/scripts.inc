@@ -36,7 +36,7 @@ MarineCave_End_EventScript_Kyogre::
 	waitmoncry
 	setvar VAR_LAST_TALKED, LOCALID_KYOGRE
 	legendary_save
-	setwildbattle SPECIES_KYOGRE, 70
+	setwildbattle SPECIES_KYOGRE, 100
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	waitstate

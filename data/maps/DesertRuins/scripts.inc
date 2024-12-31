@@ -62,7 +62,7 @@ DesertRuins_EventScript_Regirock::
 	delay 40
 	waitmoncry
 	legendary_save
-	setwildbattle SPECIES_REGIROCK, 40
+	setwildbattle SPECIES_REGIROCK, 100
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special StartRegiBattle
 	waitstate

@@ -36,7 +36,7 @@ TerraCave_End_EventScript_Groudon::
 	waitmoncry
 	setvar VAR_LAST_TALKED, LOCALID_GROUDON
 	legendary_save
-	setwildbattle SPECIES_GROUDON, 70
+	setwildbattle SPECIES_GROUDON, 100
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special BattleSetup_StartLegendaryBattle
 	waitstate

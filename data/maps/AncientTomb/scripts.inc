@@ -62,7 +62,7 @@ AncientTomb_EventScript_Registeel::
 	delay 40
 	waitmoncry
 	legendary_save
-	setwildbattle SPECIES_REGISTEEL, 40
+	setwildbattle SPECIES_REGISTEEL, 100
 	setflag FLAG_SYS_CTRL_OBJ_DELETE
 	special StartRegiBattle
 	waitstate
