@@ -331,7 +331,6 @@ Route103_Text_BrendanDefeated:
 	.string "Huh, {PLAYER}, you're not too shabby.$"
 
 Route103_Text_BrendanTimeToHeadBack:
-	.string "BRENDAN: I think I get it.\n"
 	.string "I think I know why my dad has his eye\l"
 	.string "out for you now.\p"
 	.string "Look, your POKéMON already likes you,\n"
@@ -353,3 +352,15 @@ Route103_Text_RouteSign:
 	.string "ROUTE 103\n"
 	.string "{DOWN_ARROW} OLDALE TOWN$"
 
+Route103_EventScript_SanctuaryGuard::
+	msgbox Route103_Text_SanctuaryGuard, MSGBOX_NPC
+
+Route103_Text_SanctuaryGuard:
+	.string "Sorry, I can't let you in the\n"
+	.string "sanctuary without authorization."
+
+Route103_EventScript_SanctuarySign::
+	msgbox Route103_Text_SanctuarySign, MSGBOX_SIGN
+
+Route103_Text_SanctuarySign:
+	.string "POKéMON SANCTUARY"
