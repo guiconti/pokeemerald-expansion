@@ -1004,7 +1004,7 @@ for (const mapDir of mapDirs) {
 const trainersPartyContentLines = fs.readFileSync("./src/data/trainers.party", "utf-8").split("\n");
 
 for (const trainerId of TRAINER_IDS) {
-	let trainerLineIndex = trainersPartyContentLines.findIndex((line) => line.includes(trainerId));
+	let trainerLineIndex = trainersPartyContentLines.findIndex((line) => line.includes(trainerId) && line.replace(/\=/g, "").trim() === trainerId);
 	if (trainerLineIndex === -1) {
 		throw new Error("Could not find trainer " + trainerId);
 	}

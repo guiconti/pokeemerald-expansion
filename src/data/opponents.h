@@ -2253,7 +2253,7 @@ static const struct TrainerMetadata trainerIdToMetadata[] = {
 },
 	},
 	[TRAINER_JOSH] = {
-		.tier = TIER_ONE,
+		.tier = TIER_THREE,
 		.types = {TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_STEEL,TYPE_STEEL,TYPE_FIGHTING},
 	},
 	[TRAINER_TOMMY] = {
@@ -3523,7 +3523,7 @@ static const struct TrainerMetadata trainerIdToMetadata[] = {
 },
 	},
 	[TRAINER_CAROL] = {
-		.tier = TIER_ONE,
+		.tier = TIER_TWO,
 		.types = {TYPE_NORMAL,
  TYPE_FIGHTING,
  TYPE_FLYING,
@@ -4548,7 +4548,7 @@ static const struct TrainerMetadata trainerIdToMetadata[] = {
 		.types = {TYPE_FIRE, TYPE_FIRE, TYPE_GROUND, TYPE_ROCK, TYPE_DARK},
 	},
 	[TRAINER_MARC] = {
-		.tier = TIER_ONE,
+		.tier = TIER_THREE,
 		.types = {TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_STEEL,TYPE_STEEL,TYPE_FIGHTING},
 	},
 	[TRAINER_BRENDEN] = {
@@ -4904,7 +4904,7 @@ static const struct TrainerMetadata trainerIdToMetadata[] = {
 		.types = {TYPE_ICE,TYPE_ICE,TYPE_ICE,TYPE_ICE,TYPE_WATER,TYPE_WATER,TYPE_DRAGON},
 	},
 	[TRAINER_RICK] = {
-		.tier = TIER_TWO,
+		.tier = TIER_THREE,
 		.types = {TYPE_NORMAL,
  TYPE_FIGHTING,
  TYPE_FLYING,
