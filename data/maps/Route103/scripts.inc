@@ -354,13 +354,15 @@ Route103_Text_RouteSign:
 
 Route103_EventScript_SanctuaryGuard::
 	msgbox Route103_Text_SanctuaryGuard, MSGBOX_NPC
+	end
 
 Route103_Text_SanctuaryGuard:
 	.string "Sorry, I can't let you in the\n"
-	.string "sanctuary without authorization."
+	.string "sanctuary without authorization.$"
 
 Route103_EventScript_SanctuarySign::
 	msgbox Route103_Text_SanctuarySign, MSGBOX_SIGN
+	end
 
 Route103_Text_SanctuarySign:
-	.string "POKéMON SANCTUARY"
+	.string "POKéMON SANCTUARY$"

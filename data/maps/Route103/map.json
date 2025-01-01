@@ -296,7 +296,7 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Route103_EventScript_SanctuaryGuard",
-      "flag": "FLAG_HIDE_ROUTE_103_SANCTUARY_GUARD"
+      "flag": "FLAG_UNUSED_0x493"
     }
   ],
   "warp_events": [
@@ -305,6 +305,20 @@
       "y": 6,
       "elevation": 0,
       "dest_map": "MAP_ALTERING_CAVE",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "elevation": 0,
+      "dest_map": "MAP_POKEMON_SANCTUARY",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "elevation": 0,
+      "dest_map": "MAP_POKEMON_SANCTUARY",
       "dest_warp_id": "0"
     }
   ],
