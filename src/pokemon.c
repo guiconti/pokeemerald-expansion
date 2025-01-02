@@ -19691,9 +19691,9 @@ u8 PickType(const u8 *types, u8 lengthOfTypes, u8 seeded, u16 seed) {
 
 u16 GeneratePokemonFromList(const u16 *list, u32 count, u8 seeded, u16 seed) {
     if (seeded == TRUE) {
-        return list[GenerateRandomNumberSeeded(0, count, seed)];
+        return list[GenerateRandomNumberSeeded(0, count - 1, seed)];
     } else {
-        return list[GenerateRandomNumber(0, count)];
+        return list[GenerateRandomNumber(0, count - 1)];
     }
 }
 
