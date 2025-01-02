@@ -6135,20 +6135,20 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         maxPlayerPokemonLevel = max(maxPlayerPokemonLevel, gPlayerParty[i].level);
     }
 
-    u8 isSpecialTrainer = randomizedTrainer->trainerClass == TRAINER_CLASS_LEADER || 
+    bool8 isSpecialTrainer = randomizedTrainer->trainerClass == TRAINER_CLASS_LEADER || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_ELITE_FOUR || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_RIVAL || 
         randomizedTrainer->trainerClass == TRAINER_CLASS_MAGMA_LEADER ||
         randomizedTrainer->trainerClass == TRAINER_CLASS_CHAMPION;
     // Remove the very first rival battle as a special trainer since that battles becomes
     // virtually impossible for the majority of times
-    isSpecialTrainer = isSpecialTrainer &&
-        trainerNum != TRAINER_BRENDAN_ROUTE_103_MUDKIP &&
-        trainerNum != TRAINER_BRENDAN_ROUTE_103_TREECKO &&
-        trainerNum != TRAINER_BRENDAN_ROUTE_103_TORCHIC &&
-        trainerNum != TRAINER_MAY_ROUTE_103_MUDKIP &&
-        trainerNum != TRAINER_MAY_ROUTE_103_TREECKO &&
-        trainerNum != TRAINER_MAY_ROUTE_103_TORCHIC;
+    bool8 isFirstBattle = trainerNum == TRAINER_BRENDAN_ROUTE_103_MUDKIP ||
+        trainerNum == TRAINER_BRENDAN_ROUTE_103_TREECKO ||
+        trainerNum == TRAINER_BRENDAN_ROUTE_103_TORCHIC ||
+        trainerNum == TRAINER_MAY_ROUTE_103_MUDKIP ||
+        trainerNum == TRAINER_MAY_ROUTE_103_TREECKO ||
+        trainerNum == TRAINER_MAY_ROUTE_103_TORCHIC;
+    isSpecialTrainer = isSpecialTrainer == TRUE && isFirstBattle == FALSE;
 
     if (isSpecialTrainer) {
         // Pick variant
@@ -6165,6 +6165,9 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         // For each species get the smogon variant and build the team
         const struct SpecialTrainer *specialTrainerData = &specialTrainerIdToPokemonOptions[trainerNum];
         randomizedTrainer->partySize = specialTrainerData->partySize;
+    } else if (isFirstBattle == TRUE) {
+        // Force 1st trainer to have only 1 pokemon
+        randomizedTrainer->partySize = 1;
     } else {
         u16 minNumberOfPokemons = 1;
         u16 maxNumberOfPokemons = originalTrainer->partySize;
