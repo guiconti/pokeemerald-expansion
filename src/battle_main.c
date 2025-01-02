@@ -6277,7 +6277,7 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
             u8 levelOscillation = GenerateRandomNumberSeeded(0, maxOscillation, trainerNum + newParty[i].species);
             newParty[i].lvl = min(max(maxPlayerPokemonLevel - levelOscillation, trainerMinLevel), maxLevel);
         }
-        newParty[i].ball = originalTrainer->party[i].ball;
+        newParty[i].ball = ITEM_POKE_BALL;
         newParty[i].friendship = MAX_FRIENDSHIP;
         newParty[i].nature = selectedSmogonVariant->nature;
         // If the pokemon is genderless we need to respect that
@@ -6293,6 +6293,28 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].gigantamaxFactor = FALSE;
         newParty[i].shouldUseDynamax = FALSE;
         newParty[i].dynamaxLevel = MAX_DYNAMAX_LEVEL;
+
+
+        #ifndef NDEBUG
+        MgbaPrintf(
+            MGBA_LOG_DEBUG,
+            "Pokemon %d randomized for trainer\nSpecies: %d\nisShiny: %d\nMoves: %d, %d, %d, %d\nItem: %d\nAbility: %d\nNature: %d\nGender: %d\nLevel: %d\nBall: %d\nFriendship: %d\n",
+            i,
+            newParty[i].species,
+            isShiny,
+            newParty[i].moves[0],
+            newParty[i].moves[1],
+            newParty[i].moves[2],
+            newParty[i].moves[3],
+            newParty[i].heldItem,
+            newParty[i].ability,
+            newParty[i].nature,
+            newParty[i].gender,
+            newParty[i].lvl,
+            newParty[i].ball,
+            newParty[i].friendship
+        );
+        #endif
     }
     randomizedTrainer->party = newParty;
     return randomizedTrainer;

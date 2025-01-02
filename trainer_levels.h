@@ -853,4 +853,5 @@ static const u8 trainerIdToMinLevel[] = {
 	[TRAINER_RED] = 9,
 	[TRAINER_LEAF] = 9,
 	[TRAINER_BRENDAN_PLACEHOLDER] = 9,
+	[TRAINER_DISGUISED_OAK] = 100,
 };

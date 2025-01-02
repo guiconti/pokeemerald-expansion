@@ -292,9 +292,20 @@ LittlerootTown_ProfessorBirchsLab_EventScript_AideAlreadyMet::
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_AideReceivedStarter::
+	goto_if_unset FLAG_UNUSED_0x493, LittlerootTown_ProfessorBirchsLab_OakTip
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BirchEnjoysRivalsHelpToo, MSGBOX_DEFAULT
 	release
 	end
+
+LittlerootTown_ProfessorBirchsLab_OakTip::
+	msgbox LittlerootTown_DefaultText_OakTip, MSGBOX_DEFAULT
+	release
+	end
+
+LittlerootTown_DefaultText_OakTip:
+	.string "When you've caught 100\nor more pokémons you should look for\p"
+	.string "Professor Oak I heard that\nhe has been fishing\p"
+	.string "In one of the towns.$"
 
 LittlerootTown_ProfessorBirchsLab_EventScript_Cyndaquil::
 	release
