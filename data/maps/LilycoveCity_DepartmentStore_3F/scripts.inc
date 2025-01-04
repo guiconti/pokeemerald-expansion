@@ -92,7 +92,6 @@ LilycoveCity_DepartmentStore_3F_Pokemart_Vitamins:
 	.2byte ITEM_THICK_CLUB
 	.2byte ITEM_LUCKY_PUNCH
 	.2byte ITEM_METAL_POWDER
-	.2byte ITEM_QUICK_POWDER
 	.2byte ITEM_DEEP_SEA_SCALE
 	.2byte ITEM_DEEP_SEA_TOOTH
 	.2byte ITEM_SOUL_DEW
@@ -154,7 +153,6 @@ LilycoveCity_DepartmentStore_3F_Pokemart_Vitamins:
 	.2byte ITEM_CELL_BATTERY
 	.2byte ITEM_LUMINOUS_MOSS
 	.2byte ITEM_SNOWBALL
-	.2byte ITEM_BRIGHT_POWDER
 	.2byte ITEM_WHITE_HERB
 	.2byte ITEM_EXP_SHARE
 	.2byte ITEM_QUICK_CLAW

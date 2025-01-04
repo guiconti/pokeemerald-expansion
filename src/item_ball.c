@@ -397,7 +397,6 @@ static const u16 possibleRandomItems[] = {
     ITEM_ROWAP_BERRY,
     ITEM_KEE_BERRY,
     ITEM_MARANGA_BERRY,
-    ITEM_ENIGMA_BERRY_E_READER,
     ITEM_TM01,
     ITEM_TM02,
     ITEM_TM03,
