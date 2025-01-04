@@ -885,6 +885,10 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_ELECTRICCURRENTISRUNNING]             = COMPOUND_STRING("An electric current is running across the battlefield!"),
     [STRINGID_SEEMSWEIRD]                           = COMPOUND_STRING("The battlefield seems weird!"),
     [STRINGID_WAGGLINGAFINGER]                      = COMPOUND_STRING("Waggling a finger let it use {B_CURRENT_MOVE}!"),
+    [STRINGID_ONETYPECAPTUREBLOCKED]                = COMPOUND_STRING("One Type Challenge active, capture blocked!{PAUSE_UNTIL_PRESS}"),       
+    [STRINGID_NUZLOCKECAPTUREBLOCKED]               = COMPOUND_STRING("You have already used your encounter\nfor this area!{PAUSE_UNTIL_PRESS}"),
+    [STRINGID_SPECIESCLAUSECAPTUREBLOCKED]          = COMPOUND_STRING("You have already caught a POKéMON\nin this evolution line!{PAUSE_UNTIL_PRESS}"),
+    [STRINGID_SAMESPECIESCAPTUREBLOCKED]            = COMPOUND_STRING("You have already caught this POKéMON!{PAUSE_UNTIL_PRESS}"),
 };
 
 const u16 gTrainerUsedItemStringIds[] =

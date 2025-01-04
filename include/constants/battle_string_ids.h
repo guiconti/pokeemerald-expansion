@@ -724,8 +724,13 @@
 #define STRINGID_ELECTRICCURRENTISRUNNING             722
 #define STRINGID_SEEMSWEIRD                           723
 #define STRINGID_WAGGLINGAFINGER                      724
+// Nuzlocke and challenges
+#define STRINGID_ONETYPECAPTUREBLOCKED      725
+#define STRINGID_NUZLOCKECAPTUREBLOCKED     726
+#define STRINGID_SPECIESCLAUSECAPTUREBLOCKED 727
+#define STRINGID_SAMESPECIESCAPTUREBLOCKED  728
 
-#define BATTLESTRINGS_COUNT                           725
+#define BATTLESTRINGS_COUNT                           729
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,

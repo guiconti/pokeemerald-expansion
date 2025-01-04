@@ -166,5 +166,11 @@ bool8 GetSetItemObtained(u16 item, enum ItemObtainFlags caseId);
 
 // Gui stuff
 u8 NuzlockeGetCurrentRegionMapSectionId(void);
+u8 NuzlockeFlagGet(u16 mapsec);
+u8 NuzlockeFlagSet(u16 mapsec);
+u8 NuzlockeFlagClear(u16 mapsec);
+void NuzlockeDeletePartyMon(u8 position);
+void NuzlockeDeleteFaintedPartyPokemon(void);
+bool8 IsNuzlockeActive(void);
 
 #endif // GUARD_OVERWORLD_H

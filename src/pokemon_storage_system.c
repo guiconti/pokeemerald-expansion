@@ -674,7 +674,7 @@ static void PlaceMon(void);
 static void RefreshDisplayMon(void);
 static void SetMovingMonData(u8, u8);
 static void SetPlacedMonData(u8, u8);
-static void PurgeMonOrBoxMon(u8, u8);
+// static void PurgeMonOrBoxMon(u8, u8);
 static void SetShiftedMonData(u8, u8);
 static bool8 TryStorePartyMonInBox(u8);
 static void ResetSelectionAfterDeposit(void);
@@ -6461,7 +6461,7 @@ static void SetPlacedMonData(u8 boxId, u8 position)
     }
 }
 
-static void PurgeMonOrBoxMon(u8 boxId, u8 position)
+void PurgeMonOrBoxMon(u8 boxId, u8 position) //static //gui
 {
     if (boxId == TOTAL_BOXES_COUNT)
         ZeroMonData(&gPlayerParty[position]);
@@ -10213,4 +10213,36 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
         }
     }
     sJustOpenedBag = FALSE;
+}
+
+// Gui stuff
+u16 GetFirstBoxPokemon(void) // @Kurausukun
+{
+    u16 i;
+    u16 j;
+
+    for (i = 0; i < TOTAL_BOXES_COUNT; i++)
+    {
+        for (j = 0; j < IN_BOX_COUNT; j++)
+        {
+            if (GetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_SPECIES) != SPECIES_NONE &&
+            !GetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_IS_EGG) && !GetBoxMonData(&gPokemonStoragePtr->boxes[i][j], MON_DATA_NUZLOCKE_RIBBON))
+            {
+                return (i * IN_BOX_COUNT) + j;
+            }
+        }
+    }
+    return IN_BOX_COUNT * TOTAL_BOXES_COUNT; // none found
+}
+
+void MoveFirstBoxPokemon(void) // @Kurausukun
+{
+    u16 position = GetFirstBoxPokemon();
+    if (position != IN_BOX_COUNT * TOTAL_BOXES_COUNT)
+    {
+        u16 boxNum = position / IN_BOX_COUNT;
+        u16 boxIndex = position - (boxNum * IN_BOX_COUNT);
+        BoxMonAtToMon(boxNum, boxIndex, &gPlayerParty[0]);
+        PurgeMonOrBoxMon(boxNum, boxIndex);
+    }
 }

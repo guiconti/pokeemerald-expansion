@@ -57,6 +57,7 @@
 #include "util.h"
 #include "wild_encounter.h"
 #include "window.h"
+#include "overworld.h"
 #include "constants/abilities.h"
 #include "constants/battle_ai.h"
 #include "constants/battle_move_effects.h"
@@ -4389,6 +4390,8 @@ static void HandleTurnActionSelectionState(void)
                         *(gBattleStruct->selectionScriptFinished + battler) = FALSE;
                         *(gBattleStruct->stateIdAfterSelScript + battler) = STATE_BEFORE_ACTION_CHOSEN;
                         return;
+                    } else if (IsNuzlockeActive() && NuzlockeIsCaptureBlocked) {
+                        gSelectionBattleScripts[battler] = BattleScript_Safari_NuzlockeCaptureBlocked;
                     }
                     break;
                 case B_ACTION_SAFARI_POKEBLOCK:
@@ -5589,6 +5592,38 @@ static void HandleEndTurn_FinishBattle(void)
             && gBattleResults.shinyWildMon)
         {
             TryPutBreakingNewsOnAir();
+        }
+
+        if (IsNuzlockeActive()) {
+            if (!(gBattleTypeFlags &(BATTLE_TYPE_LINK
+                    | BATTLE_TYPE_LINK_IN_BATTLE
+                    | BATTLE_TYPE_FIRST_BATTLE
+                    | BATTLE_TYPE_WALLY_TUTORIAL
+                    | BATTLE_TYPE_INGAME_PARTNER
+                    | BATTLE_TYPE_TOWER_LINK_MULTI
+                    | BATTLE_TYPE_RECORDED_LINK
+                    | BATTLE_TYPE_FRONTIER)))
+                NuzlockeDeleteFaintedPartyPokemon();
+            if (!(gBattleTypeFlags & (BATTLE_TYPE_DOUBLE
+                | BATTLE_TYPE_LINK
+                | BATTLE_TYPE_TRAINER
+                | BATTLE_TYPE_FIRST_BATTLE
+                | BATTLE_TYPE_LINK_IN_BATTLE
+                | BATTLE_TYPE_MULTI
+                | BATTLE_TYPE_BATTLE_TOWER
+                | BATTLE_TYPE_WALLY_TUTORIAL
+                | BATTLE_TYPE_LEGENDARY
+                | BATTLE_TYPE_TWO_OPPONENTS
+                | BATTLE_TYPE_INGAME_PARTNER
+                | BATTLE_TYPE_TOWER_LINK_MULTI
+                | BATTLE_TYPE_RECORDED_LINK)))
+            {
+                if (!NuzlockeIsSpeciesClauseActive && !OneTypeChallengeCaptureBlocked)
+                    NuzlockeFlagSet(NuzlockeGetCurrentRegionMapSectionId());
+            }
+            NuzlockeIsCaptureBlocked = FALSE;
+            NuzlockeIsSpeciesClauseActive = FALSE;
+            OneTypeChallengeCaptureBlocked = FALSE;
         }
 
         RecordedBattle_SetPlaybackFinished();

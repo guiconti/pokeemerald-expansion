@@ -2711,4 +2711,11 @@ extern const u8 gText_PlayerScurriedBackHome[];
 extern const u8 gText_Relearn[]; // move relearner from summary screen
 extern const u8 gText_Rename[]; // change nickname from summary screen
 
+// Gui stuff
+extern const u8 gText_NuzlockeCantThrowPokeBallRoute[];
+extern const u8 gText_NuzlockeCantThrowPokeBallSpeciesClause[];
+extern const u8 gText_NuzlockeCantThrowPokeBallAlreadyCaught[];
+extern const u8 gText_OneTypeChallengeCantThrowPokeBall[];
+extern const u8 gText_BattleRules_NoItems_Player[];
+
 #endif // GUARD_STRINGS_H

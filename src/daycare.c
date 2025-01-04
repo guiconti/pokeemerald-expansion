@@ -1184,6 +1184,8 @@ static bool8 TryProduceOrHatchEgg(struct DayCare *daycare)
             }
             else
             {
+                if (IsNuzlockeActive() && NuzlockeFlagGet(NuzlockeGetCurrentRegionMapSectionId()))
+                    return FALSE;
                 gSpecialVar_0x8004 = i;
                 return TRUE;
             }

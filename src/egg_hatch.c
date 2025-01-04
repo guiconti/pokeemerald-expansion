@@ -472,6 +472,8 @@ static void VBlankCB_EggHatch(void)
 
 void EggHatch(void)
 {
+    if (IsNuzlockeActive())
+        NuzlockeFlagSet(NuzlockeGetCurrentRegionMapSectionId());
     LockPlayerFieldControls();
     CreateTask(Task_EggHatch, 10);
     FadeScreen(FADE_TO_BLACK, 0);

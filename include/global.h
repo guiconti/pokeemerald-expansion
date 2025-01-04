@@ -1116,6 +1116,7 @@ struct SaveBlock1
     /*0x3???*/ struct TrainerHillSave trainerHill;
 #endif //FREE_TRAINER_HILL
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
+    /*0x3D88*/ u8 NuzlockeEncounterFlags[9];
     // sizeof: 0x3???
 
     // Gui stuff

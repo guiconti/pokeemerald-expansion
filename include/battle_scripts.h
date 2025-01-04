@@ -852,5 +852,10 @@ extern const u8 BattleScript_EffectSpicyExtract[];
 extern const u8 BattleScript_DamageToQuarterTargetHP[];
 extern const u8 BattleScript_EffectFickleBeam[];
 extern const u8 BattleScript_FickleBeamDoubled[];
+// Gui stuff
+extern const u8 BattleScript_Safari_OneTypeChallengeCaptureBlocked[];
+extern const u8 BattleScript_Safari_NuzlockeCaptureBlocked[];
+extern const u8 BattleScript_Safari_SpeciesClauseCaptureBlocked[];
+extern const u8 BattleScript_Safari_SameSpeciesCaptureBlocked[];
 
 #endif // GUARD_BATTLE_SCRIPTS_H

@@ -45,6 +45,7 @@
 #include "constants/items.h"
 #include "constants/songs.h"
 #include "constants/map_types.h"
+#include "battle_setup.h"
 
 static void SetUpItemUseCallback(u8);
 static void FieldCB_UseItemOnField(void);
@@ -1100,6 +1101,9 @@ static u32 GetBallThrowableState(void)
 
 bool32 CanThrowBall(void)
 {
+    if (NuzlockeIsCaptureBlocked) {
+        return FALSE;
+    }
     return (GetBallThrowableState() == BALL_THROW_ABLE);
 }
 
@@ -1108,6 +1112,10 @@ static const u8 sText_CantThrowPokeBall_SemiInvulnerable[] = _("Cannot throw a b
 static const u8 sText_CantThrowPokeBall_Disabled[] = _("POKé BALLS cannot be used\nright now!\p");
 void ItemUseInBattle_PokeBall(u8 taskId)
 {
+    if (NuzlockeIsCaptureBlocked) {
+        DisplayCannotUseItemMessage(taskId, FALSE, gText_NuzlockeCantThrowPokeBallRoute);
+        return;
+    }
     switch (GetBallThrowableState())
     {
     case BALL_THROW_ABLE:
@@ -1207,26 +1215,31 @@ bool32 CannotUseItemsInBattle(u16 itemId, struct Pokemon *mon)
             cannotUse = TRUE;
         break;
     case EFFECT_ITEM_THROW_BALL:
-        switch (GetBallThrowableState())
-        {
-        case BALL_THROW_UNABLE_TWO_MONS:
-            failStr = sText_CantThrowPokeBall_TwoMons;
+        if (NuzlockeIsCaptureBlocked) {
+            failStr = gText_NuzlockeCantThrowPokeBallRoute;
             cannotUse = TRUE;
-            break;
-        case BALL_THROW_UNABLE_NO_ROOM:
-            failStr = gText_BoxFull;
-            cannotUse = TRUE;
-            break;
-        case BALL_THROW_UNABLE_SEMI_INVULNERABLE:
-            failStr = sText_CantThrowPokeBall_SemiInvulnerable;
-            cannotUse = TRUE;
-            break;
-        case BALL_THROW_UNABLE_DISABLED_FLAG:
-            failStr = sText_CantThrowPokeBall_Disabled;
-            cannotUse = TRUE;
+        } else {
+            switch (GetBallThrowableState())
+            {
+            case BALL_THROW_UNABLE_TWO_MONS:
+                failStr = sText_CantThrowPokeBall_TwoMons;
+                cannotUse = TRUE;
+                break;
+            case BALL_THROW_UNABLE_NO_ROOM:
+                failStr = gText_BoxFull;
+                cannotUse = TRUE;
+                break;
+            case BALL_THROW_UNABLE_SEMI_INVULNERABLE:
+                failStr = sText_CantThrowPokeBall_SemiInvulnerable;
+                cannotUse = TRUE;
+                break;
+            case BALL_THROW_UNABLE_DISABLED_FLAG:
+                failStr = sText_CantThrowPokeBall_Disabled;
+                cannotUse = TRUE;
+                break;
+            }
             break;
         }
-        break;
     case EFFECT_ITEM_INCREASE_ALL_STATS:
         for (i = STAT_ATK; i < NUM_STATS; i++)
         {

@@ -43,6 +43,7 @@
 #include "text.h"
 #include "tv.h"
 #include "window.h"
+#include "overworld.h"
 #include "constants/battle_move_effects.h"
 #include "constants/hold_effects.h"
 #include "constants/items.h"
@@ -2407,7 +2408,8 @@ static bool8 CanReplaceMove(void)
 {
     if (sMonSummaryScreen->firstMoveIndex == MAX_MON_MOVES
         || sMonSummaryScreen->newMove == MOVE_NONE
-        || IsMoveHM(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]) != TRUE)
+        || IsMoveHM(sMonSummaryScreen->summary.moves[sMonSummaryScreen->firstMoveIndex]) != TRUE
+        || IsNuzlockeActive())
         return TRUE;
     else
         return FALSE;
