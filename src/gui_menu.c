@@ -290,8 +290,8 @@ static const u8 sText_Description_Random_Item_Off[]              = _("Do not ran
 static const u8 sText_Description_Random_Item_On[]               = _("Randomize ball items.");
 static const u8 sText_Description_Random_Trade_Off[]              = _("Do not randomize trades.");
 static const u8 sText_Description_Random_Trade_On[]               = _("Randomize trades.");
-static const u8 sText_Description_Chaos_Mode_Off[]              = _("Everything will be randomized.");
-static const u8 sText_Description_Chaos_Mode_On[]               = _("There will be some randomness\nbut not everything will be randomized.");
+static const u8 sText_Description_Chaos_Mode_Off[]               = _("There will be some randomness\nbut not everything will be randomized.");
+static const u8 sText_Description_Chaos_Mode_On[]              = _("Everything will be randomized.");
 static const u8 sText_Description_Random_Next[]                     = _("Continue to Nuzlocke options.");
 static const u8 *const sOptionMenuItemDescriptionsRandomizer[MENUITEM_RANDOMIZER_COUNT][2] =
 {
@@ -364,7 +364,7 @@ static const u8 *const sOptionMenuItemDescriptionsDisabledDifficulty[MENUITEM_DI
 };
 
 static const u8 sText_Description_QoL_Exp_Share_Off[]               = _("Exp share is disabled.");
-static const u8 sText_Description_QoL_Exp_Share_On[]               = _("Exp share is is enabled.");
+static const u8 sText_Description_QoL_Exp_Share_On[]               = _("Exp share is enabled.");
 static const u8 sText_Description_QoL_Save[]                     = _("Finish settings.");
 static const u8 *const sOptionMenuItemDescriptionsQoL[MENUITEM_QOL_COUNT][2] =
 {
@@ -612,14 +612,29 @@ static void DrawRightSideChoiceText(const u8 *text, int x, int y, bool8 choosen,
 }
 
 static void DrawChoices(u32 id, int y) { //right side draw function 
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "Draw Choices id: %d",
+        id
+    );
+    #endif
   switch (options->submenu) {
     case MENU_RANDOMIZER:
       if (sItemFunctionsRandom[id].drawChoices != NULL)
           sItemFunctionsRandom[id].drawChoices(options->randomizer[id], y);
       break;
     case MENU_NUZLOCKE:
-      if (sItemFunctionsNuzlocke[id].drawChoices != NULL)
+      if (sItemFunctionsNuzlocke[id].drawChoices != NULL) {
+        #ifndef NDEBUG
+                    MgbaPrintf(
+                        MGBA_LOG_DEBUG,
+                        "Draw choices for nuzlocke for id %d",
+                        id
+                    );
+                    #endif
           sItemFunctionsNuzlocke[id].drawChoices(options->nuzlocke[id], y);
+      }
     case MENU_DIFFICULTY:
       if (sItemFunctionsDifficulty[id].drawChoices != NULL)
           sItemFunctionsDifficulty[id].drawChoices(options->difficulty[id], y);
@@ -843,6 +858,12 @@ static void Task_OptionMenuProcessInput(u8 taskId) {
   }
   else if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
   {
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "DPAD Left or Right"
+    );
+    #endif
       if (options->submenu == MENU_RANDOMIZER)
       {
           int cursor = options->menuCursor[options->submenu];
@@ -862,19 +883,52 @@ static void Task_OptionMenuProcessInput(u8 taskId) {
       }
       else if (options->submenu == MENU_NUZLOCKE)
       {
+            #ifndef NDEBUG
+            MgbaPrintf(
+                MGBA_LOG_DEBUG,
+                "In nuzlocke menu"
+            );
+            #endif
           int cursor = options->menuCursor[options->submenu];
           u8 previousOption = options->nuzlocke[cursor];
+          #ifndef NDEBUG
+            MgbaPrintf(
+                MGBA_LOG_DEBUG,
+                "Cursor %d previous option %d",
+                cursor,
+                previousOption
+            );
+            #endif
           if (CheckConditions(cursor))
           {
+            #ifndef NDEBUG
+            MgbaPrintf(
+                MGBA_LOG_DEBUG,
+                "Inside check conditions"
+            );
+            #endif
               if (sItemFunctionsNuzlocke[cursor].processInput != NULL)
               {
+                #ifndef NDEBUG
+                MgbaPrintf(
+                    MGBA_LOG_DEBUG,
+                    "First if"
+                );
+                #endif
                   options->nuzlocke[cursor] = sItemFunctionsNuzlocke[cursor].processInput(previousOption);
                   ReDrawAll();
                   DrawDescriptionText();
               }
 
-              if (previousOption != options->nuzlocke[cursor])
+              if (previousOption != options->nuzlocke[cursor]) {
+                #ifndef NDEBUG
+                    MgbaPrintf(
+                        MGBA_LOG_DEBUG,
+                        "Second if"
+                    );
+                    #endif
                   DrawChoices(cursor, options->visibleCursor[options->submenu] * Y_DIFF);
+              }
           }
       }
       else if (options->submenu == MENU_DIFFICULTY)
@@ -1003,68 +1057,94 @@ static void DrawChoices_Random_OffOn(int selection, int y, bool8 active) {
     u8 styles[2] = {0};
     styles[selection] = 1;
 
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "DrawChoices_Random_OffOn %d",
+        active
+    );
+    #endif
+
     DrawOptionMenuChoice(sText_Off, 104, y, styles[0], active);
     DrawOptionMenuChoice(sText_On, GetStringRightAlignXOffset(1, sText_On, 198), y, styles[1], active);
 }
 
 static void DrawChoices_Randomizer_Toggle(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_RANDOMIZER_ENABLED];
+  bool8 active =  CheckConditions(MENUITEM_RANDOMIZER_ENABLED);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Randomize_Starter(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_RANDOM_STARTERS_ENABLED];
+  bool8 active =  CheckConditions(MENUITEM_RANDOM_STARTERS_ENABLED);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 static void DrawChoices_Randomize_WildEncounters(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED];
+  bool8 active =  CheckConditions(MENUITEM_RANDOM_WILD_ENCOUNTER_ENABLED);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Randomize_Battles(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_RANDOM_BATTLES_ENABLED];
+  bool8 active =  CheckConditions(MENUITEM_RANDOM_BATTLES_ENABLED);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Randomize_ConsistentType(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_CONSISTENT_TYPE];
+  bool8 active =  CheckConditions(MENUITEM_CONSISTENT_TYPE);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Randomize_Item(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_RANDOM_ITEMS_ENABLED];
+  bool8 active =  CheckConditions(MENUITEM_RANDOM_ITEMS_ENABLED);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Randomize_Trade(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_RANDOM_TRADES_ENABLED];
+  bool8 active =  CheckConditions(MENUITEM_RANDOM_TRADES_ENABLED);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 static void DrawChoices_Chaos_Mode(int selection, int y) {
-  bool8 active = options->randomizer[MENUITEM_CHAOS_MODE];
+  bool8 active =  CheckConditions(MENUITEM_CHAOS_MODE);
   DrawChoices_Random_OffOn(selection, y, active);
 }
 
 // Menu Nuzlocke
+static void DrawChoices_Nuzlocke_OnOff(int selection, int y, bool8 active)
+{
+    u8 styles[2] = {0};
+    styles[selection] = 1;
+
+    #ifndef NDEBUG
+    MgbaPrintf(
+        MGBA_LOG_DEBUG,
+        "DrawChoices_Nuzlocke %d, selection=%d",
+        active,
+        selection
+    );
+    #endif
+
+    DrawOptionMenuChoice(sText_Off, 104, y, styles[0], active);
+    DrawOptionMenuChoice(sText_On, GetStringRightAlignXOffset(1, sText_On, 198), y, styles[1], active);
+}
+
 static void DrawChoices_Nuzlocke_Toggle(int selection, int y) {
-    bool8 active = options->nuzlocke[MENUITEM_NUZLOCKE_ENABLED];
-    DrawChoices_Random_OffOn(selection, y, active);
+    bool8 active = CheckConditions(MENUITEM_NUZLOCKE_ENABLED);
+    DrawChoices_Nuzlocke_OnOff(selection, y, active);
 }
 
 static void DrawChoices_DifficultyIncrease_Toggle(int selection, int y) {
-    bool8 active = options->difficulty[MENUITEM_DIFFICULTY_INCREASED];
-    DrawChoices_Random_OffOn(selection, y, active);
+    bool8 active = CheckConditions(MENUITEM_DIFFICULTY_INCREASED);
+    DrawChoices_Nuzlocke_OnOff(selection, y, active);
 }
 
 static void DrawChoices_DifficultyLevelCap_Toggle(int selection, int y) {
-    bool8 active = options->difficulty[MENUITEM_DIFFICULTY_LEVEL_CAP];
-    DrawChoices_Random_OffOn(selection, y, active);
+    bool8 active =  CheckConditions(MENUITEM_DIFFICULTY_LEVEL_CAP);
+    DrawChoices_Nuzlocke_OnOff(selection, y, active);
 }
 
 static void DrawChoices_ExpShare_Toggle(int selection, int y) {
-    bool8 active = options->qol[MENUITEM_QOL_EXP_SHARE];
-    DrawChoices_Random_OffOn(selection, y, active);
+    bool8 active =  CheckConditions(MENUITEM_QOL_EXP_SHARE);
+    DrawChoices_Nuzlocke_OnOff(selection, y, active);
 }
 
 static void Task_RandomizerChallengesMenuSave(u8 taskId) {

@@ -5466,9 +5466,9 @@ BattleScript_FaintedMonTryChoose:
 	jumpifcantswitch BS_PLAYER1, BattleScript_FaintedMonSendOutNew
 	setbyte sILLUSION_NICK_HACK, 1
 @ Yes/No for sending out a new Pokémon when the opponent is switching
-	printstring STRINGID_ENEMYABOUTTOSWITCHPKMN
+@	printstring STRINGID_ENEMYABOUTTOSWITCHPKMN
 	setbyte gBattleCommunication, 0
-	yesnobox
+@	yesnobox
 	jumpifbyte CMP_EQUAL, gBattleCommunication + 1, 1, BattleScript_FaintedMonSendOutNew
 @ Player said yes, go to party screen (note optional flag, player may exit the menu instead)
 	setatktoplayer0
