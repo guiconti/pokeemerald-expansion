@@ -13767,7 +13767,7 @@ const struct Item gItemsInfo[] =
     {
         .name = _("Fresh Start Mochi"),
         .pluralName = _("Fresh Start Mochi"),
-        .price = 300,
+        .price = 20000,
         .description = COMPOUND_STRING(
             "An item that resets\n"
             "all base points of\n"

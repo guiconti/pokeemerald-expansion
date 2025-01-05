@@ -43,6 +43,7 @@ PetalburgCity_Mart_Pokemart_Basic:
   .2byte ITEM_POWER_LENS
   .2byte ITEM_POWER_BAND
   .2byte ITEM_POWER_ANKLET
+  .2byte ITEM_FRESH_START_MOCHI
 	.2byte ITEM_LONELY_MINT
 	.2byte ITEM_ADAMANT_MINT
 	.2byte ITEM_NAUGHTY_MINT
