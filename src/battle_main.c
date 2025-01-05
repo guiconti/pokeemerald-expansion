@@ -4328,7 +4328,16 @@ static void HandleTurnActionSelectionState(void)
                     }
                     break;
                 case B_ACTION_USE_ITEM:
-                    if (FlagGet(B_FLAG_NO_BAG_USE) && (gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+                    #ifndef NDEBUG
+                    MgbaPrintf(
+                        MGBA_LOG_DEBUG,
+                        "Flag no base use %d and is trainer %d",
+                        FlagGet(B_FLAG_NO_BAG_USE),
+                        (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+
+                    );
+                    #endif
+                    if ((gBattleTypeFlags & BATTLE_TYPE_TRAINER) > 0)
                     {
                         RecordedBattle_ClearBattlerAction(battler, 1);
                         gSelectionBattleScripts[battler] = BattleScript_ActionSelectionItemsCantBeUsed;
@@ -6290,30 +6299,43 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         newParty[i].moves[3] = selectedSmogonVariant->moves[3];
         newParty[i].species = newTrainerSpecies[i];
         newParty[i].heldItem = selectedSmogonVariant->heldItem;
+        #ifndef NDEBUG
+            MgbaPrintf(
+                MGBA_LOG_DEBUG,
+                "Pokemon: %d, Species: %d, move 1: %d, move 2: %d, move 3: %d, move 4: %d,",
+                i,
+                newParty[i].species,
+                selectedSmogonVariant->moves[0],
+                selectedSmogonVariant->moves[1],
+                selectedSmogonVariant->moves[2],
+                selectedSmogonVariant->moves[3]
+            );
+        #endif
         newParty[i].ability = selectedSmogonVariant->ability;
         newParty[i].lvl = originalTrainer->party[i].lvl;
         if (gSaveBlock1Ptr->difficultyIncreased) {
             // Trying to scale difficulty without making normal trainers impossible to beat, especially during
             // The first parts of the game
-            u8 maxLevel = trainerMinLevel + 5;
+            u8 maxLevel = trainerMinLevel + 8;
             u8 maxOscillation = 8;
+            u8 minLevel = trainerMinLevel;
             if (isSpecialTrainer == TRUE) {
                 maxOscillation = 2;
                 maxLevel = 100;
-                trainerMinLevel -= maxOscillation;
+                minLevel -= maxOscillation;
             }
             #ifndef NDEBUG
             MgbaPrintf(
                 MGBA_LOG_DEBUG,
                 "Choosing level for pokemon. Min level %d Max level %d Max oscillation %d",
-                trainerMinLevel,
+                minLevel,
                 maxLevel,
                 maxOscillation
             );
             #endif
             // TODO: For sure there is a better way to write this
             u8 levelOscillation = GenerateRandomNumberSeeded(0, maxOscillation, trainerNum + newParty[i].species);
-            newParty[i].lvl = min(max(maxPlayerPokemonLevel - levelOscillation, trainerMinLevel), maxLevel);
+            newParty[i].lvl = min(max(maxPlayerPokemonLevel - levelOscillation, minLevel), maxLevel);
         }
         newParty[i].ball = ITEM_POKE_BALL;
         newParty[i].friendship = MAX_FRIENDSHIP;

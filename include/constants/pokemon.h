@@ -94,7 +94,7 @@
 
 // Shiny odds
 // I've increased this from 8 to 80, which is close to increasing from 0.01% to 0.1%
-#define SHINY_ODDS 80 // Actual probability is SHINY_ODDS/65536
+#define SHINY_ODDS 68 // Actual probability is SHINY_ODDS/65536
 
 // Ribbon IDs used by TV and Pokénav
 #define CHAMPION_RIBBON       0

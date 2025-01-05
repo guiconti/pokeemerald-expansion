@@ -2259,11 +2259,11 @@ static const struct TrainerMetadata trainerIdToMetadata[] = {
 	},
 	[TRAINER_JOSH] = {
 		.tier = TIER_THREE,
-		.types = {TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_STEEL,TYPE_STEEL,TYPE_FIGHTING},
+		.types = {TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_ROCK,TYPE_STEEL,TYPE_FIGHTING},
 	},
 	[TRAINER_TOMMY] = {
 		.tier = TIER_THREE,
-		.types = {TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_STEEL,TYPE_STEEL,TYPE_FIGHTING},
+		.types = {TYPE_ROCK,TYPE_ROCK,TYPE_ROCK,TYPE_GROUND,TYPE_ROCK,TYPE_STEEL,TYPE_FIGHTING},
 	},
 	[TRAINER_JOEY] = {
 		.tier = TIER_THREE,
@@ -6749,8 +6749,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GOLEM
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[7]) {
-			SPECIES_ARCEUS_ROCK,
+		.legendaries = (const u16[6]) {
 			SPECIES_DIANCIE,
 			SPECIES_REGIROCK,
 			SPECIES_TERRAKION,
@@ -6758,7 +6757,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_NIHILEGO,
 			SPECIES_STAKATAKA
 		},
-		.legendariesSize = 7,
+		.legendariesSize = 6,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -6793,8 +6792,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_RHYDON
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[7]) {
-			SPECIES_ARCEUS_ROCK,
+		.legendaries = (const u16[6]) {
 			SPECIES_DIANCIE,
 			SPECIES_REGIROCK,
 			SPECIES_TERRAKION,
@@ -6802,7 +6800,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_NIHILEGO,
 			SPECIES_STAKATAKA
 		},
-		.legendariesSize = 7,
+		.legendariesSize = 6,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -6837,8 +6835,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SOLROCK
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[7]) {
-			SPECIES_ARCEUS_ROCK,
+		.legendaries = (const u16[6]) {
 			SPECIES_DIANCIE,
 			SPECIES_REGIROCK,
 			SPECIES_TERRAKION,
@@ -6846,7 +6843,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_NIHILEGO,
 			SPECIES_STAKATAKA
 		},
-		.legendariesSize = 7,
+		.legendariesSize = 6,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -6881,13 +6878,12 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_PUPITAR
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[4]) {
-			SPECIES_ARCEUS_ROCK,
+		.legendaries = (const u16[3]) {
 			SPECIES_DIANCIE,
 			SPECIES_REGIROCK,
 			SPECIES_TERRAKION
 		},
-		.legendariesSize = 4,
+		.legendariesSize = 3,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -6922,12 +6918,11 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_ONIX
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[3]) {
-			SPECIES_ARCEUS_ROCK,
+		.legendaries = (const u16[2]) {
 			SPECIES_REGIROCK,
 			SPECIES_TERRAKION
 		},
-		.legendariesSize = 3,
+		.legendariesSize = 2,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -6962,11 +6957,10 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_CRANIDOS
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[2]) {
-			SPECIES_ARCEUS_ROCK,
+		.legendaries = (const u16[1]) {
 			SPECIES_REGIROCK
 		},
-		.legendariesSize = 2,
+		.legendariesSize = 1,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[29]) {
 			SPECIES_TYRANITAR,
@@ -8439,8 +8433,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_TAUROS_PALDEA_BLAZE
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[15]) {
-			SPECIES_ARCEUS_FIGHTING,
+		.legendaries = (const u16[14]) {
 			SPECIES_ZAMAZENTA_CROWNED,
 			SPECIES_KORAIDON,
 			SPECIES_ZAMAZENTA,
@@ -8456,7 +8449,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_OKIDOGI,
 			SPECIES_URSHIFU
 		},
-		.legendariesSize = 15,
+		.legendariesSize = 14,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_KOMMO_O,
@@ -8491,8 +8484,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_THROH
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[13]) {
-			SPECIES_ARCEUS_FIGHTING,
+		.legendaries = (const u16[12]) {
 			SPECIES_ZAMAZENTA_CROWNED,
 			SPECIES_ZAMAZENTA,
 			SPECIES_ZAPDOS_GALAR,
@@ -8506,7 +8498,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_PHEROMOSA,
 			SPECIES_URSHIFU
 		},
-		.legendariesSize = 13,
+		.legendariesSize = 12,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_KOMMO_O,
@@ -8541,8 +8533,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_HAKAMO_O
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[9]) {
-			SPECIES_ARCEUS_FIGHTING,
+		.legendaries = (const u16[8]) {
 			SPECIES_COBALION,
 			SPECIES_TERRAKION,
 			SPECIES_VIRIZION,
@@ -8552,7 +8543,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_BUZZWOLE,
 			SPECIES_PHEROMOSA
 		},
-		.legendariesSize = 9,
+		.legendariesSize = 8,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_INFERNAPE,
@@ -8587,15 +8578,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MIENFOO
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_FIGHTING,
+		.legendaries = (const u16[5]) {
 			SPECIES_COBALION,
 			SPECIES_TERRAKION,
 			SPECIES_VIRIZION,
 			SPECIES_KELDEO,
 			SPECIES_KELDEO_RESOLUTE
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_INFERNAPE,
@@ -8630,15 +8620,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MANKEY
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_FIGHTING,
+		.legendaries = (const u16[5]) {
 			SPECIES_COBALION,
 			SPECIES_TERRAKION,
 			SPECIES_VIRIZION,
 			SPECIES_KELDEO,
 			SPECIES_KELDEO_RESOLUTE
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[25]) {
 			SPECIES_INFERNAPE,
@@ -8669,9 +8658,9 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 		},
 		.pokemonsSize = 25,
 		.legendaries = (const u16[1]) {
-			SPECIES_ARCEUS_FIGHTING
+			SPECIES_NONE
 		},
-		.legendariesSize = 1,
+		.legendariesSize = 0,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[18]) {
 			SPECIES_BLAZIKEN,
@@ -10099,8 +10088,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_BOLTUND
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[10]) {
-			SPECIES_ARCEUS_ELECTRIC,
+		.legendaries = (const u16[9]) {
 			SPECIES_ZEKROM,
 			SPECIES_MIRAIDON,
 			SPECIES_ZERAORA,
@@ -10111,7 +10099,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_ELECTRIC,
 			SPECIES_TAPU_KOKO
 		},
-		.legendariesSize = 10,
+		.legendariesSize = 9,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_REGIELEKI,
@@ -10146,8 +10134,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MANECTRIC
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[9]) {
-			SPECIES_ARCEUS_ELECTRIC,
+		.legendaries = (const u16[8]) {
 			SPECIES_ZEKROM,
 			SPECIES_ZERAORA,
 			SPECIES_ZAPDOS,
@@ -10157,7 +10144,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_ELECTRIC,
 			SPECIES_TAPU_KOKO
 		},
-		.legendariesSize = 9,
+		.legendariesSize = 8,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_XURKITREE,
@@ -10192,8 +10179,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_TOGEDEMARU_TOTEM
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[9]) {
-			SPECIES_ARCEUS_ELECTRIC,
+		.legendaries = (const u16[8]) {
 			SPECIES_ZEKROM,
 			SPECIES_ZERAORA,
 			SPECIES_ZAPDOS,
@@ -10203,7 +10189,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_ELECTRIC,
 			SPECIES_TAPU_KOKO
 		},
-		.legendariesSize = 9,
+		.legendariesSize = 8,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ELECTIVIRE,
@@ -10238,15 +10224,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_LUXIO
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_ELECTRIC,
+		.legendaries = (const u16[5]) {
 			SPECIES_ZEKROM,
 			SPECIES_ZAPDOS,
 			SPECIES_RAIKOU,
 			SPECIES_THUNDURUS,
 			SPECIES_THUNDURUS_THERIAN
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ELECTIVIRE,
@@ -10281,15 +10266,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_VOLTORB
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_ELECTRIC,
+		.legendaries = (const u16[5]) {
 			SPECIES_ZEKROM,
 			SPECIES_ZAPDOS,
 			SPECIES_RAIKOU,
 			SPECIES_THUNDURUS,
 			SPECIES_THUNDURUS_THERIAN
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ELECTIVIRE,
@@ -10324,12 +10308,11 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SHINX
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[3]) {
-			SPECIES_ARCEUS_ELECTRIC,
+		.legendaries = (const u16[2]) {
 			SPECIES_ZAPDOS,
 			SPECIES_RAIKOU
 		},
-		.legendariesSize = 3,
+		.legendariesSize = 2,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[19]) {
 			SPECIES_JOLTEON,
@@ -11784,8 +11767,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SIMISEAR
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[11]) {
-			SPECIES_ARCEUS_FIRE,
+		.legendaries = (const u16[10]) {
 			SPECIES_HO_OH,
 			SPECIES_RESHIRAM,
 			SPECIES_HEATRAN,
@@ -11797,7 +11779,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_FIRE,
 			SPECIES_BLACEPHALON
 		},
-		.legendariesSize = 11,
+		.legendariesSize = 10,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ARCANINE,
@@ -11832,8 +11814,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SALAZZLE_TOTEM
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[10]) {
-			SPECIES_ARCEUS_FIRE,
+		.legendaries = (const u16[9]) {
 			SPECIES_HO_OH,
 			SPECIES_RESHIRAM,
 			SPECIES_HEATRAN,
@@ -11844,7 +11825,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_FIRE,
 			SPECIES_BLACEPHALON
 		},
-		.legendariesSize = 10,
+		.legendariesSize = 9,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ARCANINE,
@@ -11879,8 +11860,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MAROWAK_ALOLA
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[10]) {
-			SPECIES_ARCEUS_FIRE,
+		.legendaries = (const u16[9]) {
 			SPECIES_HO_OH,
 			SPECIES_RESHIRAM,
 			SPECIES_HEATRAN,
@@ -11891,7 +11871,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_FIRE,
 			SPECIES_BLACEPHALON
 		},
-		.legendariesSize = 10,
+		.legendariesSize = 9,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ARCANINE,
@@ -11926,8 +11906,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MONFERNO
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[8]) {
-			SPECIES_ARCEUS_FIRE,
+		.legendaries = (const u16[7]) {
 			SPECIES_HO_OH,
 			SPECIES_RESHIRAM,
 			SPECIES_HEATRAN,
@@ -11936,7 +11915,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MOLTRES,
 			SPECIES_ENTEI
 		},
-		.legendariesSize = 8,
+		.legendariesSize = 7,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ARCANINE,
@@ -11971,8 +11950,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_LARVESTA
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[7]) {
-			SPECIES_ARCEUS_FIRE,
+		.legendaries = (const u16[6]) {
 			SPECIES_HO_OH,
 			SPECIES_RESHIRAM,
 			SPECIES_HEATRAN,
@@ -11980,7 +11958,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MOLTRES,
 			SPECIES_ENTEI
 		},
-		.legendariesSize = 7,
+		.legendariesSize = 6,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_ARCANINE,
@@ -12015,14 +11993,13 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SLUGMA
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[5]) {
-			SPECIES_ARCEUS_FIRE,
+		.legendaries = (const u16[4]) {
 			SPECIES_HO_OH,
 			SPECIES_HEATRAN,
 			SPECIES_MOLTRES,
 			SPECIES_ENTEI
 		},
-		.legendariesSize = 5,
+		.legendariesSize = 4,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[25]) {
 			SPECIES_ARCANINE,
@@ -15359,8 +15336,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_STARAPTOR
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[22]) {
-			SPECIES_ARCEUS_FLYING,
+		.legendaries = (const u16[21]) {
 			SPECIES_LUGIA,
 			SPECIES_HO_OH,
 			SPECIES_RAYQUAZA,
@@ -15383,7 +15359,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_FLYING,
 			SPECIES_CELESTEELA
 		},
-		.legendariesSize = 22,
+		.legendariesSize = 21,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -15418,8 +15394,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_ORICORIO
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[22]) {
-			SPECIES_ARCEUS_FLYING,
+		.legendaries = (const u16[21]) {
 			SPECIES_LUGIA,
 			SPECIES_HO_OH,
 			SPECIES_RAYQUAZA,
@@ -15442,7 +15417,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_FLYING,
 			SPECIES_CELESTEELA
 		},
-		.legendariesSize = 22,
+		.legendariesSize = 21,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -15477,8 +15452,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_ORICORIO_POM_POM
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[17]) {
-			SPECIES_ARCEUS_FLYING,
+		.legendaries = (const u16[16]) {
 			SPECIES_LUGIA,
 			SPECIES_HO_OH,
 			SPECIES_RAYQUAZA,
@@ -15496,7 +15470,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_FLYING,
 			SPECIES_CELESTEELA
 		},
-		.legendariesSize = 17,
+		.legendariesSize = 16,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -15531,8 +15505,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SKARMORY
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[15]) {
-			SPECIES_ARCEUS_FLYING,
+		.legendaries = (const u16[14]) {
 			SPECIES_LUGIA,
 			SPECIES_HO_OH,
 			SPECIES_RAYQUAZA,
@@ -15548,7 +15521,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_THUNDURUS,
 			SPECIES_THUNDURUS_THERIAN
 		},
-		.legendariesSize = 15,
+		.legendariesSize = 14,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -15583,8 +15556,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_NINJASK
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[14]) {
-			SPECIES_ARCEUS_FLYING,
+		.legendaries = (const u16[13]) {
 			SPECIES_LUGIA,
 			SPECIES_HO_OH,
 			SPECIES_RAYQUAZA,
@@ -15599,7 +15571,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_THUNDURUS,
 			SPECIES_THUNDURUS_THERIAN
 		},
-		.legendariesSize = 14,
+		.legendariesSize = 13,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -15634,8 +15606,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_PELIPPER
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[8]) {
-			SPECIES_ARCEUS_FLYING,
+		.legendaries = (const u16[7]) {
 			SPECIES_LUGIA,
 			SPECIES_HO_OH,
 			SPECIES_RAYQUAZA,
@@ -15644,7 +15615,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_ZAPDOS,
 			SPECIES_MOLTRES
 		},
-		.legendariesSize = 8,
+		.legendariesSize = 7,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -17534,8 +17505,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SLOWBRO_GALAR
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[32]) {
-			SPECIES_ARCEUS_PSYCHIC,
+		.legendaries = (const u16[31]) {
 			SPECIES_MEWTWO,
 			SPECIES_LUGIA,
 			SPECIES_HOOPA_UNBOUND,
@@ -17568,7 +17538,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MUNKIDORI,
 			SPECIES_CALYREX
 		},
-		.legendariesSize = 32,
+		.legendariesSize = 31,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_METAGROSS,
@@ -17603,8 +17573,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_ORICORIO_PAU
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[31]) {
-			SPECIES_ARCEUS_PSYCHIC,
+		.legendaries = (const u16[30]) {
 			SPECIES_MEWTWO,
 			SPECIES_LUGIA,
 			SPECIES_HOOPA_UNBOUND,
@@ -17636,7 +17605,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_TAPU_LELE,
 			SPECIES_CALYREX
 		},
-		.legendariesSize = 31,
+		.legendariesSize = 30,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_METAGROSS,
@@ -17671,8 +17640,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SOLROCK
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[27]) {
-			SPECIES_ARCEUS_PSYCHIC,
+		.legendaries = (const u16[26]) {
 			SPECIES_MEWTWO,
 			SPECIES_LUGIA,
 			SPECIES_HOOPA_UNBOUND,
@@ -17700,7 +17668,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_PSYCHIC,
 			SPECIES_TAPU_LELE
 		},
-		.legendariesSize = 27,
+		.legendariesSize = 26,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_METAGROSS,
@@ -17735,8 +17703,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SWOOBAT
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[20]) {
-			SPECIES_ARCEUS_PSYCHIC,
+		.legendaries = (const u16[19]) {
 			SPECIES_MEWTWO,
 			SPECIES_LUGIA,
 			SPECIES_HOOPA_UNBOUND,
@@ -17757,7 +17724,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_AZELF,
 			SPECIES_CRESSELIA
 		},
-		.legendariesSize = 20,
+		.legendariesSize = 19,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_METAGROSS,
@@ -17792,8 +17759,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_KADABRA
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[18]) {
-			SPECIES_ARCEUS_PSYCHIC,
+		.legendaries = (const u16[17]) {
 			SPECIES_MEWTWO,
 			SPECIES_LUGIA,
 			SPECIES_MEW,
@@ -17812,7 +17778,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_AZELF,
 			SPECIES_CRESSELIA
 		},
-		.legendariesSize = 18,
+		.legendariesSize = 17,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_METAGROSS,
@@ -17847,8 +17813,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SLOWPOKE
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[16]) {
-			SPECIES_ARCEUS_PSYCHIC,
+		.legendaries = (const u16[15]) {
 			SPECIES_MEWTWO,
 			SPECIES_LUGIA,
 			SPECIES_MEW,
@@ -17865,7 +17830,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_AZELF,
 			SPECIES_CRESSELIA
 		},
-		.legendariesSize = 16,
+		.legendariesSize = 15,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_METAGROSS,
@@ -19884,8 +19849,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_DRACOVISH
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[11]) {
-			SPECIES_ARCEUS_WATER,
+		.legendaries = (const u16[10]) {
 			SPECIES_PALKIA,
 			SPECIES_PALKIA_ORIGIN,
 			SPECIES_KYOGRE,
@@ -19897,7 +19861,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_WATER,
 			SPECIES_TAPU_FINI
 		},
-		.legendariesSize = 11,
+		.legendariesSize = 10,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_URSHIFU_RAPID_STRIKE,
@@ -19932,8 +19896,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_BARBARACLE
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[11]) {
-			SPECIES_ARCEUS_WATER,
+		.legendaries = (const u16[10]) {
 			SPECIES_PALKIA,
 			SPECIES_PALKIA_ORIGIN,
 			SPECIES_KYOGRE,
@@ -19945,7 +19908,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_WATER,
 			SPECIES_TAPU_FINI
 		},
-		.legendariesSize = 11,
+		.legendariesSize = 10,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_GYARADOS,
@@ -19980,8 +19943,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_CARRACOSTA
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[10]) {
-			SPECIES_ARCEUS_WATER,
+		.legendaries = (const u16[9]) {
 			SPECIES_PALKIA,
 			SPECIES_KYOGRE,
 			SPECIES_MANAPHY,
@@ -19992,7 +19954,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_WATER,
 			SPECIES_TAPU_FINI
 		},
-		.legendariesSize = 10,
+		.legendariesSize = 9,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_GYARADOS,
@@ -20027,8 +19989,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SLOWBRO
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[8]) {
-			SPECIES_ARCEUS_WATER,
+		.legendaries = (const u16[7]) {
 			SPECIES_PALKIA,
 			SPECIES_KYOGRE,
 			SPECIES_MANAPHY,
@@ -20037,7 +19998,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_KELDEO,
 			SPECIES_KELDEO_RESOLUTE
 		},
-		.legendariesSize = 8,
+		.legendariesSize = 7,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_GYARADOS,
@@ -20072,8 +20033,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GOREBYSS
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[7]) {
-			SPECIES_ARCEUS_WATER,
+		.legendaries = (const u16[6]) {
 			SPECIES_PALKIA,
 			SPECIES_KYOGRE,
 			SPECIES_MANAPHY,
@@ -20081,7 +20041,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_KELDEO,
 			SPECIES_KELDEO_RESOLUTE
 		},
-		.legendariesSize = 7,
+		.legendariesSize = 6,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_GYARADOS,
@@ -20116,15 +20076,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GASTRODON
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_WATER,
+		.legendaries = (const u16[5]) {
 			SPECIES_PALKIA,
 			SPECIES_KYOGRE,
 			SPECIES_MANAPHY,
 			SPECIES_SUICUNE,
 			SPECIES_PHIONE
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_GYARADOS,
@@ -21854,8 +21813,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SHIFTRY
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[14]) {
-			SPECIES_ARCEUS_DARK,
+		.legendaries = (const u16[13]) {
 			SPECIES_YVELTAL,
 			SPECIES_HOOPA_UNBOUND,
 			SPECIES_DARKRAI,
@@ -21870,7 +21828,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GUZZLORD,
 			SPECIES_URSHIFU
 		},
-		.legendariesSize = 14,
+		.legendariesSize = 13,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -21905,8 +21863,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_LIEPARD
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[10]) {
-			SPECIES_ARCEUS_DARK,
+		.legendaries = (const u16[9]) {
 			SPECIES_YVELTAL,
 			SPECIES_HOOPA_UNBOUND,
 			SPECIES_DARKRAI,
@@ -21917,7 +21874,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GUZZLORD,
 			SPECIES_URSHIFU
 		},
-		.legendariesSize = 10,
+		.legendariesSize = 9,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -21952,15 +21909,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_RATICATE_ALOLA
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_DARK,
+		.legendaries = (const u16[5]) {
 			SPECIES_YVELTAL,
 			SPECIES_HOOPA_UNBOUND,
 			SPECIES_DARKRAI,
 			SPECIES_SILVALLY_DARK,
 			SPECIES_GUZZLORD
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -21995,13 +21951,12 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_KROKOROK
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[4]) {
-			SPECIES_ARCEUS_DARK,
+		.legendaries = (const u16[3]) {
 			SPECIES_YVELTAL,
 			SPECIES_HOOPA_UNBOUND,
 			SPECIES_DARKRAI
 		},
-		.legendariesSize = 4,
+		.legendariesSize = 3,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_TYRANITAR,
@@ -22036,11 +21991,10 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_PAWNIARD
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[2]) {
-			SPECIES_ARCEUS_DARK,
+		.legendaries = (const u16[1]) {
 			SPECIES_DARKRAI
 		},
-		.legendariesSize = 2,
+		.legendariesSize = 1,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[22]) {
 			SPECIES_TYRANITAR,
@@ -22067,11 +22021,10 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_POOCHYENA
 		},
 		.pokemonsSize = 22,
-		.legendaries = (const u16[2]) {
-			SPECIES_ARCEUS_DARK,
+		.legendaries = (const u16[1]) {
 			SPECIES_DARKRAI
 		},
-		.legendariesSize = 2,
+		.legendariesSize = 1,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[16]) {
 			SPECIES_TYRANITAR,
@@ -22157,8 +22110,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_COFAGRIGUS
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[11]) {
-			SPECIES_ARCEUS_GHOST,
+		.legendaries = (const u16[10]) {
 			SPECIES_GIRATINA,
 			SPECIES_GIRATINA_ORIGIN,
 			SPECIES_LUNALA,
@@ -22170,7 +22122,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_GHOST,
 			SPECIES_BLACEPHALON
 		},
-		.legendariesSize = 11,
+		.legendariesSize = 10,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_MARSHADOW,
@@ -22205,8 +22157,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MIMIKYU_TOTEM
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[10]) {
-			SPECIES_ARCEUS_GHOST,
+		.legendaries = (const u16[9]) {
 			SPECIES_GIRATINA,
 			SPECIES_GIRATINA_ORIGIN,
 			SPECIES_LUNALA,
@@ -22217,7 +22168,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_GHOST,
 			SPECIES_BLACEPHALON
 		},
-		.legendariesSize = 10,
+		.legendariesSize = 9,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_MARSHADOW,
@@ -22252,8 +22203,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_MAROWAK_ALOLA_TOTEM
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[8]) {
-			SPECIES_ARCEUS_GHOST,
+		.legendaries = (const u16[7]) {
 			SPECIES_GIRATINA,
 			SPECIES_GIRATINA_ORIGIN,
 			SPECIES_LUNALA,
@@ -22262,7 +22212,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SILVALLY_GHOST,
 			SPECIES_BLACEPHALON
 		},
-		.legendariesSize = 8,
+		.legendariesSize = 7,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DUSKNOIR,
@@ -22297,13 +22247,12 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_PUMPKABOO_SUPER
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[4]) {
-			SPECIES_ARCEUS_GHOST,
+		.legendaries = (const u16[3]) {
 			SPECIES_GIRATINA,
 			SPECIES_GIRATINA_ORIGIN,
 			SPECIES_HOOPA
 		},
-		.legendariesSize = 4,
+		.legendariesSize = 3,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[26]) {
 			SPECIES_DUSKNOIR,
@@ -22334,12 +22283,11 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SHEDINJA
 		},
 		.pokemonsSize = 26,
-		.legendaries = (const u16[3]) {
-			SPECIES_ARCEUS_GHOST,
+		.legendaries = (const u16[2]) {
 			SPECIES_GIRATINA,
 			SPECIES_GIRATINA_ORIGIN
 		},
-		.legendariesSize = 3,
+		.legendariesSize = 2,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[17]) {
 			SPECIES_DUSKNOIR,
@@ -22361,12 +22309,11 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SHEDINJA
 		},
 		.pokemonsSize = 17,
-		.legendaries = (const u16[3]) {
-			SPECIES_ARCEUS_GHOST,
+		.legendaries = (const u16[2]) {
 			SPECIES_GIRATINA,
 			SPECIES_GIRATINA_ORIGIN
 		},
-		.legendariesSize = 3,
+		.legendariesSize = 2,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[10]) {
 			SPECIES_GENGAR,
@@ -22446,8 +22393,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_JYNX
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[10]) {
-			SPECIES_ARCEUS_ICE,
+		.legendaries = (const u16[9]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_CALYREX_ICE,
@@ -22458,7 +22404,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_CHIEN_PAO,
 			SPECIES_SILVALLY_ICE
 		},
-		.legendariesSize = 10,
+		.legendariesSize = 9,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_LAPRAS,
@@ -22493,8 +22439,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SNEASEL
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[9]) {
-			SPECIES_ARCEUS_ICE,
+		.legendaries = (const u16[8]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_CALYREX_ICE,
@@ -22504,7 +22449,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GLASTRIER,
 			SPECIES_SILVALLY_ICE
 		},
-		.legendariesSize = 9,
+		.legendariesSize = 8,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_LAPRAS,
@@ -22539,8 +22484,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_CUBCHOO
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[7]) {
-			SPECIES_ARCEUS_ICE,
+		.legendaries = (const u16[6]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_KYUREM,
@@ -22548,7 +22492,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_REGICE,
 			SPECIES_SILVALLY_ICE
 		},
-		.legendariesSize = 7,
+		.legendariesSize = 6,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_LAPRAS,
@@ -22583,15 +22527,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SPHEAL
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_ICE,
+		.legendaries = (const u16[5]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_KYUREM,
 			SPECIES_ARTICUNO,
 			SPECIES_REGICE
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[27]) {
 			SPECIES_LAPRAS,
@@ -22623,15 +22566,14 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SWINUB
 		},
 		.pokemonsSize = 27,
-		.legendaries = (const u16[6]) {
-			SPECIES_ARCEUS_ICE,
+		.legendaries = (const u16[5]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_KYUREM,
 			SPECIES_ARTICUNO,
 			SPECIES_REGICE
 		},
-		.legendariesSize = 6,
+		.legendariesSize = 5,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[21]) {
 			SPECIES_LAPRAS,
@@ -22657,12 +22599,11 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SWINUB
 		},
 		.pokemonsSize = 21,
-		.legendaries = (const u16[3]) {
-			SPECIES_ARCEUS_ICE,
+		.legendaries = (const u16[2]) {
 			SPECIES_ARTICUNO,
 			SPECIES_REGICE
 		},
-		.legendariesSize = 3,
+		.legendariesSize = 2,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[14]) {
 			SPECIES_LAPRAS,
@@ -22681,11 +22622,10 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_SWINUB
 		},
 		.pokemonsSize = 14,
-		.legendaries = (const u16[2]) {
-			SPECIES_ARTICUNO,
+		.legendaries = (const u16[1]) {
 			SPECIES_REGICE
 		},
-		.legendariesSize = 2,
+		.legendariesSize = 1,
 #elif P_GEN_2_POKEMON == TRUE
 		.pokemons = (const u16[9]) {
 			SPECIES_LAPRAS,
@@ -22753,8 +22693,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_DRUDDIGON
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[23]) {
-			SPECIES_ARCEUS_DRAGON,
+		.legendaries = (const u16[22]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_ETERNATUS,
@@ -22778,7 +22717,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GUZZLORD,
 			SPECIES_NAGANADEL
 		},
-		.legendariesSize = 23,
+		.legendariesSize = 22,
 #elif P_GEN_8_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -22813,8 +22752,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_ZWEILOUS
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[21]) {
-			SPECIES_ARCEUS_DRAGON,
+		.legendaries = (const u16[20]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_ETERNATUS,
@@ -22836,7 +22774,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GUZZLORD,
 			SPECIES_NAGANADEL
 		},
-		.legendariesSize = 21,
+		.legendariesSize = 20,
 #elif P_GEN_7_POKEMON == TRUE
 		.pokemons = (const u16[30]) {
 			SPECIES_DRAGONITE,
@@ -22871,8 +22809,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_BAGON
 		},
 		.pokemonsSize = 30,
-		.legendaries = (const u16[17]) {
-			SPECIES_ARCEUS_DRAGON,
+		.legendaries = (const u16[16]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_RAYQUAZA,
@@ -22890,7 +22827,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GUZZLORD,
 			SPECIES_NAGANADEL
 		},
-		.legendariesSize = 17,
+		.legendariesSize = 16,
 #elif P_GEN_6_POKEMON == TRUE
 		.pokemons = (const u16[28]) {
 			SPECIES_DRAGONITE,
@@ -22923,8 +22860,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_NOIBAT
 		},
 		.pokemonsSize = 28,
-		.legendaries = (const u16[14]) {
-			SPECIES_ARCEUS_DRAGON,
+		.legendaries = (const u16[13]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_RAYQUAZA,
@@ -22939,7 +22875,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_LATIOS,
 			SPECIES_ZYGARDE
 		},
-		.legendariesSize = 14,
+		.legendariesSize = 13,
 #elif P_GEN_5_POKEMON == TRUE
 		.pokemons = (const u16[20]) {
 			SPECIES_DRAGONITE,
@@ -22964,8 +22900,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_DEINO
 		},
 		.pokemonsSize = 20,
-		.legendaries = (const u16[13]) {
-			SPECIES_ARCEUS_DRAGON,
+		.legendaries = (const u16[12]) {
 			SPECIES_KYUREM_BLACK,
 			SPECIES_KYUREM_WHITE,
 			SPECIES_RAYQUAZA,
@@ -22979,7 +22914,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_LATIAS,
 			SPECIES_LATIOS
 		},
-		.legendariesSize = 13,
+		.legendariesSize = 12,
 #elif P_GEN_4_POKEMON == TRUE
 		.pokemons = (const u16[13]) {
 			SPECIES_DRAGONITE,
@@ -22997,8 +22932,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_GIBLE
 		},
 		.pokemonsSize = 13,
-		.legendaries = (const u16[8]) {
-			SPECIES_ARCEUS_DRAGON,
+		.legendaries = (const u16[7]) {
 			SPECIES_RAYQUAZA,
 			SPECIES_DIALGA,
 			SPECIES_PALKIA,
@@ -23007,7 +22941,7 @@ static const struct SpecialTrainer specialTrainerIdToPokemonOptions[] = {
 			SPECIES_LATIAS,
 			SPECIES_LATIOS
 		},
-		.legendariesSize = 8,
+		.legendariesSize = 7,
 #elif P_GEN_3_POKEMON == TRUE
 		.pokemons = (const u16[10]) {
 			SPECIES_DRAGONITE,
@@ -60191,7 +60125,7 @@ static const u8 trainerIdToMinLevel[] = {
 	[TRAINER_PHOEBE] = 100,
 	[TRAINER_GLACIA] = 100,
 	[TRAINER_DRAKE] = 100,
-	[TRAINER_ROXANNE_1] = 16,
+	[TRAINER_ROXANNE_1] = 13,
 	[TRAINER_BRAWLY_1] = 38,
 	[TRAINER_WATTSON_1] = 37,
 	[TRAINER_FLANNERY_1] = 52,
@@ -60245,7 +60179,7 @@ static const u8 trainerIdToMinLevel[] = {
 	[TRAINER_SHELBY_4] = 100,
 	[TRAINER_SHELBY_5] = 100,
 	[TRAINER_CALVIN_1] = 8,
-	[TRAINER_BILLY] = 22,
+	[TRAINER_BILLY] = 12,
 	[TRAINER_JOSH] = 14,
 	[TRAINER_TOMMY] = 14,
 	[TRAINER_JOEY] = 16,
@@ -60530,7 +60464,7 @@ static const u8 trainerIdToMinLevel[] = {
 	[TRAINER_MAXIE_MAGMA_HIDEOUT] = 88,
 	[TRAINER_MAXIE_MT_CHIMNEY] = 57,
 	[TRAINER_TIANA] = 8,
-	[TRAINER_HALEY_1] = 20,
+	[TRAINER_HALEY_1] = 12,
 	[TRAINER_JANICE] = 16,
 	[TRAINER_VIVI] = 38,
 	[TRAINER_HALEY_2] = 100,
@@ -60622,7 +60556,7 @@ static const u8 trainerIdToMinLevel[] = {
 	[TRAINER_CHRIS] = 66,
 	[TRAINER_DAWSON] = 19,
 	[TRAINER_SARAH] = 19,
-	[TRAINER_DARIAN] = 21,
+	[TRAINER_DARIAN] = 12,
 	[TRAINER_HAILEY] = 24,
 	[TRAINER_CHANDLER] = 24,
 	[TRAINER_KALEB] = 27,

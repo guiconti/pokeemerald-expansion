@@ -5469,7 +5469,7 @@ BattleScript_FaintedMonTryChoose:
 @	printstring STRINGID_ENEMYABOUTTOSWITCHPKMN
 	setbyte gBattleCommunication, 0
 @	yesnobox
-	jumpifbyte CMP_EQUAL, gBattleCommunication + 1, 1, BattleScript_FaintedMonSendOutNew
+	jumpifbyte CMP_NOT_EQUAL, gBattleCommunication + 1, 1, BattleScript_FaintedMonSendOutNew
 @ Player said yes, go to party screen (note optional flag, player may exit the menu instead)
 	setatktoplayer0
 	openpartyscreen BS_ATTACKER | PARTY_SCREEN_OPTIONAL, BattleScript_FaintedMonSendOutNew
