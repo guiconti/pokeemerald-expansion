@@ -5259,6 +5259,22 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
         totalEVs += evs[i];
     }
 
+    // If pokemon is wearing a power item we just add EV based of that item
+    if (heldItem != ITEM_NONE && holdEffect == HOLD_EFFECT_POWER_ITEM) {
+        // When using power item the increase is fixed at 126
+        evIncrease = 126;
+        if (totalEVs + (s16)evIncrease > currentEVCap)
+            evIncrease = ((s16)evIncrease + currentEVCap) - (totalEVs + evIncrease);
+        if (evs[stat] + (s16)evIncrease > MAX_PER_STAT_EVS)
+        {
+            int val1 = (s16)evIncrease + MAX_PER_STAT_EVS;
+            int val2 = evs[stat] + evIncrease;
+            evIncrease = val1 - val2;
+        }
+        evs[stat] += evIncrease;
+        SetMonData(mon, stat, &evs[stat]);
+    }
+
     for (i = 0; i < NUM_STATS; i++)
     {
         if (totalEVs >= currentEVCap)
