@@ -1900,6 +1900,7 @@ extern const u8 gText_Store[];
 extern const u8 gText_Register[];
 extern const u8 gText_Trade4[];
 extern const u8 gText_Summary5[];
+extern const u8 gText_CheckEvs[];
 extern const u8 gText_Switch2[];
 extern const u8 gText_Item[];
 extern const u8 gText_NotPkmnOtherTrainerWants[];
