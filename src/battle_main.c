@@ -6316,7 +6316,6 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
         if (gSaveBlock1Ptr->difficultyIncreased) {
             // Trying to scale difficulty without making normal trainers impossible to beat, especially during
             // The first parts of the game
-            u8 maxLevel = trainerMinLevel + 8;
             u8 maxOscillation = 8;
             u8 minLevel = trainerMinLevel;
             if (isSpecialTrainer == TRUE) {
@@ -6329,13 +6328,13 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
                 MGBA_LOG_DEBUG,
                 "Choosing level for pokemon. Min level %d Max level %d Max oscillation %d",
                 minLevel,
-                maxLevel,
+                maxPlayerPokemonLevel,
                 maxOscillation
             );
             #endif
             // TODO: For sure there is a better way to write this
             u8 levelOscillation = GenerateRandomNumberSeeded(0, maxOscillation, trainerNum + newParty[i].species);
-            newParty[i].lvl = min(max(maxPlayerPokemonLevel - levelOscillation, minLevel), maxLevel);
+            newParty[i].lvl = max(maxPlayerPokemonLevel - levelOscillation, minLevel);
         }
         newParty[i].ball = ITEM_POKE_BALL;
         newParty[i].friendship = MAX_FRIENDSHIP;
