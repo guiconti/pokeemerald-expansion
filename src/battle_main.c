@@ -6320,7 +6320,6 @@ const struct Trainer *RandomizeTrainer(const struct Trainer *originalTrainer, u1
             u8 minLevel = trainerMinLevel;
             if (isSpecialTrainer == TRUE) {
                 maxOscillation = 2;
-                maxLevel = 100;
                 minLevel -= maxOscillation;
             }
             #ifndef NDEBUG

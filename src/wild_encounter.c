@@ -427,12 +427,12 @@ static void CreateWildMon(u16 species, u8 level, u8 area)
     for (int i = 0; i < gPlayerPartyCount; i++) {
         maxPlayerPokemonLevel = max(maxPlayerPokemonLevel, gPlayerParty[i].level);
     }
+    if (gSaveBlock1Ptr->randomizeWildEncounters && CheckFeebas() == FALSE) {
+        species = GetRandomWildMonSpecies(species, level, area);
+    }
     if (gSaveBlock1Ptr->difficultyIncreased) {
         u8 levelOscillation = GenerateRandomNumberSeeded(0, 10, species + level + area);
         level = max(min(maxPlayerPokemonLevel - levelOscillation, 90), 4);
-    }
-    if (gSaveBlock1Ptr->randomizeWildEncounters && CheckFeebas() == FALSE) {
-        species = GetRandomWildMonSpecies(species, level, area);
     }
 
     switch (gSpeciesInfo[species].genderRatio)
